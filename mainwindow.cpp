@@ -15,7 +15,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
   std::vector<Point> points;
   std::vector<Line>* lines = new std::vector<Line>();
 
-  displayFile = std::make_unique<std::vector<std::variant<Point, Line, Polygon>>>();
+  displayFile = new std::vector<Thing*>();
 
   Point* a = new Point(50, 50, 0);
   Point* b = new Point(100, 200, 0);
@@ -29,12 +29,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
   lines->push_back(B);
   lines->push_back(C);
 
-  Polygon myPolygon = Polygon(lines);
+  Polygon* myPolygon = new Polygon(lines);
 
   displayFile->push_back(myPolygon);
-
-  Polygon oneItem = std::get<Polygon>((*displayFile)[0]);
-  oneItem.checkItself();
+  displayFile->push_back(a);
 }
 
 MainWindow::~MainWindow() { delete ui; }
@@ -46,8 +44,8 @@ void MainWindow::paintEvent(QPaintEvent *event) {
   pen.setWidth(1);
   painter.setPen(pen);
 
-  Polygon oneItem = std::get<Polygon>((*displayFile)[0]);
-  oneItem.draw(&painter);
+  (*displayFile)[0]->checkItself();
+  (*displayFile)[1]->checkItself();
 }
 
 void MainWindow::on_pBx1_clicked() {

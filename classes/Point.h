@@ -1,12 +1,14 @@
 #ifndef POINT_H
 #define POINT_H
 
+#include "Thing.h"
+
 #include <QPainter>
 
 #include <iostream>
 #include <sstream>
 
-class Point {
+class Point : public Thing {
 public:
   int32_t x;
   int32_t y;
@@ -22,8 +24,9 @@ public:
     return ss.str();
   }
 
-  void checkItself(){
-    std::cout << self() << std::endl;
+  void checkItself() const override {
+    printf("Dot : \n");
+    // std::cout << self() << std::endl;
   };
 
   bool operator==(const Point& other) const {

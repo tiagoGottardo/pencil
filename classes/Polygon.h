@@ -1,9 +1,10 @@
 #ifndef POLYGON_H
 #define POLYGON_H
 
+#include "Thing.h"
 #include <QPainter>
 
-class Polygon {
+class Polygon : public Thing {
 public:
   std::vector<Line>* lines;
   Point ref = Point(0, 0, 0);
@@ -48,11 +49,11 @@ public:
     lines = linesList;
   }
 
-  void checkItself() {
+  void checkItself() const override{
     printf("Polygon {\n");
-    for(uint i = 0; i < lines->size(); i++){
-      (*lines)[i].checkItself();
-    }
+    // for(uint i = 0; i < lines->size(); i++){
+    //   (*lines)[i].checkItself();
+    // }
     printf("}\n");
   }
 

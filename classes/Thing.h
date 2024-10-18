@@ -3,16 +3,10 @@
 
 #include <QPainter>
 
-enum DrawMode{
-  FILL,
-  LINE
-};
-
 class Thing {
 public:
-  virtual ~Thing() = default;
-  virtual void draw() const = 0;
-  virtual void checkItself();
+  virtual void checkItself() const = 0;
+  // virtual void draw() const = 0;
 };
 
 #endif

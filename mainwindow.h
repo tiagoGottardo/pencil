@@ -29,7 +29,8 @@ public:
 private:
   Ui::MainWindow *ui;
 
-  std::unique_ptr<std::vector<std::variant<Point, Line, Polygon>>> displayFile;
+  std::vector<Thing*>* displayFile;
+  // std::unique_ptr<std::vector<std::variant<Point, Line, Polygon>>> displayFile;
   // std::vector<std::variant<Point, Line, Polygon>>* displayFile;
 
 protected:
