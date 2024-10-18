@@ -53,9 +53,17 @@ OBJECTS_DIR   = ./
 ####### Files
 
 SOURCES       = main.cpp \
-		mainwindow.cpp moc_mainwindow.cpp
+		mainwindow.cpp \
+		classes/Thing.cpp \
+		classes/Point.cpp \
+		classes/Line.cpp \
+		classes/Polygon.cpp moc_mainwindow.cpp
 OBJECTS       = main.o \
 		mainwindow.o \
+		Thing.o \
+		Point.o \
+		Line.o \
+		Polygon.o \
 		moc_mainwindow.o
 DIST          = /usr/lib/qt/mkspecs/features/spec_pre.prf \
 		/usr/lib/qt/mkspecs/common/unix.conf \
@@ -153,8 +161,16 @@ DIST          = /usr/lib/qt/mkspecs/features/spec_pre.prf \
 		/usr/lib/qt/mkspecs/features/exceptions.prf \
 		/usr/lib/qt/mkspecs/features/yacc.prf \
 		/usr/lib/qt/mkspecs/features/lex.prf \
-		pencil.pro mainwindow.h main.cpp \
-		mainwindow.cpp
+		pencil.pro mainwindow.h \
+		classes/Thing.h \
+		classes/Point.h \
+		classes/Line.h \
+		classes/Polygon.h main.cpp \
+		mainwindow.cpp \
+		classes/Thing.cpp \
+		classes/Point.cpp \
+		classes/Line.cpp \
+		classes/Polygon.cpp
 QMAKE_TARGET  = pencil
 DESTDIR       = 
 TARGET        = pencil
@@ -376,8 +392,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/qt/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents mainwindow.h $(DISTDIR)/
-	$(COPY_FILE) --parents main.cpp mainwindow.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents mainwindow.h classes/Thing.h classes/Point.h classes/Line.h classes/Polygon.h $(DISTDIR)/
+	$(COPY_FILE) --parents main.cpp mainwindow.cpp classes/Thing.cpp classes/Point.cpp classes/Line.cpp classes/Polygon.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents mainwindow.ui $(DISTDIR)/
 
 
@@ -414,6 +430,9 @@ compiler_moc_header_make_all: moc_mainwindow.cpp
 compiler_moc_header_clean:
 	-$(DEL_FILE) moc_mainwindow.cpp
 moc_mainwindow.cpp: mainwindow.h \
+		classes/Point.h \
+		classes/Line.h \
+		classes/Polygon.h \
 		moc_predefs.h \
 		/usr/bin/moc
 	/usr/bin/moc $(DEFINES) --include /home/tiagopg/projects/pencil/moc_predefs.h -I/usr/lib/qt/mkspecs/linux-g++ -I/home/tiagopg/projects/pencil -I/usr/include/qt -I/usr/include/qt/QtWidgets -I/usr/include/qt/QtGui -I/usr/include/qt/QtCore -I/usr/include/c++/14.2.1 -I/usr/include/c++/14.2.1/x86_64-pc-linux-gnu -I/usr/include/c++/14.2.1/backward -I/usr/lib/gcc/x86_64-pc-linux-gnu/14.2.1/include -I/usr/local/include -I/usr/lib/gcc/x86_64-pc-linux-gnu/14.2.1/include-fixed -I/usr/include mainwindow.h -o moc_mainwindow.cpp
@@ -439,12 +458,31 @@ compiler_clean: compiler_moc_predefs_clean compiler_moc_header_clean compiler_ui
 
 ####### Compile
 
-main.o: main.cpp mainwindow.h
+main.o: main.cpp mainwindow.h \
+		classes/Point.h \
+		classes/Line.h \
+		classes/Polygon.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o main.cpp
 
 mainwindow.o: mainwindow.cpp mainwindow.h \
-		ui_mainwindow.h
+		classes/Point.h \
+		classes/Line.h \
+		classes/Polygon.h \
+		ui_mainwindow.h \
+		classes/Thing.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o mainwindow.cpp
+
+Thing.o: classes/Thing.cpp classes/Thing.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Thing.o classes/Thing.cpp
+
+Point.o: classes/Point.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Point.o classes/Point.cpp
+
+Line.o: classes/Line.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Line.o classes/Line.cpp
+
+Polygon.o: classes/Polygon.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Polygon.o classes/Polygon.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp

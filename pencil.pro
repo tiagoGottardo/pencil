@@ -10,10 +10,18 @@ CONFIG += c++17
 
 SOURCES += \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    classes/Thing.cpp \
+    classes/Point.cpp \
+    classes/Line.cpp \
+    classes/Polygon.cpp
 
 HEADERS += \
-    mainwindow.h
+    mainwindow.h \
+    classes/Thing.h \
+    classes/Point.h \
+    classes/Line.h \
+    classes/Polygon.h
 
 FORMS += \
     mainwindow.ui

@@ -24,6 +24,8 @@ para baixo. Todo objeto precisará passar por uma transformação para ser repre
 Como será a viewport? 
 O viewport preencherá toda a tela, os botões ficaram suspensos no canto direito.
 
-Como funciona a atualização de desenhos no qtcreator? Precisaremos de ponteiros?
+Como funciona a atualização de desenhos no qtcreator?
+update() chamar o paintEvent, atualizando os desenhos;
 
 Como representaremos esses objetos?
+
