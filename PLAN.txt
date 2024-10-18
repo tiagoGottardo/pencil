@@ -1,0 +1,29 @@
+Objetivo: Criar um visualizador 3D
+
+Display file
+ - Vai ser um vetor de objetos que devem ser desenhados em loop
+
+Podemos usar o drawPoint e o drawLine do QtPainter
+
+Nossas classes
+- Thing (classe primária)
+- Point
+- Line
+- Polygon
+- Regular Polygon
+- Polyline (talvez)
+
+O que são coordenadas de mundo, de objeto e de tela?
+- Coordenada de objeto: os objetos tem coordenadas próprias,
+assim seus pontos são baseados nessas coordenadas.
+- Coordenada de mundo: essas coordenadas ficaram as referências dos vários 
+objetos coexistindo.
+- Coordenada de tela: essas coordenadas são 2D e o eixo y é crescente de cima
+para baixo. Todo objeto precisará passar por uma transformação para ser representado na tela.
+
+Como será a viewport? 
+O viewport preencherá toda a tela, os botões ficaram suspensos no canto direito.
+
+Como funciona a atualização de desenhos no qtcreator? Precisaremos de ponteiros?
+
+Como representaremos esses objetos?

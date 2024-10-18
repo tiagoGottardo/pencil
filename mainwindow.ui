@@ -24,7 +24,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>X +</string>
+     <string>Get bigger</string>
     </property>
    </widget>
    <widget class="QPushButton" name="pBx2">
@@ -37,7 +37,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>X -</string>
+     <string>Get little</string>
     </property>
    </widget>
   </widget>
