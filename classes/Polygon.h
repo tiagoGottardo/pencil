@@ -10,30 +10,38 @@ public:
   std::vector<Line>* lines;
   Point ref = Point(0, 0, 0);
 
-  std::string name = "Polygon";
+  std::string name;
 
-  Polygon(std::vector<Line>* linesList) {
-    if(linesList->size() <= 2) {
-      printf("It need 3 points or more to be polygon.\n");
-      return;
-    }
+  static bool isPolygon(std::vector<Line>* linesList){
+    if(linesList->size() <= 2) return false;
 
     linesList->push_back((*linesList)[0]);
     for(uint i = 0; i + 1 < linesList->size(); i++){
-      if((*linesList)[i].b != (*linesList)[i + 1].a){
-        printf("It couldn't be polygon.\n");
-        return;
-      }
+      if((*linesList)[i].b != (*linesList)[i + 1].a) return false;
     }
     linesList->pop_back();
 
+    return true;
+  }
+
+  Polygon(std::vector<Line>* linesList) { Polygon(linesList, "Polygon"); }
+
+  Polygon(std::vector<Line>* linesList, std::string name) : name(name) {
+    if(!Polygon::isPolygon(linesList)) {
+      printf("It couldn't be polygon.");
+      return;
+    }
+
     lines = linesList;
   }
+  
 
   void checkItself() const override {
     printf("Polygon {\n");
     for(uint i = 0; i < lines->size(); i++){
+      printf("  ");
       (*lines)[i].checkItself();
+      printf("\n");
     }
     printf("}\n");
   }

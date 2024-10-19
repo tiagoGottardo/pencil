@@ -12,18 +12,17 @@ public:
   Point* a;
   Point* b;
 
-  std::string name = "Line";
+  std::string name;
 
-  Line(Point* a, Point* b) : a(a), b(b) {};
-
-  std::string self() {
-    std::stringstream ss;
-    ss << name << "|" << a->self() << " -> " << b->self() << "|";
-    return ss.str();
-  };
+  Line(Point* a, Point* b, std::string name) : a(a), b(b), name(name) {};
+  Line(Point* a, Point* b) : a(a), b(b) { name = "Line"; };
 
   void checkItself() const override {
-    // std::cout << self() << std::endl;
+    printf("%s |", name.c_str());
+    a->checkItself();
+    printf(", ");
+    b->checkItself();
+    printf("|");
   };
 
   void draw(QPainter* painter) const override {
