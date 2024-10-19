@@ -4,7 +4,6 @@
 #include "Drawable.h"
 
 #include <QPainter>
-
 #include <iostream>
 #include <sstream>
 
@@ -16,14 +15,13 @@ public:
 
   std::string name;
 
-  Point(int32_t x, int32_t y, int32_t z) : x(x), y(y), z(z) { name = "Dot"; };
-  Point(int32_t x, int32_t y, int32_t z, std::string name) : x(x), y(y), z(z), name(name) {};
+  Point(int32_t x, int32_t y, int32_t z) : Point(x, y, z, "Dot") {} 
 
-  void draw(QPainter* painter) const override {
-    printf("Drawing dot now");
-  }
+  Point(int32_t x, int32_t y, int32_t z, const std::string& name) : x(x), y(y), z(z), name(name) {}
 
-  void checkItself() const override { printf("%s(%d, %d, %d)", name.c_str(), x, y, z); };
+  void draw(QPainter* painter) const override { painter->drawPoint(x, y); }
+
+  void checkItself() const override { printf("%s(%d, %d, %d)", name.c_str(), x, y, z); }
 
   bool operator==(const Point& other) const {
     return (x == other.x && y == other.y && z == other.z);

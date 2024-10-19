@@ -14,8 +14,9 @@ public:
 
   std::string name;
 
-  Line(Point* a, Point* b, std::string name) : a(a), b(b), name(name) {};
-  Line(Point* a, Point* b) : a(a), b(b) { name = "Line"; };
+  Line(Point* a, Point* b) : Line(a, b, "Line") {}
+
+  Line(Point* a, Point* b, const std::string& name) : a(a), b(b), name(name) {}
 
   void checkItself() const override {
     printf("%s |", name.c_str());
@@ -23,11 +24,11 @@ public:
     printf(", ");
     b->checkItself();
     printf("|");
-  };
+  }
 
   void draw(QPainter* painter) const override {
     painter->drawLine(a->x, a->y, b->x, b->y);
-  };
+  }
 
   double calculateAngular(){
     int32_t dy = b->y - a->y;

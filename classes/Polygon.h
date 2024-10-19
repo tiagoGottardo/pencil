@@ -16,17 +16,16 @@ public:
     if(linesList->size() <= 2) return false;
 
     linesList->push_back((*linesList)[0]);
-    for(uint i = 0; i + 1 < linesList->size(); i++){
+    for(uint i = 0; i + 1 < linesList->size(); i++)
       if((*linesList)[i].b != (*linesList)[i + 1].a) return false;
-    }
     linesList->pop_back();
 
     return true;
   }
 
-  Polygon(std::vector<Line>* linesList) { Polygon(linesList, "Polygon"); }
-
-  Polygon(std::vector<Line>* linesList, std::string name) : name(name) {
+  Polygon(std::vector<Line>* linesList) : Polygon(linesList, "Polygon") {} 
+  
+  Polygon(std::vector<Line>* linesList, const std::string& name) : name(name) {
     if(!Polygon::isPolygon(linesList)) {
       printf("It couldn't be polygon.");
       return;
@@ -35,7 +34,6 @@ public:
     lines = linesList;
   }
   
-
   void checkItself() const override {
     printf("Polygon {\n");
     for(uint i = 0; i < lines->size(); i++){
@@ -49,9 +47,8 @@ public:
   std::vector<Point*> getDots(){
     std::vector<Point*> dots;
 
-    for(uint i = 0; i < (*lines).size(); i++){
+    for(uint i = 0; i < (*lines).size(); i++)
       dots.push_back((*lines)[i].a);
-    }
 
     return dots;
   };
@@ -73,9 +70,7 @@ public:
 
     uint size = dots.size();
 
-    if (size == 0){
-        throw std::invalid_argument("There is no dots in centroid calculation.");
-    };
+    if (size == 0) throw std::invalid_argument("There is no dots in centroid calculation.");
 
     for(uint i = 0; i < size; i++){
         Cx += dots[i]->x;
@@ -86,9 +81,8 @@ public:
   };
 
   void draw(QPainter* painter) const override {
-    for(uint i = 0; i < (*lines).size(); i++) {
+    for(uint i = 0; i < (*lines).size(); i++)
       (*lines)[i].draw(painter);
-    }
   }
 };
 
