@@ -15,8 +15,9 @@ public:
 
   std::string name;
 
+  Point(int32_t x, int32_t y) : Point(x, y, 0, "Dot") {} 
+  Point(int32_t x, int32_t y, const std::string& name) : Point(x, y, 0, name) {} 
   Point(int32_t x, int32_t y, int32_t z) : Point(x, y, z, "Dot") {} 
-
   Point(int32_t x, int32_t y, int32_t z, const std::string& name) : x(x), y(y), z(z), name(name) {}
 
   void draw(QPainter* painter) const override { painter->drawPoint(x, y); }
