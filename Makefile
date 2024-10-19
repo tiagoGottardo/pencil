@@ -54,13 +54,13 @@ OBJECTS_DIR   = ./
 
 SOURCES       = main.cpp \
 		mainwindow.cpp \
-		classes/Thing.cpp \
+		classes/Drawable.cpp \
 		classes/Point.cpp \
 		classes/Line.cpp \
 		classes/Polygon.cpp moc_mainwindow.cpp
 OBJECTS       = main.o \
 		mainwindow.o \
-		Thing.o \
+		Drawable.o \
 		Point.o \
 		Line.o \
 		Polygon.o \
@@ -162,12 +162,12 @@ DIST          = /usr/lib/qt/mkspecs/features/spec_pre.prf \
 		/usr/lib/qt/mkspecs/features/yacc.prf \
 		/usr/lib/qt/mkspecs/features/lex.prf \
 		pencil.pro mainwindow.h \
-		classes/Thing.h \
+		classes/Drawable.h \
 		classes/Point.h \
 		classes/Line.h \
 		classes/Polygon.h main.cpp \
 		mainwindow.cpp \
-		classes/Thing.cpp \
+		classes/Drawable.cpp \
 		classes/Point.cpp \
 		classes/Line.cpp \
 		classes/Polygon.cpp
@@ -392,8 +392,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/qt/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents mainwindow.h classes/Thing.h classes/Point.h classes/Line.h classes/Polygon.h $(DISTDIR)/
-	$(COPY_FILE) --parents main.cpp mainwindow.cpp classes/Thing.cpp classes/Point.cpp classes/Line.cpp classes/Polygon.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents mainwindow.h classes/Drawable.h classes/Point.h classes/Line.h classes/Polygon.h $(DISTDIR)/
+	$(COPY_FILE) --parents main.cpp mainwindow.cpp classes/Drawable.cpp classes/Point.cpp classes/Line.cpp classes/Polygon.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents mainwindow.ui $(DISTDIR)/
 
 
@@ -431,6 +431,7 @@ compiler_moc_header_clean:
 	-$(DEL_FILE) moc_mainwindow.cpp
 moc_mainwindow.cpp: mainwindow.h \
 		classes/Point.h \
+		classes/Drawable.h \
 		classes/Line.h \
 		classes/Polygon.h \
 		moc_predefs.h \
@@ -460,20 +461,21 @@ compiler_clean: compiler_moc_predefs_clean compiler_moc_header_clean compiler_ui
 
 main.o: main.cpp mainwindow.h \
 		classes/Point.h \
+		classes/Drawable.h \
 		classes/Line.h \
 		classes/Polygon.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o main.cpp
 
 mainwindow.o: mainwindow.cpp mainwindow.h \
 		classes/Point.h \
+		classes/Drawable.h \
 		classes/Line.h \
 		classes/Polygon.h \
-		ui_mainwindow.h \
-		classes/Thing.h
+		ui_mainwindow.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o mainwindow.cpp
 
-Thing.o: classes/Thing.cpp classes/Thing.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Thing.o classes/Thing.cpp
+Drawable.o: classes/Drawable.cpp classes/Drawable.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Drawable.o classes/Drawable.cpp
 
 Point.o: classes/Point.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Point.o classes/Point.cpp

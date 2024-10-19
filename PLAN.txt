@@ -6,7 +6,7 @@ Display file
 Podemos usar o drawPoint e o drawLine do QtPainter
 
 Nossas classes
-- Thing (classe primária)
+- Drawable (classe primária)
 - Point
 - Line
 - Polygon
@@ -26,6 +26,3 @@ O viewport preencherá toda a tela, os botões ficaram suspensos no canto direit
 
 Como funciona a atualização de desenhos no qtcreator?
 update() chamar o paintEvent, atualizando os desenhos;
-
-Como representaremos esses objetos?
-

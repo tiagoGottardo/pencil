@@ -9,7 +9,7 @@
 #include <QMainWindow>
 #include <QKeyEvent>
 
-#include<variant>
+#include <variant>
 #include <memory>
 #include <vector>
 
@@ -29,9 +29,7 @@ public:
 private:
   Ui::MainWindow *ui;
 
-  std::vector<Thing*>* displayFile;
-  // std::unique_ptr<std::vector<std::variant<Point, Line, Polygon>>> displayFile;
-  // std::vector<std::variant<Point, Line, Polygon>>* displayFile;
+  std::vector<Drawable*>* displayFile;
 
 protected:
   void paintEvent(QPaintEvent *event) override;

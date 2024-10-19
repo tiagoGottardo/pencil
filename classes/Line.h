@@ -1,9 +1,13 @@
 #ifndef LINE_H
 #define LINE_H
 
+#include "Drawable.h"
+
 #include <QPainter>
 
-class Line {
+#include <iostream>
+
+class Line : public Drawable {
 public:
   Point* a;
   Point* b;
@@ -18,13 +22,13 @@ public:
     return ss.str();
   };
 
-  void checkItself(){
-    std::cout << self() << std::endl;
+  void checkItself() const override {
+    // std::cout << self() << std::endl;
   };
 
-  void draw(QPainter* painter){
+  void draw(QPainter* painter) const override {
     painter->drawLine(a->x, a->y, b->x, b->y);
-  }
+  };
 
   double calculateAngular(){
     int32_t dy = b->y - a->y;

@@ -15,7 +15,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
   std::vector<Point> points;
   std::vector<Line>* lines = new std::vector<Line>();
 
-  displayFile = new std::vector<Thing*>();
+  displayFile = new std::vector<Drawable*>();
 
   Point* a = new Point(50, 50, 0);
   Point* b = new Point(100, 200, 0);
@@ -32,7 +32,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
   Polygon* myPolygon = new Polygon(lines);
 
   displayFile->push_back(myPolygon);
-  displayFile->push_back(a);
 }
 
 MainWindow::~MainWindow() { delete ui; }
@@ -44,18 +43,17 @@ void MainWindow::paintEvent(QPaintEvent *event) {
   pen.setWidth(1);
   painter.setPen(pen);
 
-  (*displayFile)[0]->checkItself();
-  (*displayFile)[1]->checkItself();
+  for(Drawable* drawable : (*displayFile)) {
+    drawable->draw(&painter);
+  }
 }
 
 void MainWindow::on_pBx1_clicked() {
-  // myPolygon->redimensionXY(1.5);
-  // myPolygon->checkItself();
-  // update();
+  (dynamic_cast<Polygon*>((*displayFile)[0]))->redimensionXY(1.5);
+  update();
 }
 
 void MainWindow::on_pBx2_clicked() {
-  // myPolygon->redimensionXY(0.6666666666);
-  // myPolygon->checkItself();
-  // update();
+  (dynamic_cast<Polygon*>((*displayFile)[0]))->redimensionXY(0.666666666);
+  update();
 }

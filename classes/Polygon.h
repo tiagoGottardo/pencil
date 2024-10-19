@@ -1,10 +1,10 @@
 #ifndef POLYGON_H
 #define POLYGON_H
 
-#include "Thing.h"
+#include "Drawable.h"
 #include <QPainter>
 
-class Polygon : public Thing {
+class Polygon : public Drawable {
 public:
   std::vector<Line>* lines;
   Point ref = Point(0, 0, 0);
@@ -23,7 +23,7 @@ public:
         if((*linesList)[i].b != (*linesList)[0].a){
           couldBePolygon = false;
         }
-        if((*linesList)[i].calculateAngular() == (*linesList)[i + 1].calculateAngular()){
+        if((*linesList)[i].calculateAngular() == (*linesList)[0].calculateAngular()){
           printf("There are two lines in place of one.\n");
           couldBePolygon = false;
         }
@@ -49,7 +49,7 @@ public:
     lines = linesList;
   }
 
-  void checkItself() const override{
+  void checkItself() const override {
     printf("Polygon {\n");
     // for(uint i = 0; i < lines->size(); i++){
     //   (*lines)[i].checkItself();
@@ -96,7 +96,7 @@ public:
     }
   };
 
-  void draw(QPainter* painter){
+  void draw(QPainter* painter) const override {
     for(uint i = 0; i < (*lines).size(); i++) {
       (*lines)[i].draw(painter);
     }

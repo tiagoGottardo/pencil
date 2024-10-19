@@ -1,14 +1,14 @@
 #ifndef POINT_H
 #define POINT_H
 
-#include "Thing.h"
+#include "Drawable.h"
 
 #include <QPainter>
 
 #include <iostream>
 #include <sstream>
 
-class Point : public Thing {
+class Point : public Drawable {
 public:
   int32_t x;
   int32_t y;
@@ -22,6 +22,10 @@ public:
     std::stringstream ss;
     ss << name << "(" << x << ", " << y << ", " << z << ")";
     return ss.str();
+  }
+
+  void draw(QPainter* painter) const override {
+    printf("Drawing dot now");
   }
 
   void checkItself() const override {
