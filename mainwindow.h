@@ -13,14 +13,14 @@
 #include <memory>
 #include <vector>
 
-// QT_BEGIN_NAMESPACE
+QT_BEGIN_NAMESPACE;
 namespace Ui {
   class MainWindow;
 }
-// QT_END_NAMESPACE
+QT_END_NAMESPACE;
 
 class MainWindow : public QMainWindow {
-  Q_OBJECT
+  Q_OBJECT;
 
 public:
   MainWindow(QWidget *parent = nullptr);
@@ -34,14 +34,16 @@ private:
 protected:
   void paintEvent(QPaintEvent *event) override;
   void keyPressEvent(QKeyEvent *event) override {
-    if(event->key() == Qt::Key_Return) {
-      QCoreApplication::quit();
+    if(event->key() == Qt::Key_Return) QCoreApplication::quit();
+
+    if(event->key() == Qt::Key_D) {
+      printf("Display file: \n");
+      for(Drawable* drawable : (*displayFile)) 
+        drawable->checkItself();
     }
   };
-
 private slots:
   void on_pBx1_clicked();
   void on_pBx2_clicked();
-
 };
 #endif

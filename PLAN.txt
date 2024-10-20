@@ -1,16 +1,13 @@
-Objetivo: Criar um visualizador 3D
-
 Display file
  - Vai ser um vetor de objetos que devem ser desenhados em loop
 
-Podemos usar o drawPoint e o drawLine do QtPainter
+Posso usar o drawPoint e o drawLine do QtPainter
 
-Nossas classes
+Classes
 - Drawable (classe primária)
 - Point
 - Line
 - Polygon
-- Regular Polygon
 - Polyline (talvez)
 
 O que são coordenadas de mundo, de objeto e de tela?
@@ -20,9 +17,23 @@ assim seus pontos são baseados nessas coordenadas.
 objetos coexistindo.
 - Coordenada de tela: essas coordenadas são 2D e o eixo y é crescente de cima
 para baixo. Todo objeto precisará passar por uma transformação para ser representado na tela.
-
-Como será a viewport? 
-O viewport preencherá toda a tela, os botões ficaram suspensos no canto direito.
+-------
 
 Como funciona a atualização de desenhos no qtcreator?
-update() chamar o paintEvent, atualizando os desenhos;
+update() chama o paintEvent, atualizando os desenhos. 
+O update é chamado automaticamente ao redimensionar a tela
+É possível programar uma quantidade de tempo para chamar o update
+-------
+
+Como gerenciar os três sistemas de coordenadas?
+
+
+Como gerenciar os calculos das matrizes?
+
+Next Tasks
+X Criar construtor de array de pontos para polígonos
+- Criar função fill para polígonos
+- Criar constructor de polígono regular para largura e altura diferentes
+- Criar ponto de referência e sistema de coordenadas para os objetos
+
+- Estudar como os cálculos com matrizes funcionam

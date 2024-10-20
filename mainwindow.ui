@@ -1,58 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>MainWindow</class>
- <widget class="QMainWindow" name="MainWindow">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>800</width>
-    <height>600</height>
-   </rect>
-  </property>
-  <property name="windowTitle">
-   <string>MainWindow</string>
-  </property>
-  <widget class="QWidget" name="centralwidget">
-   <widget class="QPushButton" name="pBx1">
+  <class>MainWindow</class>
+  <widget class="QMainWindow" name="MainWindow">
     <property name="geometry">
-     <rect>
-      <x>480</x>
-      <y>140</y>
-      <width>171</width>
-      <height>81</height>
-     </rect>
+      <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>800</width>
+        <height>600</height>
+      </rect>
     </property>
-    <property name="text">
-     <string>Get bigger</string>
+    <property name="windowTitle">
+      <string>MainWindow</string>
     </property>
-   </widget>
-   <widget class="QPushButton" name="pBx2">
-    <property name="geometry">
-     <rect>
-      <x>580</x>
-      <y>110</y>
-      <width>80</width>
-      <height>26</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Get little</string>
-    </property>
-   </widget>
+    <widget class="QWidget" name="centralwidget">
+      <widget class="QPushButton" name="pBx1">
+        <property name="geometry">
+          <rect>
+            <x>480</x>
+            <y>140</y>
+            <width>171</width>
+            <height>81</height>
+          </rect>
+        </property>
+        <property name="text">
+          <string>Get bigger</string>
+        </property>
+      </widget>
+      <widget class="QPushButton" name="pBx2">
+        <property name="geometry">
+          <rect>
+            <x>580</x>
+            <y>110</y>
+            <width>80</width>
+            <height>26</height>
+          </rect>
+        </property>
+        <property name="text">
+          <string>Get smaller</string>
+        </property>
+      </widget>
+    </widget>
+    <widget class="QMenuBar" name="menubar">
+      <property name="geometry">
+        <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>1200</width>
+          <height>230</height>
+        </rect>
+      </property>
+    </widget>
+    <widget class="QStatusBar" name="statusbar" />
   </widget>
-  <widget class="QMenuBar" name="menubar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>800</width>
-     <height>23</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QStatusBar" name="statusbar"/>
- </widget>
- <resources/>
- <connections/>
+  <resources />
+  <connections />
 </ui>

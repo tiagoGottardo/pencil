@@ -3,6 +3,7 @@
 
 #include <QPainter>
 
+#include <stdio.h>
 #include <variant>
 #include <iostream>
 #include <memory>
@@ -11,26 +12,22 @@
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow) {
   ui->setupUi(this);
-
-  std::vector<Point> points;
-  std::vector<Line>* lines = new std::vector<Line>();
-
   displayFile = new std::vector<Drawable*>();
 
-  Point* a = new Point(50, 50, 0);
-  Point* b = new Point(100, 200, 0);
-  Point* c = new Point(300, 300, 0);
+  Polygon* triangle = Polygon::createRegularPolygon(100, 8, Point(100, 100));
+  Polygon* quad = Polygon::createRegularPolygon(100, 4, Point(200, 200));
+  Polygon* pent = Polygon::createRegularPolygon(100, 12, Point(300, 300));
+  
+  Polygon* myPolygon = new Polygon({
+    {50, 50},
+    {100, 200},
+    {0, 0},
+    {300, 300}
+  }, "Ronaldinho Soccer");
 
-  Line A(a, b);
-  Line B(b, c);
-  Line C(c, a);
-
-  lines->push_back(A);
-  lines->push_back(B);
-  lines->push_back(C);
-
-  Polygon* myPolygon = new Polygon(lines);
-
+  displayFile->push_back(triangle);
+  displayFile->push_back(quad);
+  displayFile->push_back(pent);
   displayFile->push_back(myPolygon);
 }
 
@@ -43,17 +40,18 @@ void MainWindow::paintEvent(QPaintEvent *event) {
   pen.setWidth(1);
   painter.setPen(pen);
 
-  for(Drawable* drawable : (*displayFile)) {
+  for(Drawable* drawable : (*displayFile))
     drawable->draw(&painter);
-  }
 }
 
 void MainWindow::on_pBx1_clicked() {
-  (dynamic_cast<Polygon*>((*displayFile)[0]))->redimensionXY(1.5);
+  for(Drawable* drawable : *displayFile)
+    (dynamic_cast<Polygon*>(drawable))->redimensionXY(1.25);
   update();
 }
 
 void MainWindow::on_pBx2_clicked() {
-  (dynamic_cast<Polygon*>((*displayFile)[0]))->redimensionXY(0.666666666);
+  for(Drawable* drawable : *displayFile)
+    (dynamic_cast<Polygon*>(drawable))->redimensionXY(0.75);
   update();
 }
