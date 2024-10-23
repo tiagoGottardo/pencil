@@ -14,13 +14,15 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
   ui->setupUi(this);
   displayFile = new std::vector<Drawable*>();
 
-  Polygon* triangle = Polygon::createRegularPolygon(100, 8, Point(100, 100));
+  // Nomes customizaveis -------------------------------------------------------|
+  Polygon* triangle = Polygon::createRegularPolygon(100, 3, Point(100, 100), "Triangle");
   Polygon* quad = Polygon::createRegularPolygon(100, 4, Point(200, 200));
-  Polygon* pent = Polygon::createRegularPolygon(100, 12, Point(300, 300));
+  Polygon* pent = Polygon::createRegularPolygon(100, 5, Point(300, 300));
   
+
   Polygon* myPolygon = new Polygon({
     {50, 50},
-    {100, 200},
+    {100, 200}, // <---- Inicialização por pontos
     {0, 0},
     {300, 300}
   }, "Ronaldinho Soccer");
@@ -44,12 +46,14 @@ void MainWindow::paintEvent(QPaintEvent *event) {
     drawable->draw(&painter);
 }
 
+// Escala experimental (sem multiplicação matrizes por enquanto)
 void MainWindow::on_pBx1_clicked() {
   for(Drawable* drawable : *displayFile)
     (dynamic_cast<Polygon*>(drawable))->redimensionXY(1.25);
   update();
 }
 
+// Escala experimental (sem multiplicação matrizes por enquanto)
 void MainWindow::on_pBx2_clicked() {
   for(Drawable* drawable : *displayFile)
     (dynamic_cast<Polygon*>(drawable))->redimensionXY(0.75);

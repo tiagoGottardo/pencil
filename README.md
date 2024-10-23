@@ -2,8 +2,8 @@
 - Por Tiago Panizio Gottardo
 
 ### Binds
-Tecla d -> printa as informações de todos objetos que estão no display file
-Tecla Enter -> Fecha o programa
+- Tecla Enter -> Fecha o programa
+- Tecla d -> printa as informações de todos objetos que estão no display file
 
 ### Extra Info
 - Funcionalidade experimental de escala
