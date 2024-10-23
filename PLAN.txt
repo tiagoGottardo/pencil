@@ -13,10 +13,10 @@ Classes
 O que são coordenadas de mundo, de objeto e de tela?
 - Coordenada de objeto: os objetos tem coordenadas próprias,
 assim seus pontos são baseados nessas coordenadas.
-- Coordenada de mundo: essas coordenadas ficaram as referências dos vários 
+- Coordenada de mundo: nessas coordenadas ficarão as referências dos vários 
 objetos coexistindo.
-- Coordenada de tela: essas coordenadas são 2D e o eixo y é crescente de cima
-para baixo. Todo objeto precisará passar por uma transformação para ser representado na tela.
+- Coordenada de tela: essas coordenadas são 2D e a origem fica no canto superior direito.
+Todo objeto precisará passar por uma transformação para ser representado na tela.
 -------
 
 Como funciona a atualização de desenhos no qtcreator?
@@ -29,6 +29,12 @@ Como gerenciar os três sistemas de coordenadas?
 
 
 Como gerenciar os calculos das matrizes?
+- Biblioteca de matrizes 
+- Transformação de coordenadas em matrizes
+- Translação envolve apenas mover o ponto de referência
+- Rotação e Escala envolvem atualizar todos os pontos do objeto em relação a referência 
+(por padrão a referência vai ficar no início da extensão do objeto, mas pode ficar no centro) 
+-------
 
 Next Tasks
 X Criar construtor de array de pontos para polígonos
