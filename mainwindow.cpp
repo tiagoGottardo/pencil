@@ -14,16 +14,16 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
   ui->setupUi(this);
   displayFile = new std::vector<Drawable*>();
 
+  // Info aparece no terminal ao apertar d
   // Nomes customizaveis -------------------------------------------------------|
+  // Quantidade de lados --------------------------------|                      |
   Polygon* triangle = Polygon::createRegularPolygon(100, 3, Point(100, 100), "Triangle");
   Polygon* quad = Polygon::createRegularPolygon(100, 4, Point(200, 200));
   Polygon* pent = Polygon::createRegularPolygon(100, 5, Point(300, 300));
   
-
   Polygon* myPolygon = new Polygon({
     {50, 50},
     {100, 200}, // <---- Inicialização por pontos
-    {0, 0},
     {300, 300}
   }, "Ronaldinho Soccer");
 
@@ -38,7 +38,7 @@ MainWindow::~MainWindow() { delete ui; }
 void MainWindow::paintEvent(QPaintEvent *event) {
   QPainter painter(this);
 
-  QPen pen(Qt::white, 3);
+  QPen pen(Qt::red, 3);
   pen.setWidth(1);
   painter.setPen(pen);
 

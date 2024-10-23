@@ -28,6 +28,10 @@ public:
   }
 
   static Polygon* createRegularPolygon(int size, int sides, Point centroid) {
+    return createRegularPolygon(size, sides, centroid, "Polygon");
+  }
+
+  static Polygon* createRegularPolygon(int size, int sides, Point centroid, std::string name) {
     if(sides <= 0) return NULL;
 
     double R = size / 2;
@@ -52,7 +56,7 @@ public:
       lines->push_back(Line(points[i], points[i + 1]));
     lines->push_back(Line(points[points.size() - 1], points[0]));
 
-    return new Polygon(lines);
+    return new Polygon(lines, name);
   }
 
   Polygon(const std::vector<std::vector<int>>& matrix) : Polygon(matrix, "Polygon") {}
