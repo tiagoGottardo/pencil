@@ -29,7 +29,7 @@ public:
 private:
   Ui::MainWindow *ui;
 
-  std::vector<Drawable*>* displayFile;
+  std::vector<Drawable*> displayFile;
 
 protected:
   void paintEvent(QPaintEvent *event) override;
@@ -38,7 +38,7 @@ protected:
 
     if(event->key() == Qt::Key_D) {
       printf("Display file: \n");
-      for(Drawable* drawable : (*displayFile)) 
+      for(Drawable* drawable : displayFile) 
         drawable->checkItself();
     }
   };
