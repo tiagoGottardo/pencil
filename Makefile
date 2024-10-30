@@ -53,17 +53,9 @@ OBJECTS_DIR   = ./
 ####### Files
 
 SOURCES       = main.cpp \
-		mainwindow.cpp \
-		classes/Drawable.cpp \
-		classes/Point.cpp \
-		classes/Line.cpp \
-		classes/Polygon.cpp moc_mainwindow.cpp
+		mainwindow.cpp moc_mainwindow.cpp
 OBJECTS       = main.o \
 		mainwindow.o \
-		Drawable.o \
-		Point.o \
-		Line.o \
-		Polygon.o \
 		moc_mainwindow.o
 DIST          = /usr/lib/qt/mkspecs/features/spec_pre.prf \
 		/usr/lib/qt/mkspecs/common/unix.conf \
@@ -165,12 +157,9 @@ DIST          = /usr/lib/qt/mkspecs/features/spec_pre.prf \
 		classes/Drawable.h \
 		classes/Point.h \
 		classes/Line.h \
-		classes/Polygon.h main.cpp \
-		mainwindow.cpp \
-		classes/Drawable.cpp \
-		classes/Point.cpp \
-		classes/Line.cpp \
-		classes/Polygon.cpp
+		classes/Polygon.h \
+		classes/Matrix.h main.cpp \
+		mainwindow.cpp
 QMAKE_TARGET  = pencil
 DESTDIR       = 
 TARGET        = pencil
@@ -392,8 +381,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/qt/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents mainwindow.h classes/Drawable.h classes/Point.h classes/Line.h classes/Polygon.h $(DISTDIR)/
-	$(COPY_FILE) --parents main.cpp mainwindow.cpp classes/Drawable.cpp classes/Point.cpp classes/Line.cpp classes/Polygon.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents mainwindow.h classes/Drawable.h classes/Point.h classes/Line.h classes/Polygon.h classes/Matrix.h $(DISTDIR)/
+	$(COPY_FILE) --parents main.cpp mainwindow.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents mainwindow.ui $(DISTDIR)/
 
 
@@ -473,18 +462,6 @@ mainwindow.o: mainwindow.cpp mainwindow.h \
 		classes/Polygon.h \
 		ui_mainwindow.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o mainwindow.cpp
-
-Drawable.o: classes/Drawable.cpp classes/Drawable.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Drawable.o classes/Drawable.cpp
-
-Point.o: classes/Point.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Point.o classes/Point.cpp
-
-Line.o: classes/Line.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Line.o classes/Line.cpp
-
-Polygon.o: classes/Polygon.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Polygon.o classes/Polygon.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp

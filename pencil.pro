@@ -10,18 +10,15 @@ CONFIG += c++17
 
 SOURCES += \
     main.cpp \
-    mainwindow.cpp \
-    classes/Drawable.cpp \
-    classes/Point.cpp \
-    classes/Line.cpp \
-    classes/Polygon.cpp
+    mainwindow.cpp 
 
 HEADERS += \
     mainwindow.h \
     classes/Drawable.h \
     classes/Point.h \
     classes/Line.h \
-    classes/Polygon.h
+    classes/Polygon.h \
+    classes/Matrix.h
 
 FORMS += \
     mainwindow.ui
