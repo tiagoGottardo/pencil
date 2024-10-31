@@ -4,8 +4,6 @@
 #include "Drawable.h"
 
 #include <QPainter>
-#include <iostream>
-#include <sstream>
 
 class Point : public Drawable {
 public:
@@ -15,6 +13,7 @@ public:
 
   std::string name;
 
+  Point() : Point(0, 0, 0, "Point") {} 
   Point(int32_t x, int32_t y) : Point(x, y, 0, "Point") {} 
   Point(int32_t x, int32_t y, const std::string& name) : Point(x, y, 0, name) {} 
   Point(int32_t x, int32_t y, int32_t z) : Point(x, y, z, "Point") {} 
@@ -28,9 +27,19 @@ public:
     return (x == other.x && y == other.y && z == other.z);
   }
 
-  bool operator!=(const Point& other) const {
-    return !(*this == other);
-  }
+  bool operator!=(const Point& other) const { return !(*this == other); }
+
+  // Point& operator=(const Point& other) {
+  //   if (this == &other) return *this;
+
+  //   x = other.x;
+  //   y = other.y;
+  //   z = other.z;
+
+  //   name = other.name;
+  //   
+  //   return *this;
+  // }
 };
 
 #endif

@@ -1,13 +1,9 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "./classes/Polygon.h"
+
 
 #include <QPainter>
-
-#include <stdio.h>
-#include <variant>
-#include <iostream>
-#include <memory>
-#include <string>
 #include <vector>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow) {
@@ -33,6 +29,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 MainWindow::~MainWindow() { delete ui; }
 
 void MainWindow::paintEvent(QPaintEvent *event) {
+  event->ignore();
   QPainter painter(this);
 
   QPen pen(Qt::red, 3);
@@ -42,6 +39,7 @@ void MainWindow::paintEvent(QPaintEvent *event) {
   for(Drawable* drawable : displayFile)
     drawable->draw(&painter);
 }
+
 
 void MainWindow::on_pBx1_clicked() {
   for(Drawable* drawable : displayFile)
@@ -54,3 +52,4 @@ void MainWindow::on_pBx2_clicked() {
     (dynamic_cast<Polygon*>(drawable))->redimensionXY(0.75);
   update();
 }
+

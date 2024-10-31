@@ -6,7 +6,6 @@
 
 #include <stdexcept>
 #include <vector>
-#include <iostream>
 #include <cmath>
 
 using sizet = std::size_t;

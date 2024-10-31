@@ -2,12 +2,14 @@
 #define POLYGON_H
 
 #include "Drawable.h"
+#include "Point.h"
+#include "Line.h"
+
 #include <QPainter>
-#include <iterator>
 #include <vector>
 #include <cmath>
-#include <numbers>
-#include <initializer_list>
+
+using sizet = std::size_t;
 
 class Polygon : public Drawable {
 public:
@@ -52,9 +54,8 @@ public:
 
     std::vector<Line>* lines = new std::vector<Line>();
 
-    for(int i = 0; i + 1 < static_cast<int>(points.size()); i++)
-      lines->push_back(Line(points[i], points[i + 1]));
-    lines->push_back(Line(points[points.size() - 1], points[0]));
+    for(sizet i = 0; i < points.size(); i++)
+      lines->push_back(Line(points[i], points[(i + 1 < points.size()) ? i + 1 : 0]));
 
     return new Polygon(lines, name);
   }
@@ -69,9 +70,13 @@ public:
 
     lines = new std::vector<Line>(); 
 
-    for(int i = 0; i + 1 < static_cast<int>(points.size()); i++)
-      lines->push_back(Line(points[i], points[i + 1]));
-    lines->push_back(Line(points[points.size() - 1], points[0]));
+    ref = Point(points[0]->x, points[0]->y, 0);
+    for(sizet i = 0; i < points.size(); i++) {
+      lines->push_back(Line(points[i], points[(i + 1 < points.size()) ? i + 1 : 0]));
+
+      if(points[i]->x < ref.x) ref.x = points[i]->x;
+      if(points[i]->y > ref.y) ref.y = points[i]->y;
+    }
   } 
 
   Polygon(std::vector<Line>* linesList) : Polygon(linesList, "Polygon") {} 
@@ -82,11 +87,21 @@ public:
       return;
     }
 
+    ref = Point((*linesList)[0].a->x, (*linesList)[0].a->y, 0);
+
+    Point iterator = Point();
+    for(sizet i = 1; i < linesList->size(); i++) {
+      iterator = *((*linesList)[i].a);
+      if(iterator.x < ref.x) ref.x = iterator.x;
+      if(iterator.y > ref.y) ref.y = iterator.y;
+    }
+
     lines = linesList;
   }
   
   void checkItself() const override {
     printf("%s {\n", name.c_str());
+    printf("Ref: "); ref.checkItself(); printf("\n");
     for(uint i = 0; i < lines->size(); i++){
       printf("  ");
       (*lines)[i].checkItself();

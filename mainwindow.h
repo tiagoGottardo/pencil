@@ -1,17 +1,11 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "classes/Point.h"
-#include "classes/Line.h"
-#include "classes/Polygon.h"
+#include "./classes/Drawable.h"
 
 #include <QCoreApplication>
 #include <QMainWindow>
 #include <QKeyEvent>
-
-#include <variant>
-#include <memory>
-#include <vector>
 
 QT_BEGIN_NAMESPACE;
 namespace Ui {

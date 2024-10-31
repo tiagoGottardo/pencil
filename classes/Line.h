@@ -2,10 +2,9 @@
 #define LINE_H
 
 #include "Drawable.h"
+#include "Point.h"
 
 #include <QPainter>
-
-#include <iostream>
 
 class Line : public Drawable {
 public:
