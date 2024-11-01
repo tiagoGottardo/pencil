@@ -130,17 +130,6 @@ public:
     return points;
   }
 
-  void redimensionXY(float s){
-    std::vector<Point*> points = getPoints();
-
-    Point centroid = calculateCentroid();
-
-    for(uint i = 0; i < points.size(); i++){
-      points[i]->y = centroid.y + s * (points[i]->y - centroid.y);
-      points[i]->x = centroid.x + s * (points[i]->x - centroid.x);
-    }
-  }
-
   Point calculateCentroid(){
     int Cx = 0, Cy = 0;
     std::vector<Point*> points = getPoints();
@@ -165,13 +154,42 @@ public:
     }
   }
 
-  void rotate(int degree) {
-    Matrix a = ref.toMatrix();
-    printf("degree: %d\n", degree);
-    a.checkItself();
+  void rotate(double theta_degree) {
+    double theta_radian = theta_degree * M_PI / 180.0;
+    Matrix rotation = Matrix({
+      {std::cos(theta_radian), -std::sin(theta_radian), 0},
+      {std::sin(theta_radian), std::cos(theta_radian), 0},
+      {0, 0, 1}
+    });
+
+    std::vector<Point*> points = getPoints();
+
+    Matrix iterator = Matrix(1, 3);
+    for(sizet i = 0; i < points.size(); i++) {
+      iterator = rotation * points[i]->toMatrix();
+      points[i]->x = iterator[0][0];
+      points[i]->y = iterator[1][0];
+      points[i]->z = iterator[2][0];
+    }
   };
-  // void move(Matrix<int32_t> to) {};
-  // void redimensionXY(Matrix<int32_t> scale) {};
+  void move(Point to) {
+    ref = ref + to;
+  };
+
+  void redimensionXY(double scale) {
+    Matrix scaleMatrix = Matrix::IdentityMatrix(3) * scale;
+
+    std::vector<Point*> points = getPoints();
+
+    Matrix iterator = Matrix(1, 3);
+    for(sizet i = 0; i < points.size(); i++) {
+      iterator = scaleMatrix * points[i]->toMatrix();
+      points[i]->x = iterator[0][0];
+      points[i]->y = iterator[1][0];
+      points[i]->z = iterator[2][0];
+    }
+
+  };
 };
 
 #endif

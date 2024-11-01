@@ -30,8 +30,16 @@ public:
 
   bool operator!=(const Point& other) const { return !(*this == other); }
 
-  Matrix<int32_t> toMatrix() { 
-    return Matrix<int32_t>(1, 3, {{0, 0, x}, {0, 1, y}, {0, 2, z}}); 
+  Matrix toMatrix() { 
+    return Matrix(1, 3, {{0, 0, (double) x}, {0, 1, (double) y}, {0, 2, (double) z}}); 
+  }
+
+  Point operator=(const Matrix& other) const {
+    return Point(
+      static_cast<int>(std::round(other[0][0])), 
+      static_cast<int>(std::round(other[1][0])), 
+      static_cast<int>(std::round(other[2][0])) 
+    );
   }
 
   Point operator+(const Point& other) const {

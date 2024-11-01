@@ -37,7 +37,7 @@ protected:
     }
   };
 private slots:
-  void on_pBx1_clicked();
-  void on_pBx2_clicked();
+  // void on_pBx1_clicked();
+  // void on_pBx2_clicked();
 };
 #endif
