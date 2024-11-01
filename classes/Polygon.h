@@ -77,6 +77,12 @@ public:
       if(points[i]->x < ref.x) ref.x = points[i]->x;
       if(points[i]->y > ref.y) ref.y = points[i]->y;
     }
+
+    for(sizet i = 0; i < lines->size(); i++) {
+      (*lines)[i].a->x -= ref.x;
+      (*lines)[i].a->y -= ref.y;
+    }
+
   } 
 
   Polygon(std::vector<Line>* linesList) : Polygon(linesList, "Polygon") {} 
@@ -94,6 +100,11 @@ public:
       iterator = *((*linesList)[i].a);
       if(iterator.x < ref.x) ref.x = iterator.x;
       if(iterator.y > ref.y) ref.y = iterator.y;
+    }
+
+    for(sizet i = 0; i < linesList->size(); i++) {
+      (*linesList)[i].a->x -= ref.x;
+      (*linesList)[i].a->y -= ref.y;
     }
 
     lines = linesList;
@@ -147,9 +158,20 @@ public:
   }
 
   void draw(QPainter* painter) const override {
-    for(uint i = 0; i < (*lines).size(); i++)
-      (*lines)[i].draw(painter);
+    Line line;
+    for(uint i = 0; i < (*lines).size(); i++) {
+      line = Line(new Point(*((*lines)[i].a) + ref), new Point((*(*lines)[i].b) + ref));
+      line.draw(painter);
+    }
   }
+
+  void rotate(int degree) {
+    Matrix a = ref.toMatrix();
+    printf("degree: %d\n", degree);
+    a.checkItself();
+  };
+  // void move(Matrix<int32_t> to) {};
+  // void redimensionXY(Matrix<int32_t> scale) {};
 };
 
 #endif

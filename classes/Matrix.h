@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <type_traits>
 #include <stdexcept>
 #include <vector>
 #include <cmath>
@@ -55,7 +56,7 @@ public:
       matrix[point.y][point.x] = point.value;
   }
 
-  Matrix(std::vector<std::vector<T>> input) {
+  Matrix(const std::vector<std::vector<T>>& input) {
     if(input.size() == 0) return; 
 
     width = input[0].size();
@@ -63,11 +64,11 @@ public:
 
     matrix = (T **) calloc(height, sizeof(T*));
 
-    for(int i = 0; i < height; i++)
+    for(sizet i = 0; i < height; i++)
       matrix[i] = (T*) calloc(width, sizeof(T));
 
-    for(int i = 0; i < height; i++)
-      for(int j = 0; j < width; j++)
+    for(sizet i = 0; i < height; i++)
+      for(sizet j = 0; j < width; j++)
         matrix[i][j] = input[i][j];
   }
 
@@ -209,8 +210,11 @@ public:
 
   void checkItself(){
     for(sizet i = 0; i < height; i++) {
-      for(sizet j = 0; j < width; j++)
-        printf("%.2f ", matrix[i][j]);
+      for(sizet j = 0; j < width; j++) 
+        if constexpr (std::is_integral<T>::value)
+          printf("%d ", matrix[i][j]);
+        else 
+          printf("%.2f ", matrix[i][j]);
       printf("\n");
     }
     printf("\n");

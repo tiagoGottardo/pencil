@@ -11,19 +11,21 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
   displayFile = std::vector<Drawable*>();
 
   Polygon* triangle = Polygon::createRegularPolygon(100, 3, Point(100, 100), "Triangle");
-  Polygon* quad = Polygon::createRegularPolygon(100, 4, Point(200, 200));
-  Polygon* pent = Polygon::createRegularPolygon(100, 5, Point(300, 300));
-  
-  Polygon* myPolygon = new Polygon({
-    {50, 50},
-    {100, 200},
-    {300, 300}
-  }, "Ronaldinho Soccer");
+  // Polygon* quad = Polygon::createRegularPolygon(100, 4, Point(200, 200));
+  // Polygon* pent = Polygon::createRegularPolygon(100, 5, Point(300, 300));
+  // 
+  // Polygon* myPolygon = new Polygon({
+  //   {50, 50},
+  //   {100, 200},
+  //   {300, 300}
+  // }, "Ronaldinho Soccer");
+
+  triangle->rotate(30);
 
   displayFile.push_back(triangle);
-  displayFile.push_back(quad);
-  displayFile.push_back(pent);
-  displayFile.push_back(myPolygon);
+  // displayFile.push_back(quad);
+  // displayFile.push_back(pent);
+  // displayFile.push_back(myPolygon);
 }
 
 MainWindow::~MainWindow() { delete ui; }

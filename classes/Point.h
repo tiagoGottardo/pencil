@@ -2,6 +2,7 @@
 #define POINT_H
 
 #include "Drawable.h"
+#include "Matrix.h"
 
 #include <QPainter>
 
@@ -29,17 +30,14 @@ public:
 
   bool operator!=(const Point& other) const { return !(*this == other); }
 
-  // Point& operator=(const Point& other) {
-  //   if (this == &other) return *this;
+  Matrix<int32_t> toMatrix() { 
+    return Matrix<int32_t>(1, 3, {{0, 0, x}, {0, 1, y}, {0, 2, z}}); 
+  }
 
-  //   x = other.x;
-  //   y = other.y;
-  //   z = other.z;
+  Point operator+(const Point& other) const {
+    return Point(x + other.x, y + other.y, z + other.z);
+  }
 
-  //   name = other.name;
-  //   
-  //   return *this;
-  // }
 };
 
 #endif

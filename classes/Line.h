@@ -15,6 +15,8 @@ public:
 
   Line(Point* a, Point* b) : Line(a, b, "Line") {}
 
+  Line() : Line(new Point(), new Point(), "Line") {}
+
   Line(Point* a, Point* b, const std::string& name) : a(a), b(b), name(name) {}
 
   void checkItself() const override {

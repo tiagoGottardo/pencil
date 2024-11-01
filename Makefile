@@ -454,6 +454,7 @@ mainwindow.o: mainwindow.cpp mainwindow.h \
 		ui_mainwindow.h \
 		classes/Polygon.h \
 		classes/Point.h \
+		classes/Matrix.h \
 		classes/Line.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o mainwindow.cpp
 
