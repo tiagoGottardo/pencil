@@ -18,6 +18,7 @@ HEADERS += \
     classes/Point.h \
     classes/Line.h \
     classes/Polygon.h \
+    classes/Viewport2.h \
     classes/Matrix.h
 
 FORMS += \

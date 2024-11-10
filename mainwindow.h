@@ -23,6 +23,7 @@ public:
 private:
   Ui::MainWindow *ui;
 
+  int dfIndex;
   std::vector<Drawable*> displayFile;
 
 protected:
@@ -37,7 +38,7 @@ protected:
     }
   };
 private slots:
-  // void on_pBx1_clicked();
-  // void on_pBx2_clicked();
+  void on_left_clicked();
+  void on_right_clicked();
 };
 #endif

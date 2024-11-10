@@ -11,13 +11,11 @@ public:
   Point* a;
   Point* b;
 
-  std::string name;
-
   Line(Point* a, Point* b) : Line(a, b, "Line") {}
 
   Line() : Line(new Point(), new Point(), "Line") {}
 
-  Line(Point* a, Point* b, const std::string& name) : a(a), b(b), name(name) {}
+  Line(Point* a, Point* b, const std::string& name) : a(a), b(b), Drawable(name) {}
 
   void checkItself() const override {
     printf("%s |", name.c_str());

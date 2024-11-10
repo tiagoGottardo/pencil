@@ -62,7 +62,7 @@ public:
 
   Polygon(const std::vector<std::vector<int>>& matrix) : Polygon(matrix, "Polygon") {}
 
-  Polygon(const std::vector<std::vector<int>>& matrix, const std::string& name) : name(name) {
+  Polygon(const std::vector<std::vector<int>>& matrix, const std::string& name) : Drawable(name) {
     std::vector<Point*> points;
 
     for(std::vector pointArray : matrix)
@@ -87,7 +87,7 @@ public:
 
   Polygon(std::vector<Line>* linesList) : Polygon(linesList, "Polygon") {} 
   
-  Polygon(std::vector<Line>* linesList, const std::string& name) : name(name) {
+  Polygon(std::vector<Line>* linesList, const std::string& name) : Drawable(name) {
     if(!Polygon::isPolygon(linesList)) {
       printf("It couldn't be polygon.");
       return;

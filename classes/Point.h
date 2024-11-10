@@ -18,7 +18,7 @@ public:
   Point(int32_t x, int32_t y) : Point(x, y, 0, "Point") {} 
   Point(int32_t x, int32_t y, const std::string& name) : Point(x, y, 0, name) {} 
   Point(int32_t x, int32_t y, int32_t z) : Point(x, y, z, "Point") {} 
-  Point(int32_t x, int32_t y, int32_t z, const std::string& name) : x(x), y(y), z(z), name(name) {}
+  Point(int32_t x, int32_t y, int32_t z, const std::string& name) : x(x), y(y), z(z), Drawable(name) {}
 
   void draw(QPainter* painter) const override { painter->drawPoint(x, y); }
 

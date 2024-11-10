@@ -158,6 +158,7 @@ DIST          = /usr/lib/qt/mkspecs/features/spec_pre.prf \
 		classes/Point.h \
 		classes/Line.h \
 		classes/Polygon.h \
+		classes/Viewport2.h \
 		classes/Matrix.h main.cpp \
 		mainwindow.cpp
 QMAKE_TARGET  = pencil
@@ -381,7 +382,7 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/qt/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents mainwindow.h classes/Drawable.h classes/Point.h classes/Line.h classes/Polygon.h classes/Matrix.h $(DISTDIR)/
+	$(COPY_FILE) --parents mainwindow.h classes/Drawable.h classes/Point.h classes/Line.h classes/Polygon.h classes/Viewport2.h classes/Matrix.h $(DISTDIR)/
 	$(COPY_FILE) --parents main.cpp mainwindow.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents mainwindow.ui $(DISTDIR)/
 
@@ -432,7 +433,8 @@ compiler_uic_make_all: ui_mainwindow.h
 compiler_uic_clean:
 	-$(DEL_FILE) ui_mainwindow.h
 ui_mainwindow.h: mainwindow.ui \
-		/usr/bin/uic
+		/usr/bin/uic \
+		classes/Viewport.h
 	/usr/bin/uic mainwindow.ui -o ui_mainwindow.h
 
 compiler_yacc_decl_make_all:
@@ -452,6 +454,7 @@ main.o: main.cpp mainwindow.h \
 mainwindow.o: mainwindow.cpp mainwindow.h \
 		classes/Drawable.h \
 		ui_mainwindow.h \
+		classes/Viewport.h \
 		classes/Polygon.h \
 		classes/Point.h \
 		classes/Matrix.h \

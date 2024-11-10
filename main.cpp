@@ -1,7 +1,6 @@
 #include "mainwindow.h"
 
 #include <QApplication>
-
 #include <QPainter>
 #include <QWidget>
 

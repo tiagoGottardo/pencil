@@ -5,6 +5,9 @@
 
 class Drawable {
 public:
+  std::string name;
+
+  Drawable (std::string name) : name(name) {}
   virtual void draw(QPainter* painter) const = 0;
   virtual void checkItself() const = 0;
 };
