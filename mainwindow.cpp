@@ -16,14 +16,14 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
   triangle->redimensionXY(1.2);
   triangle2->rotate(90);
   triangle3->move(Point(50, 50));
-  ui->frame->setDisplayFile(&displayFile);
-  update();
+
 
   displayFile.push_back(triangle);
   displayFile.push_back(triangle2);
   displayFile.push_back(triangle3);
 
-  dfIndex = 0;
+  ui->frame->setDisplayFile(&displayFile);
+  ui->frame->setDisplayIndex(dfIndex = 0);
   ui->label->setText(QString::fromStdString(displayFile[dfIndex]->name));
 }
 
@@ -47,8 +47,6 @@ void MainWindow::paintEvent(QPaintEvent *event) {
     displayFile[i]->draw(&painter);
   }
 }
-
-
 
 void MainWindow::on_left_clicked() {
   if(dfIndex == 0) dfIndex = ((int) displayFile.size()) - 1; else dfIndex--;

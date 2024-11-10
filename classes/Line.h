@@ -15,7 +15,7 @@ public:
 
   Line() : Line(new Point(), new Point(), "Line") {}
 
-  Line(Point* a, Point* b, const std::string& name) : a(a), b(b), Drawable(name) {}
+  Line(Point* a, Point* b, const std::string& name) : Drawable(name), a(a), b(b) {}
 
   void checkItself() const override {
     printf("%s |", name.c_str());

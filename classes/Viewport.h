@@ -6,7 +6,6 @@ class Viewport : public QFrame {
   
 public:
   void setDisplayFile(std::vector<Drawable*> *displayFile) {
-    this->displayIndex = 0;
     this->displayFile = displayFile;
   }
 
@@ -28,8 +27,7 @@ protected:
         painter.setPen(Qt::red);
         (*displayFile)[i]->draw(&painter);
         painter.setPen(Qt::black);
-      } else
-      (*displayFile)[i]->draw(&painter);
+      } else (*displayFile)[i]->draw(&painter);
     }
   }
 
