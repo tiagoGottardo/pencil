@@ -176,7 +176,7 @@ public:
     ref = ref + to;
   };
 
-  void redimensionXY(double scale) {
+  void scale(double scale) {
     Matrix scaleMatrix = Matrix::IdentityMatrix(3) * scale;
 
     std::vector<Point*> points = getPoints();
