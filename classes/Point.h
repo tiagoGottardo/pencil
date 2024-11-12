@@ -44,6 +44,9 @@ public:
     return Point(x + other.x, y + other.y, z + other.z);
   }
 
+  Point operator-(const Point& other) const {
+    return Point(x - other.x, y - other.y, z - other.z);
+  }
 };
 
 #endif

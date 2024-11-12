@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include "./classes/Drawable.h"
+#include "./classes/Window.h"
 
 #include <QCoreApplication>
 #include <QMainWindow>
@@ -23,19 +24,12 @@ public:
 private:
   Ui::MainWindow *ui;
 
+  Window window;
   int dfIndex;
-  std::vector<Drawable*> displayFile;
+  std::vector<Drawable*> displayFile = std::vector<Drawable*>();
 
 protected:
-  void keyPressEvent(QKeyEvent *event) override {
-    if(event->key() == Qt::Key_Return) QCoreApplication::quit();
-
-    if(event->key() == Qt::Key_D) {
-      printf("Display file: \n");
-      for(Drawable* drawable : displayFile) 
-        drawable->checkItself();
-    }
-  };
+  void keyPressEvent(QKeyEvent *event) override;
 private slots:
   void on_left_clicked();
   void on_right_clicked();

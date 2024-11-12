@@ -45,15 +45,10 @@ Na analogia da câmera, uma viewport é uma tela que recebe as informações da 
 e tem tamanho fixo. Esse tamanho geralmente não é o tamanho capturado pela câmera, portanto, realiza-se a
 transformação mencionada anteriormente. Cada viewport precisa estar relacionada com apenas uma window.
 
-Next Tasks
-- Criar uma interface descente para o programa
-- Criar uma classe para window
-- Criar as tranformações para viewport
-
 Entrega 3:
-- Implementar a window com coordenadas normalizadas. Modo mais pratico: dobrar as coordenadas 
+X Implementar a window com coordenadas normalizadas. Modo mais pratico: dobrar as coordenadas 
 dos objetos no display file; 
-- Acrescente algum mecanismo para modificar os parâmetros da window para ver o efeito na 
+X Acrescente algum mecanismo para modificar os parâmetros da window para ver o efeito na 
 area de desenho. A cada mudança o SCN precisa ser recalculado;
 - Acrescente algum mecanismo para modificar os parâmetros da viewport para ver o efeito na 
 area de desenho. A cada mudança, a transformada de viewport precisa ser recalculada;

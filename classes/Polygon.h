@@ -171,6 +171,7 @@ public:
 
   void rotate(double theta_degree) {
     double theta_radian = theta_degree * M_PI / 180.0;
+    Point centroid = this->calculateCentroid();
     Matrix rotation = Matrix({
       {std::cos(theta_radian), -std::sin(theta_radian), 0},
       {std::sin(theta_radian), std::cos(theta_radian), 0},
@@ -181,15 +182,16 @@ public:
 
     Matrix iterator = Matrix(1, 3);
     for(sizet i = 0; i < points.size(); i++) {
-      iterator = rotation * points[i]->toMatrix();
-      points[i]->x = iterator[0][0];
-      points[i]->y = iterator[1][0];
-      points[i]->z = iterator[2][0];
+      iterator = rotation * ((*points[i]) - centroid).toMatrix();
+      points[i]->x = iterator[0][0] + centroid.x;
+      points[i]->y = iterator[1][0] + centroid.y;
+      points[i]->z = iterator[2][0] + centroid.z;
     }
-  };
+  }
+
   void move(Point to) {
     ref = ref + to;
-  };
+  }
 
   void scale(double scaleX, double scaleY, std::vector<Point*> points) {
     Matrix scaleMatrix = Matrix::IdentityMatrix(3);
@@ -203,10 +205,10 @@ public:
       points[i]->y = iterator[1][0];
       points[i]->z = iterator[2][0];
     }
-  };
+  }
 
-  void scale(double scaleX, double scaleY) { this->scale(scaleX, scaleY, this->getPoints()); };
-  void scale(double scale) { this->scale(scale, scale); };
+  void scale(double scaleX, double scaleY) { this->scale(scaleX, scaleY, this->getPoints()); }
+  void scale(double scale) { this->scale(scale, scale); }
 
 
 };
