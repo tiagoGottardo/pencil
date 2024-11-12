@@ -16,7 +16,22 @@ public:
   std::vector<Line>* lines;
   Point ref = Point(0, 0, 0);
 
-  std::string name;
+  Polygon clone() {
+    std::vector<Point*> points = getPoints();
+    std::vector<Point*> newPoints = std::vector<Point*>();
+    std::vector<Line>* newLines = new std::vector<Line>(); 
+
+    newPoints.push_back(new Point(*points[0]));
+    for(sizet i = 0; i < points.size(); i++) {
+      if(i + 1 < points.size()) newPoints.push_back(new Point(*points[i + 1]));
+      newLines->push_back(Line(newPoints[i], newPoints[(i + 1 < points.size()) ? i + 1 : 0]));
+    }
+
+    Polygon newPolygon = Polygon(newLines, this->name);
+    newPolygon.ref = this->ref;
+
+    return newPolygon;
+  }
 
   static bool isPolygon(std::vector<Line>* linesList){
     if(linesList->size() <= 2) return false;
@@ -176,10 +191,10 @@ public:
     ref = ref + to;
   };
 
-  void scale(double scale) {
-    Matrix scaleMatrix = Matrix::IdentityMatrix(3) * scale;
-
-    std::vector<Point*> points = getPoints();
+  void scale(double scaleX, double scaleY, std::vector<Point*> points) {
+    Matrix scaleMatrix = Matrix::IdentityMatrix(3);
+    scaleMatrix[0][0] = scaleX;
+    scaleMatrix[1][1] = scaleY;
 
     Matrix iterator = Matrix(1, 3);
     for(sizet i = 0; i < points.size(); i++) {
@@ -188,8 +203,12 @@ public:
       points[i]->y = iterator[1][0];
       points[i]->z = iterator[2][0];
     }
-
   };
+
+  void scale(double scaleX, double scaleY) { this->scale(scaleX, scaleY, this->getPoints()); };
+  void scale(double scale) { this->scale(scale, scale); };
+
+
 };
 
 #endif
