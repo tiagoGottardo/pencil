@@ -45,10 +45,19 @@ Na analogia da câmera, uma viewport é uma tela que recebe as informações da 
 e tem tamanho fixo. Esse tamanho geralmente não é o tamanho capturado pela câmera, portanto, realiza-se a
 transformação mencionada anteriormente. Cada viewport precisa estar relacionada com apenas uma window.
 
-Entrega 3:
-X Implementar a window com coordenadas normalizadas. Modo mais pratico: dobrar as coordenadas 
-dos objetos no display file; 
-X Acrescente algum mecanismo para modificar os parâmetros da window para ver o efeito na 
-area de desenho. A cada mudança o SCN precisa ser recalculado;
-- Acrescente algum mecanismo para modificar os parâmetros da viewport para ver o efeito na 
-area de desenho. A cada mudança, a transformada de viewport precisa ser recalculada;
+Problemas?
+- Rotating bug 
+- Código sujo 
+- Necessidade de refatoração
+- Sem rotação de window
+- Modelagem ruim
+
+Próximos passos:
+
+Entrega 4:
+a) Implementar o clipping 2D em seu sistema de visualização;
+b) Na área de desenho, desenhe uma moldura interna para representar sua viewport. O desenho do conteúdo da 
+window deve estar limitado a esta moldura. A parte entre a moldura e o limite da área de desenho precisa 
+estar limpa;
+c) Modifique a window usando as transformações geométricas para ver o efeito em sua área de desenho. Use para 
+isso, as operações de Rotação, Translação e Escala.
