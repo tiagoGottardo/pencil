@@ -3,17 +3,25 @@
 
 #include <QFrame>
 #include <QPainter>
+#include <QColor>
 
 #include "./Polygon.h"
 
 class Viewport : public QFrame {
-  // Q_OBJECT
+private:
+  int displayIndex;
+  std::vector<Drawable*> *displayFile;
+
+  void paint(Drawable* obj, QPainter* painter, QColor color) {
+    painter->setPen(color);
+    obj->draw(painter);
+  };
   
 public:
   uint width, height;
 
   void setDisplayFile(std::vector<Drawable*> *displayFile) {
-    delete this->displayFile;
+    if(this->displayFile) delete this->displayFile;
     this->displayFile = displayFile;
   }
 
@@ -25,25 +33,15 @@ public:
 
 protected:
   void paintEvent(QPaintEvent *) override {
-    printf("paintEvent viewport\n");
     if (!displayFile) return;
-
     QPainter painter(this);
-    QPen pen(Qt::black);
-    painter.setPen(pen);
 
-    for(int i = 0; i < (int) (*displayFile).size(); i++){
+    for(int i = 0; i < (int) (*displayFile).size(); i++)
       if(i == displayIndex) {
-        painter.setPen(Qt::red);
-        (*displayFile)[i]->draw(&painter);
-        painter.setPen(Qt::black);
-      } else (*displayFile)[i]->draw(&painter);
-    }
+        this->paint((*displayFile)[i], &painter, Qt::red);
+      } else 
+        this->paint((*displayFile)[i], &painter, Qt::black);
   }
-
-private:
-  int displayIndex;
-  std::vector<Drawable*> *displayFile;
 };
 
 #endif

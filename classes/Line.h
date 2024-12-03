@@ -32,17 +32,6 @@ public:
   void draw(QPainter* painter) const override {
     painter->drawLine(a->x, a->y, b->x, b->y);
   }
-
-  double calculateAngular(){
-    int32_t dy = b->y - a->y;
-    int32_t dx = b->x - a->x;
-
-    if(dx == 0) {
-        return std::numeric_limits<double>::infinity();
-    }
-
-    return dy/dx;
-  }
 };
 
 #endif

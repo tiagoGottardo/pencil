@@ -17,7 +17,6 @@ private:
   sizet width, height;
 
 public:
-
   typedef struct {
     sizet x;
     sizet y;
@@ -35,6 +34,7 @@ public:
     height = other.height;
 
     matrix = (double**) calloc(height, sizeof(double*));
+
     for (sizet i = 0; i < height; ++i) {
       matrix[i] = (double*) calloc(width, sizeof(double));
       for (sizet j = 0; j < width; ++j) 
@@ -44,10 +44,8 @@ public:
 
   Matrix static IdentityMatrix(int size){
     std::vector<PointInitializer> points;
-    for(sizet i = 0; i < (sizet) size; i++) {
-      PointInitializer point = { i, i, 1 };
-      points.push_back(point);
-    }
+    for(sizet i = 0; i < (sizet) size; i++)
+      points.push_back({i, i, 1});
     
     return Matrix(size, size, points);
   }
@@ -142,10 +140,9 @@ public:
   }
 
   Matrix operator*(const Matrix& other) const {
-    if(width != other.height) {
+    if(width != other.height) 
       throw std::invalid_argument("Matrix dimensions must match for multiplication.");
-    }
-
+    
     std::vector<std::vector<double>> result(height, std::vector<double>(other.width, 0));
     for(sizet i = 0; i < height; i++)
       for(sizet j = 0; j < other.width; j++) 
@@ -258,8 +255,8 @@ public:
     return Row(matrix[row], width);
   }
 
-  int getWidth() const { return width; }
-  int getHeight() const { return height; }
+  int getWidth() const { return (int) width; }
+  int getHeight() const { return (int) height; }
 };
 
 #endif
