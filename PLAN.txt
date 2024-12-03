@@ -46,6 +46,7 @@ e tem tamanho fixo. Esse tamanho geralmente não é o tamanho capturado pela câ
 transformação mencionada anteriormente. Cada viewport precisa estar relacionada com apenas uma window.
 
 Problemas?
+- Falta de Testes
 - Rotating bug 
 - Código sujo 
 - Necessidade de refatoração
@@ -53,6 +54,13 @@ Problemas?
 - Modelagem ruim
 
 Próximos passos:
+X Criar lib de testes
+X Reentender o código
+X Refatorar o código
+X Resolver bug da rotação
+- Criar rotação de window
+P Criar testes
+- Codar entrega 4...
 
 Entrega 4:
 a) Implementar o clipping 2D em seu sistema de visualização;
