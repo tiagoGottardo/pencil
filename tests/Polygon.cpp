@@ -2,7 +2,7 @@
 #include "../classes/Polygon.h"
 #include "../classes/Point.h"
 
-int main() {
+void polygon() {
   Tester suite = Tester("Polygon Suite");
 
   suite.add([]() -> bool { 
@@ -41,6 +41,4 @@ int main() {
   }(), "it tests setRef method");
 
   suite.run();
-
-  return 0;
 }
