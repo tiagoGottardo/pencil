@@ -5,9 +5,8 @@
 #include <QPainter>
 #include <vector>
 
-MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow), window(Window(100, 100, &displayFile)) {
+MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow), window(Window(500, 250, &displayFile)) {
   ui->setupUi(this);
-  // ui->frame->setDisplayFile(&displayFile);
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *event) {
@@ -18,9 +17,9 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
     for(Drawable* drawable : (*window.displayFile)) 
       drawable->checkItself();
 
-    printf("\nWindow file: \n");
-    for(Drawable* drawable : (*window.draws)) 
-      drawable->checkItself();
+    // printf("\nWindow file: \n");
+    // for(Drawable* drawable : (*window.draws)) 
+    //   drawable->checkItself();
   }
 
   if(event->key() == Qt::Key_R) { window.setSize(); window.transformViewport(ui->frame); }
@@ -52,7 +51,7 @@ void MainWindow::on_right_clicked() {
 void movePolygon(Ui::MainWindow *ui, Window w, Polygon* polygon, char x, char y) {
   bool ok;
   int num = ui->moveEdit->displayText().toInt(&ok);
-  if(ok) polygon->move(Point((x - 1) * num, (y - 1) * num, 0));
+  if(ok) polygon->move(Point((x - 1) * num, (y - 1) * num));
   w.transformViewport(ui->frame);
 }
 
@@ -123,4 +122,3 @@ void MainWindow::on_createPolygon_clicked() {
     window.transformViewport(ui->frame);
   }
 }
-

@@ -13,6 +13,7 @@ public:
   uint width, height;
 
   void setDisplayFile(std::vector<Drawable*> *displayFile) {
+    delete this->displayFile;
     this->displayFile = displayFile;
   }
 
@@ -27,20 +28,15 @@ protected:
     printf("paintEvent viewport\n");
     if (!displayFile) return;
 
-    // Polygon* circle;
-    // Polygon* iterator;
     QPainter painter(this);
     QPen pen(Qt::black);
     painter.setPen(pen);
 
     for(int i = 0; i < (int) (*displayFile).size(); i++){
-      // iterator = dynamic_cast<Polygon*>((*displayFile)[i]);
-      // circle = Polygon::createRegularPolygon(20, 12, iterator->ref);
       if(i == displayIndex) {
         painter.setPen(Qt::red);
         (*displayFile)[i]->draw(&painter);
         painter.setPen(Qt::black);
-        // circle->draw(&painter);
       } else (*displayFile)[i]->draw(&painter);
     }
   }
