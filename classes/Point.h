@@ -1,10 +1,14 @@
 #ifndef POINT_H
 #define POINT_H
 
+#ifndef TEST_MODE
+#include <QPainter>
+#else 
+#include "../tests/mocks/QPainterMock.h"
+#endif
+
 #include "Drawable.h"
 #include "Matrix.h"
-
-#include <QPainter>
 
 class Point : public Drawable {
 public:
@@ -32,21 +36,24 @@ public:
     return Matrix(1, 3, {{0, 0, (double) x}, {0, 1, (double) y}, {0, 2, (double) z}}); 
   }
 
-  Point operator=(const Matrix& other) const {
-    return Point(
-      static_cast<int>(std::round(other[0][0])), 
-      static_cast<int>(std::round(other[1][0])), 
-      static_cast<int>(std::round(other[2][0])) 
-    );
+  void operator=(const Matrix& other) {
+    if(other.getHeight() < 3) throw std::invalid_argument("Invalid Matrix!");
+
+    if(other.getWidth() >= 3) {
+      this->x = std::round(other[0][0]); 
+      this->y = std::round(other[1][1]); 
+      this->z = std::round(other[2][2]);
+    } else {
+      this->x = std::round(other[0][0]); 
+      this->y = std::round(other[1][0]); 
+      this->z = std::round(other[2][0]);
+    }
   }
 
-  Point operator+(const Point& other) const {
-    return Point(x + other.x, y + other.y, z + other.z);
-  }
-
-  Point operator-(const Point& other) const {
-    return Point(x - other.x, y - other.y, z - other.z);
-  }
+  Point operator+(const Point& other) const { return Point(x + other.x, y + other.y, z + other.z); }
+  Point& operator+=(const Point& other) { *this = *this + other; return *this; }
+  Point operator-(const Point& other) const { return Point(x - other.x, y - other.y, z - other.z); }
+  Point& operator-=(const Point& other) { *this = *this - other; return *this; }
 };
 
 #endif
