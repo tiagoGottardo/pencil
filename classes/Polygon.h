@@ -1,11 +1,16 @@
 #ifndef POLYGON_H
 #define POLYGON_H
 
+#ifndef TEST_MODE
+#include <QPainter>
+#else 
+#include "../tests/mocks/QPainterMock.h"
+#endif
+
 #include "Drawable.h"
 #include "Point.h"
 #include "Line.h"
 
-#include <QPainter>
 #include <vector>
 #include <cmath>
 
@@ -14,7 +19,7 @@ using sizet = std::size_t;
 class Polygon : public Drawable {
 public:
   std::vector<Line>* lines;
-  Point ref = Point(0, 0, 0);
+  Point ref;
 
   Polygon clone() {
     std::vector<Point*> points = getPoints();
@@ -27,10 +32,7 @@ public:
       newLines->push_back(Line(newPoints[i], newPoints[(i + 1 < points.size()) ? i + 1 : 0]));
     }
 
-    Polygon newPolygon = Polygon(newLines, this->name);
-    newPolygon.ref = this->ref;
-
-    return newPolygon;
+    return Polygon(this->name, this->ref, newLines);
   }
 
   static bool isPolygon(std::vector<Line>* linesList){
@@ -72,62 +74,29 @@ public:
     for(sizet i = 0; i < points.size(); i++)
       lines->push_back(Line(points[i], points[(i + 1 < points.size()) ? i + 1 : 0]));
 
-    return new Polygon(lines, name);
+    return new Polygon(name, centroid, lines);
   }
 
-  Polygon(const std::vector<std::vector<int>>& matrix) : Polygon(matrix, "Polygon") {}
+  Polygon(std::vector<Line>* linesList, Point ref) : Polygon("Polygon", ref, linesList) {} 
+  Polygon(const std::string& name, Point ref, std::vector<Line>* linesList) : Drawable(name) {
+    if(!Polygon::isPolygon(linesList)) 
+      throw std::invalid_argument("It couldn't be polygon.");
 
-  Polygon(const std::vector<std::vector<int>>& matrix, const std::string& name) : Drawable(name) {
-    std::vector<Point*> points;
+    this->ref = ref;
+    this->lines = linesList;
 
-    for(std::vector pointArray : matrix)
-      points.push_back(new Point(pointArray[0], pointArray[1], (pointArray.size() == 3) ? pointArray[2] : 0));
-
-    lines = new std::vector<Line>(); 
-
-    ref = Point(points[0]->x, points[0]->y, 0);
-    for(sizet i = 0; i < points.size(); i++) {
-      lines->push_back(Line(points[i], points[(i + 1 < points.size()) ? i + 1 : 0]));
-
-      if(points[i]->x < ref.x) ref.x = points[i]->x;
-      if(points[i]->y > ref.y) ref.y = points[i]->y;
-    }
-
-    for(sizet i = 0; i < lines->size(); i++) {
-      (*lines)[i].a->x -= ref.x;
-      (*lines)[i].a->y -= ref.y;
-    }
-
-  } 
-
-  Polygon(std::vector<Line>* linesList) : Polygon(linesList, "Polygon") {} 
-  
-  Polygon(std::vector<Line>* linesList, const std::string& name) : Drawable(name) {
-    if(!Polygon::isPolygon(linesList)) {
-      printf("It couldn't be polygon.");
-      return;
-    }
-
-    ref = Point((*linesList)[0].a->x, (*linesList)[0].a->y, 0);
-
-    Point iterator = Point();
-    for(sizet i = 1; i < linesList->size(); i++) {
-      iterator = *((*linesList)[i].a);
-      if(iterator.x < ref.x) ref.x = iterator.x;
-      if(iterator.y > ref.y) ref.y = iterator.y;
-    }
+    Point centroid = this->calculateCentroid();
 
     for(sizet i = 0; i < linesList->size(); i++) {
-      (*linesList)[i].a->x -= ref.x;
-      (*linesList)[i].a->y -= ref.y;
+      (*this->lines)[i].a->x -= centroid.x;
+      (*this->lines)[i].a->y -= centroid.y;
     }
-
-    lines = linesList;
   }
   
   void checkItself() const override {
     printf("%s {\n", name.c_str());
     printf("Ref: "); ref.checkItself(); printf("\n");
+    printf("Centroid: "); calculateCentroid().checkItself(); printf("\n");
     for(uint i = 0; i < lines->size(); i++){
       printf("  ");
       (*lines)[i].checkItself();
@@ -136,7 +105,7 @@ public:
     printf("}\n");
   }
 
-  std::vector<Point*> getPoints(){
+  std::vector<Point*> getPoints() {
     std::vector<Point*> points;
 
     for(uint i = 0; i < (*lines).size(); i++)
@@ -145,17 +114,17 @@ public:
     return points;
   }
 
-  Point calculateCentroid(){
-    int Cx = 0, Cy = 0;
-    std::vector<Point*> points = getPoints();
-
-    uint size = points.size();
-
+  Point calculateCentroid() const {
+    int size = lines->size();
     if (size == 0) throw std::invalid_argument("There is no points in centroid calculation.");
 
-    for(uint i = 0; i < size; i++){
-        Cx += points[i]->x;
-        Cy += points[i]->y;
+    int Cx = 0, Cy = 0;
+    Point* iterator;
+
+    for(int i = 0; i < size; i++){
+      iterator = (*lines)[i].a;
+      Cx += iterator->x;
+      Cy += iterator->y;
     }
 
     return Point(Cx/size, Cy/size, 0);
@@ -171,8 +140,7 @@ public:
 
   void rotate(double theta_degree) {
     double theta_radian = theta_degree * M_PI / 180.0;
-    Point centroid = this->calculateCentroid();
-    Matrix rotation = Matrix({
+    Matrix rotationMatrix = Matrix({
       {std::cos(theta_radian), -std::sin(theta_radian), 0},
       {std::sin(theta_radian), std::cos(theta_radian), 0},
       {0, 0, 1}
@@ -182,35 +150,41 @@ public:
 
     Matrix iterator = Matrix(1, 3);
     for(sizet i = 0; i < points.size(); i++) {
-      iterator = rotation * ((*points[i]) - centroid).toMatrix();
-      points[i]->x = iterator[0][0] + centroid.x;
-      points[i]->y = iterator[1][0] + centroid.y;
-      points[i]->z = iterator[2][0] + centroid.z;
+      iterator = rotationMatrix * points[i]->toMatrix();
+      *points[i] = iterator;
     }
   }
 
-  void move(Point to) {
-    ref = ref + to;
+  void setRef() {
+    Point centroid = this->calculateCentroid();
+    if(centroid == Point(0, 0)) return;
+
+    this->ref += centroid;
+
+    std::vector<Point*> points = getPoints();
+
+    for(int i = 0; i < (int) points.size(); i++)
+      *points[i] -= centroid;
   }
 
-  void scale(double scaleX, double scaleY, std::vector<Point*> points) {
+  void move(Point to) { ref = ref + to; }
+
+  void scale(double scaleX, double scaleY) {
     Matrix scaleMatrix = Matrix::IdentityMatrix(3);
     scaleMatrix[0][0] = scaleX;
     scaleMatrix[1][1] = scaleY;
 
     Matrix iterator = Matrix(1, 3);
-    for(sizet i = 0; i < points.size(); i++) {
-      iterator = scaleMatrix * points[i]->toMatrix();
-      points[i]->x = iterator[0][0];
-      points[i]->y = iterator[1][0];
-      points[i]->z = iterator[2][0];
+    Point* point;
+    for(sizet i = 0; i < lines->size(); i++) {
+      point = (*lines)[i].a;
+
+      iterator = scaleMatrix * point->toMatrix();
+      *point = iterator;
     }
   }
 
-  void scale(double scaleX, double scaleY) { this->scale(scaleX, scaleY, this->getPoints()); }
   void scale(double scale) { this->scale(scale, scale); }
-
-
 };
 
 #endif
