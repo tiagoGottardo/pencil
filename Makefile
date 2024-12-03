@@ -422,6 +422,7 @@ compiler_moc_header_clean:
 	-$(DEL_FILE) moc_mainwindow.cpp
 moc_mainwindow.cpp: mainwindow.h \
 		classes/Drawable.h \
+		tests/mocks/QPainterMock.h \
 		classes/Window.h \
 		classes/Point.h \
 		classes/Matrix.h \
@@ -443,6 +444,7 @@ ui_mainwindow.h: mainwindow.ui \
 		/usr/bin/uic \
 		classes/Viewport.h \
 		classes/Polygon.h \
+		tests/mocks/QPainterMock.h \
 		classes/Drawable.h \
 		classes/Point.h \
 		classes/Matrix.h \
@@ -461,6 +463,7 @@ compiler_clean: compiler_moc_predefs_clean compiler_moc_header_clean compiler_ui
 
 main.o: main.cpp mainwindow.h \
 		classes/Drawable.h \
+		tests/mocks/QPainterMock.h \
 		classes/Window.h \
 		classes/Point.h \
 		classes/Matrix.h \
@@ -471,6 +474,7 @@ main.o: main.cpp mainwindow.h \
 
 mainwindow.o: mainwindow.cpp mainwindow.h \
 		classes/Drawable.h \
+		tests/mocks/QPainterMock.h \
 		classes/Window.h \
 		classes/Point.h \
 		classes/Matrix.h \

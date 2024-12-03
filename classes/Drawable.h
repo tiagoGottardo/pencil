@@ -1,7 +1,11 @@
 #ifndef DRAWABLE_H
 #define DRAWABLE_H
 
+#ifndef TEST_MODE
 #include <QPainter>
+#else 
+#include "../tests/mocks/QPainterMock.h"
+#endif
 
 class Drawable {
 public:

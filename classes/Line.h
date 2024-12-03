@@ -1,10 +1,14 @@
 #ifndef LINE_H
 #define LINE_H
 
+#ifndef TEST_MODE
+#include <QPainter>
+#else 
+#include "../tests/mocks/QPainterMock.h"
+#endif
+
 #include "Drawable.h"
 #include "Point.h"
-
-#include <QPainter>
 
 class Line : public Drawable {
 public:

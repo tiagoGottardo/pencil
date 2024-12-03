@@ -12,7 +12,7 @@ for file in $DIR/*.cpp; do
 
         # Compila o arquivo .cpp
         # echo "Compilando $file..."
-        g++ "$file" ./tests/Tester.h -o "$output"
+        g++ -DTEST_MODE "$file" ./tests/Tester.h -o "$output"
 
         # Verifica se a compilação foi bem-sucedida
         if [ $? -eq 0 ]; then
