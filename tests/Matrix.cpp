@@ -80,12 +80,9 @@ void matrix() {
       {-1, -2, -3}
     });
 
-    if(m1 == -m2) return true;
-
-    return false;
+    return m1 == -m2;
   }(), "it tests invert signal matrix operation");
 
-  // TODO: fix matrix multiplication
   suite.add([]() -> bool {
     Matrix m1({
       {0, 1, 2},
@@ -103,10 +100,7 @@ void matrix() {
       {6, 15, 33},
     });
 
-    // (m1 * m2).checkItself();
-    if(result == m1 * m2) return true;
-
-    return false;
+    return result == m1 * m2;
   }(), "it tests multiplication matrix operation");
 
   suite.run();

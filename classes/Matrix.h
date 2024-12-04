@@ -146,11 +146,12 @@ public:
     std::vector<std::vector<double>> result(height, std::vector<double>(other.width, 0));
     for(sizet i = 0; i < height; i++)
       for(sizet j = 0; j < other.width; j++) 
-        for(sizet k = 0; k < height; k++) 
+        for(sizet k = 0; k < width; k++) 
           result[i][j] += matrix[i][k] * other[k][j];   
 
     return Matrix(result);
   }
+  Matrix& operator*=(const Matrix& other) { *this = *this * other; return *this; }
 
   Matrix operator*(const double& value) const {
     std::vector<std::vector<double>> result(height, std::vector<double>(width, 0));
@@ -217,7 +218,7 @@ public:
     return result; 
   }
 
-  void checkItself(){
+  void checkItself() const {
     for(sizet i = 0; i < height; i++) {
       for(sizet j = 0; j < width; j++) 
           printf("%.2f ", matrix[i][j]);
