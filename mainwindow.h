@@ -2,7 +2,7 @@
 #define MAINWINDOW_H
 
 #include "./classes/Drawable.h"
-#include "./classes/Window.h"
+#include "./classes/Viewport.h"
 
 #include <QCoreApplication>
 #include <QMainWindow>
@@ -23,9 +23,8 @@ public:
 
 private:
   Ui::MainWindow *ui;
-
-  Window window;
-  int dfIndex;
+  Viewport viewport;
+  int displayFileIndex;
   std::vector<Drawable*> displayFile = std::vector<Drawable*>();
 
 protected:

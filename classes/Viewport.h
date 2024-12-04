@@ -3,45 +3,58 @@
 
 #include <QFrame>
 #include <QPainter>
-#include <QColor>
+#include <QTimer>
 
 #include "./Polygon.h"
+#include "./Window.h"
+
+#define WINDOW_INIT_HEIGHT 100
+#define WINDOW_INIT_WIDTH 100
 
 class Viewport : public QFrame {
 private:
-  int displayIndex;
-  std::vector<Drawable*> *displayFile;
-
-  void paint(Drawable* obj, QPainter* painter, QColor color) {
-    painter->setPen(color);
-    obj->draw(painter);
-  };
+  Window* window;
+  
+  RectangleSize getSize() {
+    return { (uint) this->width(), (uint) this->height() };
+  }
   
 public:
-  uint width, height;
-
-  void setDisplayFile(std::vector<Drawable*> *displayFile) {
-    if(this->displayFile) delete this->displayFile;
-    this->displayFile = displayFile;
+  explicit Viewport(QWidget *parent = nullptr) : QFrame(parent) {
+    QTimer *timer = new QTimer(this);
+    connect(timer, &QTimer::timeout, this, &Viewport::triggerRepaint);
+    timer->start(100); // milliseconds to trigger
   }
 
-  void setDisplayIndex(int newIndex) {
-    this->displayIndex = newIndex;
+  void connectWindow(std::vector<Drawable*>* displayFile) {
+    if(!this->window)
+      this->window = new Window(WINDOW_INIT_WIDTH, WINDOW_INIT_HEIGHT, displayFile);
   }
 
-  explicit Viewport(QWidget *parent = nullptr) : QFrame(parent), width(500), height(250) {}
+  void connectWindow(Window* window) {
+    if(!this->window)
+      this->window = window;
+  }
+
+  Window* getWindow() { 
+    return (this->window) ? this->window : nullptr; 
+  }
 
 protected:
   void paintEvent(QPaintEvent *) override {
-    if (!displayFile) return;
-    QPainter painter(this);
+    if(!this->window) return;
 
-    for(int i = 0; i < (int) (*displayFile).size(); i++)
-      if(i == displayIndex) {
-        this->paint((*displayFile)[i], &painter, Qt::red);
-      } else 
-        this->paint((*displayFile)[i], &painter, Qt::black);
+    std::vector<Drawable*>* draws = this->window->transformViewport(this->getSize());
+
+    QPainter painter(this);
+    painter.setPen(Qt::black);
+
+    for(int i = 0; i < (int) draws->size(); i++)
+      (*draws)[i]->draw(&painter);
   }
+
+private slots:
+  void triggerRepaint() { this->update(); }
 };
 
 #endif

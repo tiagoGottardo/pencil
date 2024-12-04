@@ -5,11 +5,18 @@
 #include <QPainter>
 
 #include "./Point.h"
-#include "./Viewport.h"
 #include "./Polygon.h"
+
+typedef struct RectangleSize {
+  uint width, height;
+} RectangleSize;
 
 class Window {
 private:
+  uint width, height;
+  Point position;
+  std::vector<Drawable*> *displayFile;
+
   std::vector<Drawable*> *cloneDisplayFile() {
     std::vector<Drawable*> *clone = new std::vector<Drawable*>();
     for(sizet i = 0; i < this->displayFile->size(); i++) {
@@ -20,15 +27,8 @@ private:
   }
 
 public:
-  uint width, height;
-  Point position;
-  std::vector<Drawable*> *displayFile;
-
-  Window(uint width, uint height, std::vector<Drawable*>* displayFile) {
-    this->width = width;
-    this->height = height;
-    this->displayFile = displayFile;
-    position = Point(0, 0, 0);
+  Window(uint width, uint height, std::vector<Drawable*>* displayFile) : width(width), height(height), displayFile(displayFile) {
+    this->position = Point(0, 0);
   }
 
   void setSize(){
@@ -41,7 +41,7 @@ public:
 
   void move(Point to) { this->position = this->position + to; }
 
-  void transformViewport(Viewport* viewport) {
+  std::vector<Drawable*>* transformViewport(RectangleSize viewportSize) {
     std::vector<Drawable*> *draws = this->cloneDisplayFile();
 
     Polygon* polygon;
@@ -55,7 +55,7 @@ public:
       for(sizet j = 0; j < points.size(); j++) 
         *points[j] += polygon->ref;
 
-      polygon->scale(viewport->width / this->width, viewport->height / this->height);
+      polygon->scale(viewportSize.width / this->width, viewportSize.height / this->height);
 
       for(sizet j = 0; j < points.size(); j++) 
         *points[j] -= polygon->ref;
@@ -63,8 +63,7 @@ public:
       polygon->setRef();
     }
 
-    viewport->setDisplayFile(draws);
-    viewport->update();
+    return draws;
   }
 };
 

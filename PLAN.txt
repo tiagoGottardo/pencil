@@ -53,11 +53,12 @@ Problemas?
 - Sem rotação de window
 - Modelagem ruim
 
+O app tem uma viewport
+Essa viewport tem uma window
+Essa window tem um displayFile
+
 Próximos passos:
-X Criar lib de testes
-X Reentender o código
-X Refatorar o código
-X Resolver bug da rotação
+- Remodelar viewport e window
 - Criar rotação de window
 P Criar testes
 - Codar entrega 4...
