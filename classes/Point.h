@@ -33,7 +33,12 @@ public:
   bool operator!=(const Point& other) const { return !(*this == other); }
 
   Matrix toMatrix() { 
-    return Matrix(1, 3, {{0, 0, (double) x}, {0, 1, (double) y}, {0, 2, (double) z}}); 
+    return Matrix({
+      {(double) this->x},
+      {(double) this->y},
+      {(double) this->z},
+      {1.0},
+    }); 
   }
 
   void operator=(const Matrix& other) {
