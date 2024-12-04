@@ -14,22 +14,54 @@ typedef struct RectangleSize {
 class Window {
 private:
   uint width, height;
-  Point position;
   std::vector<Drawable*> *displayFile;
+  double rotation;
+  Point centroid;
 
-  std::vector<Drawable*> *cloneDisplayFile() {
-    std::vector<Drawable*> *clone = new std::vector<Drawable*>();
+  std::vector<Line> normalizeDisplayFile() {
+    std::vector<Line> lines = std::vector<Line>();
+
+    Polygon* iterator;
     for(sizet i = 0; i < this->displayFile->size(); i++) {
-      Polygon* iterator = dynamic_cast<Polygon*>((*this->displayFile)[i]);
-      clone->push_back(new Polygon(iterator->clone()));
+      iterator = dynamic_cast<Polygon*>((*this->displayFile)[i]);
+
+      for(sizet j = 0; j < iterator->lines->size(); j++) {
+        Line line = (*iterator->lines)[j];
+
+        lines.push_back(Line(
+          new Point((*line.a) + iterator->ref - Point(-(double)(this->width)/2.0, -(double)(this->height)/2.0)),
+          new Point((*line.b) + iterator->ref - Point(-(double)(this->width)/2.0, -(double)(this->height)/2.0)))
+        );
+      }
     }
-    return clone;
+
+    return lines;
+  }
+
+  Matrix calculateTransformationMatrix(RectangleSize viewportSize) {
+    double theta_radian = -(this->rotation * M_PI / 180.0);
+    Matrix rotationMatrix = Matrix({
+      {std::cos(theta_radian), -std::sin(theta_radian), 0},
+      {std::sin(theta_radian), std::cos(theta_radian), 0},
+      {0, 0, 1}
+    });
+
+    Matrix scaleMatrix = Matrix::IdentityMatrix(3);
+    scaleMatrix[0][0] = (double) viewportSize.width / (double) this->width;
+    scaleMatrix[1][1] = (double) viewportSize.height / (double) this->height;
+
+    Matrix translationMatrix = Matrix::IdentityMatrix(3);
+    scaleMatrix[0][2] = ((double)(viewportSize.width))/2.0;
+    scaleMatrix[1][2] = ((double)(viewportSize.height))/2.0;
+
+    if(this->rotation == 0) 
+      return translationMatrix * scaleMatrix;
+     else 
+      return translationMatrix * scaleMatrix * rotationMatrix;
   }
 
 public:
-  Window(uint width, uint height, std::vector<Drawable*>* displayFile) : width(width), height(height), displayFile(displayFile) {
-    this->position = Point(0, 0);
-  }
+  Window(uint width, uint height, std::vector<Drawable*>* displayFile) : width(width), height(height), displayFile(displayFile), rotation(0), centroid(Point(0, 0)) { }
 
   void setSize(){
     if(this->width == 500 && this->height == 250) {
@@ -39,31 +71,19 @@ public:
     }
   }
 
-  void move(Point to) { this->position = this->position + to; }
+  void move(Point to) { this->centroid = this->centroid + to; }
 
-  std::vector<Drawable*>* transformViewport(RectangleSize viewportSize) {
-    std::vector<Drawable*> *draws = this->cloneDisplayFile();
+  std::vector<Line> transformViewport(RectangleSize viewportSize) {
+    std::vector<Line> lines = this->normalizeDisplayFile();
 
-    Polygon* polygon;
-    for(sizet i = 0; i < draws->size(); i++) {
-      polygon = dynamic_cast<Polygon*>((*draws)[i]);
+    Matrix transformationMatrix = calculateTransformationMatrix(viewportSize);
 
-      polygon->ref -= this->position;
-
-      std::vector<Point*> points = polygon->getPoints();
-
-      for(sizet j = 0; j < points.size(); j++) 
-        *points[j] += polygon->ref;
-
-      polygon->scale(viewportSize.width / this->width, viewportSize.height / this->height);
-
-      for(sizet j = 0; j < points.size(); j++) 
-        *points[j] -= polygon->ref;
-
-      polygon->setRef();
+    for(sizet i = 0; i < lines.size(); i++) {
+      *lines[i].a = transformationMatrix * lines[i].a->toMatrix();
+      *lines[i].b = transformationMatrix * lines[i].b->toMatrix();
     }
 
-    return draws;
+    return lines;
   }
 };
 

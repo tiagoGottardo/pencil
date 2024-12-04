@@ -44,13 +44,14 @@ protected:
   void paintEvent(QPaintEvent *) override {
     if(!this->window) return;
 
-    std::vector<Drawable*>* draws = this->window->transformViewport(this->getSize());
+    std::vector<Line> draws = this->window->transformViewport(this->getSize());
 
     QPainter painter(this);
     painter.setPen(Qt::black);
 
-    for(int i = 0; i < (int) draws->size(); i++)
-      (*draws)[i]->draw(&painter);
+    for(int i = 0; i < (int) draws.size(); i++) 
+      draws[i].draw(&painter);
+    
   }
 
 private slots:

@@ -103,7 +103,7 @@ void MainWindow::on_createPolygon_clicked() {
   name = ui->nameEdit->displayText().toStdString();
 
   if(okSize && okSides) {
-    displayFile.push_back(Polygon::createRegularPolygon(size, sides, Point(size / 2, size / 2), name));
+    displayFile.push_back(Polygon::createRegularPolygon(size, sides, Point(0, 0), name));
     displayFileIndex = (int) displayFile.size() - 1;
     ui->label->setText(QString::fromStdString(displayFile[displayFileIndex]->name));
   }
