@@ -19,11 +19,18 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
       drawable->checkItself();
   }
 
+  // Resize window
   if(event->key() == Qt::Key_R) { ui->frame->getWindow()->setSize(); }
+
+  // Move window
   if(event->key() == Qt::Key_D) { ui->frame->getWindow()->move(Point(50, 0)); }
   if(event->key() == Qt::Key_A) { ui->frame->getWindow()->move(Point(-50, 0)); }
   if(event->key() == Qt::Key_W) { ui->frame->getWindow()->move(Point(0, -50)); }
   if(event->key() == Qt::Key_S) { ui->frame->getWindow()->move(Point(0, 50)); }
+
+  // Rotate window
+  if(event->key() == Qt::Key_Q) { ui->frame->getWindow()->rotate(1); }
+  if(event->key() == Qt::Key_E) { ui->frame->getWindow()->rotate(-1); }
 };
 
 MainWindow::~MainWindow() { delete ui; }
