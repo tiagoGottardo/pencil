@@ -42,6 +42,8 @@ public:
     }
   }
 
+  static bool areNearlyEqual(double a, double b, double epsilon = 1e-2) { return std::fabs(a - b) < epsilon; }
+
   Matrix static IdentityMatrix(int size){
     std::vector<PointInitializer> points;
     for(sizet i = 0; i < (sizet) size; i++)
@@ -134,7 +136,7 @@ public:
 
     for(sizet i = 0; i < height; i++)
       for(sizet j = 0; j < width; j++)
-        if(matrix[i][j] != other[i][j]) return false;
+        if(!Matrix::areNearlyEqual(matrix[i][j], other[i][j])) return false;
 
     return true;
   }

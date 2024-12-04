@@ -11,6 +11,9 @@
 #define WINDOW_INIT_HEIGHT 100
 #define WINDOW_INIT_WIDTH 100
 
+// This class couldn't has test ):
+// cause it's related with QFrame
+
 class Viewport : public QFrame {
 private:
   Window* window;

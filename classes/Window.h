@@ -1,9 +1,6 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
-#include <QFrame>
-#include <QPainter>
-
 #include "./Point.h"
 #include "./Polygon.h"
 
@@ -17,6 +14,8 @@ private:
   std::vector<Drawable*> *displayFile;
   double rotation;
   Point centroid;
+
+  friend class WindowFriend;
 
   std::vector<Line> normalizeDisplayFile() {
     std::vector<Line> lines = std::vector<Line>();
@@ -65,11 +64,8 @@ public:
   Window(uint width, uint height, std::vector<Drawable*>* displayFile) : width(width), height(height), displayFile(displayFile), rotation(0), centroid(Point(0, 0)) { }
 
   void setSize(){
-    if(this->width == 500 && this->height == 250) {
-      this->width = 100; this->height = 100;
-    } else {
-      this->width = 500; this->height = 250;
-    }
+    this->width = (this->width == 500) ? 100 : 500;
+    this->height = (this->height == 250) ? 100 : 250;
   }
 
   void rotate(double diffRotation) { this->rotation += diffRotation; }
