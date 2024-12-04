@@ -29,8 +29,8 @@ private:
         Line line = (*iterator->lines)[j];
 
         lines.push_back(Line(
-          new Point((*line.a) + iterator->ref - Point(-(double)(this->width)/2.0, -(double)(this->height)/2.0)),
-          new Point((*line.b) + iterator->ref - Point(-(double)(this->width)/2.0, -(double)(this->height)/2.0)))
+          new Point((*line.a) + iterator->ref - this->centroid),
+          new Point((*line.b) + iterator->ref - this->centroid))
         );
       }
     }
@@ -41,18 +41,19 @@ private:
   Matrix calculateTransformationMatrix(RectangleSize viewportSize) {
     double theta_radian = -(this->rotation * M_PI / 180.0);
     Matrix rotationMatrix = Matrix({
-      {std::cos(theta_radian), -std::sin(theta_radian), 0},
-      {std::sin(theta_radian), std::cos(theta_radian), 0},
-      {0, 0, 1}
+      {std::cos(theta_radian), -std::sin(theta_radian), 0, 0},
+      {std::sin(theta_radian), std::cos(theta_radian), 0, 0},
+      {0, 0, 1, 0},
+      {0, 0, 0, 1}
     });
 
-    Matrix scaleMatrix = Matrix::IdentityMatrix(3);
+    Matrix scaleMatrix = Matrix::IdentityMatrix(4);
     scaleMatrix[0][0] = (double) viewportSize.width / (double) this->width;
     scaleMatrix[1][1] = (double) viewportSize.height / (double) this->height;
 
-    Matrix translationMatrix = Matrix::IdentityMatrix(3);
-    scaleMatrix[0][2] = ((double)(viewportSize.width))/2.0;
-    scaleMatrix[1][2] = ((double)(viewportSize.height))/2.0;
+    Matrix translationMatrix = Matrix::IdentityMatrix(4);
+    translationMatrix[0][3] = ((double)(viewportSize.width))/2.0;
+    translationMatrix[1][3] = ((double)(viewportSize.height))/2.0;
 
     if(this->rotation == 0) 
       return translationMatrix * scaleMatrix;
@@ -71,7 +72,9 @@ public:
     }
   }
 
-  void move(Point to) { this->centroid = this->centroid + to; }
+  void rotate(double diffRotation) { this->rotation += diffRotation; }
+
+  void move(Point to) { this->centroid += to; }
 
   std::vector<Line> transformViewport(RectangleSize viewportSize) {
     std::vector<Line> lines = this->normalizeDisplayFile();

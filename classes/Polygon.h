@@ -141,14 +141,15 @@ public:
   void rotate(double theta_degree) {
     double theta_radian = theta_degree * M_PI / 180.0;
     Matrix rotationMatrix = Matrix({
-      {std::cos(theta_radian), -std::sin(theta_radian), 0},
-      {std::sin(theta_radian), std::cos(theta_radian), 0},
-      {0, 0, 1}
+      {std::cos(theta_radian), -std::sin(theta_radian), 0, 0},
+      {std::sin(theta_radian), std::cos(theta_radian), 0, 0},
+      {0, 0, 1, 0},
+      {0, 0, 0, 1}
     });
 
     std::vector<Point*> points = getPoints();
 
-    Matrix iterator = Matrix(1, 3);
+    Matrix iterator = Matrix(1, 4);
     for(sizet i = 0; i < points.size(); i++) {
       iterator = rotationMatrix * points[i]->toMatrix();
       *points[i] = iterator;
