@@ -52,6 +52,54 @@ public:
     return Matrix(size, size, points);
   }
 
+  Matrix static ScaleMatrix(double x = 1, double y = 1, double z = 1) {
+    return Matrix({
+      {x, 0, 0, 0},
+      {0, y, 0, 0},
+      {0, 0, z, 0},
+      {0, 0, 0, 1}
+    });
+  }
+
+  Matrix static XRotationMatrix(double theta_degree) {
+    double theta_radian = theta_degree * M_PI / 180.0;
+    return Matrix({
+      {1,                      0,                       0, 0},
+      {0,                      1,                       0, 0},
+      {0, std::cos(theta_radian), -std::sin(theta_radian), 0},
+      {0, std::sin(theta_radian),  std::cos(theta_radian), 1}
+    });
+  }
+
+  Matrix static YRotationMatrix(double theta_degree) {
+    double theta_radian = theta_degree * M_PI / 180.0;
+    return Matrix({
+      { std::cos(theta_radian), 0, std::sin(theta_radian), 0},
+      {                      0, 1,                      0, 0},
+      {-std::sin(theta_radian), 0, std::cos(theta_radian), 0},
+      {                      0, 0,                      0, 1}
+    });
+  }
+
+  Matrix static ZRotationMatrix(double theta_degree) {
+    double theta_radian = theta_degree * M_PI / 180.0;
+    return Matrix({
+      {std::cos(theta_radian), -std::sin(theta_radian), 0, 0},
+      {std::sin(theta_radian),  std::cos(theta_radian), 0, 0},
+      {                     0,                       0, 1, 0},
+      {                     0,                       0, 0, 1}
+    });
+  }
+
+  Matrix static TranslationMatrix(double x = 0, double y = 0, double z = 0) {
+    return Matrix({
+      {1, 0, 0, x},
+      {0, 1, 0, y},
+      {0, 0, 1, z},
+      {0, 0, 0, 1},
+    });
+  }
+
   Matrix(sizet w, sizet h) : Matrix(w, h, {}) {}
 
   Matrix(int w, int h, std::vector<PointInitializer> points) {
