@@ -53,22 +53,5 @@ void window() {
     return matrix == correctMatrix;
   }(), "it tests matrix transformation without rotation");
 
-  suite.add([]() -> bool { 
-    Window window = Window(100, 100, new std::vector<Drawable*>());
-    window.rotate(10);
-
-    RectangleSize viewportSize = {500, 250};
-    Matrix matrix = WindowFriend::testCalculateTransformationMatrix(window, viewportSize);
-
-    Matrix correctMatrix = Matrix({
-      {4.92, 0.86, 0, 250},
-      {-0.43, 2.46, 0, 125},
-      {0, 0, 1, 0},
-      {0, 0, 0, 1}
-    });
-
-    return matrix == correctMatrix;
-  }(), "it tests matrix transformation with rotation");
-
   suite.run();
 }

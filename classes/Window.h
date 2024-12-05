@@ -18,46 +18,34 @@ private:
   friend class WindowFriend;
 
   std::vector<Line> normalizeDisplayFile() {
-    std::vector<Line> lines = std::vector<Line>();
+    std::vector<Line> result = std::vector<Line>();
 
-    Polygon* iterator;
-    for(sizet i = 0; i < this->displayFile->size(); i++) {
-      iterator = dynamic_cast<Polygon*>((*this->displayFile)[i]);
+    for(Drawable* drawable : *this->displayFile) {
+      Polygon* iterator = dynamic_cast<Polygon*>(drawable);
 
-      for(sizet j = 0; j < iterator->lines->size(); j++) {
-        Line line = (*iterator->lines)[j];
+      Point diffToOrigin = iterator->ref - this->centroid;
+      Matrix normalizationMatrix = Matrix::ZRotationMatrix(-this->rotation) * Matrix::TranslationMatrix(diffToOrigin.x, diffToOrigin.y);
 
-        lines.push_back(Line(
-          new Point((*line.a) + iterator->ref - this->centroid),
-          new Point((*line.b) + iterator->ref - this->centroid))
-        );
+      for(Line oldLine : *iterator->lines) {
+        Line newLine = Line(new Point(*oldLine.a), new Point(*oldLine.b));
+
+        newLine.applyMatrix(normalizationMatrix);
+
+        result.push_back(newLine);
       }
     }
 
-    return lines;
+    return result;
   }
 
   Matrix calculateTransformationMatrix(RectangleSize viewportSize) {
-    double theta_radian = -(this->rotation * M_PI / 180.0);
-    Matrix rotationMatrix = Matrix({
-      {std::cos(theta_radian), -std::sin(theta_radian), 0, 0},
-      {std::sin(theta_radian), std::cos(theta_radian), 0, 0},
-      {0, 0, 1, 0},
-      {0, 0, 0, 1}
-    });
+    double scaleX = (double) viewportSize.width / (double) this->width;
+    double scaleY = (double) viewportSize.height / (double) this->height;
 
-    Matrix scaleMatrix = Matrix::IdentityMatrix(4);
-    scaleMatrix[0][0] = (double) viewportSize.width / (double) this->width;
-    scaleMatrix[1][1] = (double) viewportSize.height / (double) this->height;
+    double halfViewportWidth = ((double)(viewportSize.width))/2.0;
+    double halfViewportHeight = ((double)(viewportSize.height))/2.0;
 
-    Matrix translationMatrix = Matrix::IdentityMatrix(4);
-    translationMatrix[0][3] = ((double)(viewportSize.width))/2.0;
-    translationMatrix[1][3] = ((double)(viewportSize.height))/2.0;
-
-    if(this->rotation == 0) 
-      return translationMatrix * scaleMatrix;
-     else 
-      return translationMatrix * scaleMatrix * rotationMatrix;
+    return Matrix::TranslationMatrix(halfViewportWidth, halfViewportHeight) * Matrix::ScaleMatrix(scaleX, scaleY);
   }
 
 public:
@@ -75,13 +63,13 @@ public:
   std::vector<Line> transformViewport(RectangleSize viewportSize) {
     std::vector<Line> lines = this->normalizeDisplayFile();
 
+    // Clipping
+
     Matrix transformationMatrix = calculateTransformationMatrix(viewportSize);
 
-    for(sizet i = 0; i < lines.size(); i++) {
-      *lines[i].a = transformationMatrix * lines[i].a->toMatrix();
-      *lines[i].b = transformationMatrix * lines[i].b->toMatrix();
-    }
-
+    for(Line line : lines)
+      line.applyMatrix(transformationMatrix);
+    
     return lines;
   }
 };
