@@ -1,8 +1,17 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
+#include <optional>
+
 #include "./Point.h"
 #include "./Polygon.h"
+
+enum LineStatus {
+  COMPLETELY_INSIDE,
+  COMPLETELY_OUTSIDE,
+  INTERSECTION_CHECK_NEEDED,
+  HAS_INTERSECTION,
+};
 
 typedef struct RectangleSize {
   uint width, height;
@@ -14,6 +23,9 @@ private:
   std::vector<Drawable*> *displayFile;
   double rotation;
   Point centroid;
+
+  Point maxPoint() { return Point((int) this->width / 2, (int) this->height / 2); }
+  Point minPoint() { return -this->maxPoint(); }
 
   friend class WindowFriend;
 
@@ -48,6 +60,107 @@ private:
     return Matrix::TranslationMatrix(halfViewportWidth, halfViewportHeight) * Matrix::ScaleMatrix(scaleX, scaleY);
   }
 
+  char calculateRC(Point point) {
+    char result = 0;
+
+    if(point.x < this->minPoint().x) result += 1;
+    if(point.x > this->maxPoint().x) result += 2;
+    if(point.y < this->minPoint().y) result += 4;
+    if(point.y > this->maxPoint().y) result += 8;
+
+    return result;
+  }
+
+  std::optional<Point> calculateIntersection(Point p1, Point p2, double clipCoord, bool isVertical) {
+    double t;
+
+    if (isVertical) {
+      if (p1.x == p2.x) return std::nullopt;
+      t = (clipCoord - (double) p1.x) / ((double) p2.x - (double) p1.x);
+    } else {
+      if (p1.y == p2.y) return std::nullopt; 
+      t = (clipCoord - (double) p1.y) / ((double) p2.y - (double) p1.y);
+    }
+
+    if (t < 0 || t > 1) return std::nullopt; 
+
+    double x = p1.x + t * (p2.x - p1.x);
+    double y = p1.y + t * (p2.y - p1.y);
+    return Point(x, y);
+  }
+
+  LineStatus resolveIntersection(Line line) {
+    std::optional<Point> iterator;
+    LineStatus lineStatus = LineStatus::COMPLETELY_OUTSIDE;
+    
+    iterator = calculateIntersection(*line.a, *line.b, (double) this->maxPoint().y, false);
+    if(iterator && iterator->x >= this->minPoint().x && iterator->x <= this->maxPoint().x) {
+      printf("Has top\n");
+      (line.a->y > line.b->y) ? *line.a = *iterator : *line.b = *iterator;
+      lineStatus = LineStatus::HAS_INTERSECTION;
+    }
+
+    iterator = calculateIntersection(*line.a, *line.b, (double) this->minPoint().y, false);
+    if(iterator && iterator->x >= this->minPoint().x && iterator->x <= this->maxPoint().x) {
+      printf("Has bottom\n");
+      (line.a->y < line.b->y) ? *line.a = *iterator : *line.b = *iterator;
+      lineStatus = LineStatus::HAS_INTERSECTION;
+    }
+
+    iterator = calculateIntersection(*line.a, *line.b, (double) this->maxPoint().x, true);
+    if(iterator && iterator->y >= this->minPoint().y && iterator->y <= this->maxPoint().y) {
+      printf("Has right\n");
+      (line.a->x > line.b->x) ? *line.a = *iterator : *line.b = *iterator;
+      lineStatus = LineStatus::HAS_INTERSECTION;
+    }
+
+    iterator = calculateIntersection(*line.a, *line.b, (double) this->minPoint().x, true);
+    if(iterator && iterator->y >= this->minPoint().y && iterator->y <= this->maxPoint().y) {
+      printf("Has left\n");
+      (line.a->x < line.b->x) ? *line.a = *iterator : *line.b = *iterator;
+      lineStatus = LineStatus::HAS_INTERSECTION;
+    }
+    printf("\n");
+    
+    return lineStatus;
+  }
+
+  LineStatus calculateRCStatus(Line line) {
+    char aRC = calculateRC(*line.a);
+    char bRC = calculateRC(*line.b);
+    printf("a: %b\n", aRC);
+    printf("b: %b\n", bRC);
+    if(aRC == 0 && bRC == 0) {
+      printf("COMPLETELY_INSIDE\n");
+      return COMPLETELY_INSIDE;
+    }
+    if(aRC == 0 || bRC == 0) {
+      printf("HAS_INTERSECTION\n");
+      return HAS_INTERSECTION; 
+    }
+    if((aRC & bRC) == 0) {
+      printf("INTERSECTION_CHECK_NEEDED\n");
+      return INTERSECTION_CHECK_NEEDED;
+    }
+
+    printf("COMPLETELY_OUTSIDE\n");
+    return COMPLETELY_OUTSIDE;
+  }
+
+  void clip(std::vector<Line>* lines) {
+    for(int i = 0; i < (int) lines->size(); i++) {
+      LineStatus RCStatus = calculateRCStatus((*lines)[i]);
+
+      if(RCStatus == LineStatus::COMPLETELY_OUTSIDE) {
+        lines->erase(lines->begin() + i); 
+        i--; continue;
+      }
+
+      if(RCStatus != LineStatus::COMPLETELY_INSIDE && resolveIntersection((*lines)[i]) != LineStatus::HAS_INTERSECTION)
+        lines->erase(lines->begin() + i);
+    }
+  }
+
 public:
   Window(uint width, uint height, std::vector<Drawable*>* displayFile) : width(width), height(height), displayFile(displayFile), rotation(0), centroid(Point(0, 0)) { }
 
@@ -63,7 +176,15 @@ public:
   std::vector<Line> transformViewport(RectangleSize viewportSize) {
     std::vector<Line> lines = this->normalizeDisplayFile();
 
-    // Clipping
+    printf("\n\n\n\n\n");
+    // printf("Amount of lines before clip: %d\n", (int) lines.size());
+    this->clip(&lines);
+    // printf("Amount of lines after clip: %d\n", (int) lines.size());
+
+    for(Line line : lines) {
+      line.checkItself();
+      printf("\n");
+    }
 
     Matrix transformationMatrix = calculateTransformationMatrix(viewportSize);
 
