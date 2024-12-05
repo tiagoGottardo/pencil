@@ -30,17 +30,28 @@ public:
   }
 
   void connectWindow(std::vector<Drawable*>* displayFile) {
-    if(!window)
-      window = new Window(WINDOW_INIT_WIDTH, WINDOW_INIT_HEIGHT, displayFile);
+    if(!window) window = new Window(WINDOW_INIT_WIDTH, WINDOW_INIT_HEIGHT, displayFile);
   }
 
-  void connectWindow(Window* window) {
-    if(!window)
-      window = window;
-  }
+  void connectWindow(Window* window) { if(!window) window = window; }
 
-  Window* getWindow() { 
-    return (window) ? window : nullptr; 
+  Window* getWindow() { return (window) ? window : nullptr; }
+
+  void debugWindow() {
+    if(!window) { printf("No window connected yet.\n"); return; }
+
+    std::vector<Line> draws = window->transformViewport(this->getSize());
+
+    printf("Window connected\n");
+
+    if(draws.size() == 0) { printf("No lines to draw\n"); return; }
+
+    printf("Lines after displayFile clipping: \n");
+    for(Line line : draws) {
+      line.checkItself();
+      printf("\n");
+    }
+    printf("\n");
   }
 
 protected:

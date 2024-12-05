@@ -159,10 +159,7 @@ private:
 public:
   Window(uint width, uint height, std::vector<Drawable*>* displayFile) : width(width), height(height), displayFile(displayFile), rotation(0), centroid(Point(0, 0)) { }
 
-  void setSize(){
-    width = (width == 500) ? 100 : 500;
-    height = (height == 250) ? 100 : 250;
-  }
+  void setSize() { width = (width == 500) ? 100 : 500; height = (height == 250) ? 100 : 250; }
 
   void rotate(double diffRotation) { rotation += diffRotation; }
 
