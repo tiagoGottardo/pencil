@@ -8,8 +8,11 @@
 #include "./Polygon.h"
 #include "./Window.h"
 
-#define WINDOW_INIT_HEIGHT 100
 #define WINDOW_INIT_WIDTH 100
+#define WINDOW_INIT_HEIGHT 100
+
+#define FRAME_DIFF_WIDTH 20 
+#define FRAME_DIFF_HEIGHT 10 
 
 // This class couldn't has test ):
 // cause it's related with QFrame
@@ -19,7 +22,15 @@ private:
   Window* window;
   
   RectangleSize getSize() {
-    return { (uint) this->width(), (uint) this->height() };
+    return { (uint) this->width() - (2*FRAME_DIFF_WIDTH), (uint) this->height() - (2*FRAME_DIFF_HEIGHT) };
+  }
+
+  void drawFrame(QPainter* painter) {
+    painter->drawLine(FRAME_DIFF_WIDTH, FRAME_DIFF_HEIGHT, this->width() - FRAME_DIFF_WIDTH, FRAME_DIFF_HEIGHT);
+    painter->drawLine(FRAME_DIFF_WIDTH, FRAME_DIFF_HEIGHT, FRAME_DIFF_WIDTH, this->height() - FRAME_DIFF_HEIGHT);
+
+    painter->drawLine(this->width() - FRAME_DIFF_WIDTH, FRAME_DIFF_HEIGHT, this->width() - FRAME_DIFF_WIDTH, this->height() - FRAME_DIFF_HEIGHT);
+    painter->drawLine(FRAME_DIFF_WIDTH, this->height() - FRAME_DIFF_HEIGHT, this->width() - FRAME_DIFF_WIDTH, this->height() - FRAME_DIFF_HEIGHT);
   }
   
 public:
@@ -63,9 +74,14 @@ protected:
     QPainter painter(this);
     painter.setPen(Qt::black);
 
-    for(int i = 0; i < (int) draws.size(); i++) 
+    Matrix frameCorrectionMatrix = Matrix::TranslationMatrix(FRAME_DIFF_WIDTH, FRAME_DIFF_HEIGHT);
+
+    for(int i = 0; i < (int) draws.size(); i++) {
+      draws[i].applyMatrix(frameCorrectionMatrix);
       draws[i].draw(&painter);
-    
+    } 
+
+    drawFrame(&painter);
   }
 
 private slots:

@@ -34,8 +34,6 @@ public:
     b->applyMatrix(matrix);
   }
 
-  void draw(QPainter* painter) const override {
-    painter->drawLine(a->x, a->y, b->x, b->y); }
-};
+  void draw(QPainter* painter) const override { painter->drawLine(a->x, a->y, b->x, b->y); } };
 
 #endif
