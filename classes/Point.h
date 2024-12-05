@@ -55,6 +55,10 @@ public:
     }
   }
 
+  void applyMatrix(Matrix matrix) {
+    *this = matrix * this->toMatrix();
+  }
+
   Point operator+(const Point& other) const { return Point(x + other.x, y + other.y, z + other.z); }
   Point& operator+=(const Point& other) { *this = *this + other; return *this; }
   Point operator-(const Point& other) const { return Point(x - other.x, y - other.y, z - other.z); }

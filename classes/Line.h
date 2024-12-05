@@ -29,9 +29,13 @@ public:
     printf("|");
   }
 
-  void draw(QPainter* painter) const override {
-    painter->drawLine(a->x, a->y, b->x, b->y);
+  void applyMatrix(Matrix matrix) {
+    this->a->applyMatrix(matrix);
+    this->b->applyMatrix(matrix);
   }
+
+  void draw(QPainter* painter) const override {
+    painter->drawLine(a->x, a->y, b->x, b->y); }
 };
 
 #endif

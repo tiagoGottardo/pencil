@@ -171,18 +171,14 @@ public:
   void move(Point to) { ref = ref + to; }
 
   void scale(double scaleX, double scaleY) {
-    Matrix scaleMatrix = Matrix::IdentityMatrix(3);
-    scaleMatrix[0][0] = scaleX;
-    scaleMatrix[1][1] = scaleY;
+    this->applyMatrix(Matrix::ScaleMatrix(scaleX, scaleY));
+  }
 
-    Matrix iterator = Matrix(1, 3);
-    Point* point;
-    for(sizet i = 0; i < lines->size(); i++) {
-      point = (*lines)[i].a;
+  void applyMatrix(Matrix matrix) {
+    std::vector<Point*> points = getPoints();
 
-      iterator = scaleMatrix * point->toMatrix();
-      *point = iterator;
-    }
+    for(Point* point: points) 
+      point->applyMatrix(matrix); 
   }
 
   void scale(double scale) { this->scale(scale, scale); }
