@@ -45,28 +45,29 @@ Na analogia da câmera, uma viewport é uma tela que recebe as informações da 
 e tem tamanho fixo. Esse tamanho geralmente não é o tamanho capturado pela câmera, portanto, realiza-se a
 transformação mencionada anteriormente. Cada viewport precisa estar relacionada com apenas uma window.
 
-Problemas?
-- Falta de Testes
-- Rotating bug 
-- Código sujo 
-- Necessidade de refatoração
-- Sem rotação de window
-- Modelagem ruim
-
-O app tem uma viewport
-Essa viewport tem uma window
-Essa window tem um displayFile
+Modelagem
+- O app tem um Qframe que é uma viewport
+- Essa viewport pode se conectar a uma window 
+- Essa window recebe a referência de um displayFile
+- Durante a transformada de viewport
+  1. Os polígonos dos displayFile se transformam em linhas (Line)
+  2. As cordenadas das linhas são normalizadas
+  3. Executamos o clipping
+  4. Criamos a matriz de transformação (transformada de viewport) 
+  5. Aplicamos a matrix em todas as linhas
 
 Próximos passos:
-- Remodelar viewport e window
-- Criar rotação de window
-P Criar testes
-- Codar entrega 4...
+X Commitar tudo
+X Criar clipping
+X Refatorar clipping 
+X Adicionar debug 
+X Criar testes
+X Terminar entrega 4
+P Refatorar polígono
 
-Entrega 4:
-a) Implementar o clipping 2D em seu sistema de visualização;
-b) Na área de desenho, desenhe uma moldura interna para representar sua viewport. O desenho do conteúdo da 
-window deve estar limitado a esta moldura. A parte entre a moldura e o limite da área de desenho precisa 
-estar limpa;
-c) Modifique a window usando as transformações geométricas para ver o efeito em sua área de desenho. Use para 
-isso, as operações de Rotação, Translação e Escala.
+ChatGPT: Pipeline resumido
+- Transformação do modelo para o espaço de mundo: Aplica as transformações locais de um objeto.
+- Transformação para o espaço de câmera (ou view): Ajusta as coordenadas para o referencial da câmera.
+- Transformação de projeção: Aplica a projeção (perspectiva ou ortogonal), mapeando o espaço de câmera para o espaço de projeção.
+- Clipping: Descarta ou ajusta as primitivas (linhas, triângulos, etc.) que estão fora da área visível (geralmente o volume de visão ou view frustum).
+- Transformação de window para viewport: Mapeia as coordenadas normalizadas da janela (window) para a área de exibição (viewport), geralmente em pixels na tela.
