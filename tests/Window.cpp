@@ -10,6 +10,26 @@ public:
   static Matrix testCalculateTransformationMatrix(Window window, RectangleSize viewportSize) {
     return window.calculateTransformationMatrix(viewportSize);
   }
+
+  static char testCalculateRC(Window window, Point point) {
+    return window.calculateRC(point);
+  }
+
+  static std::optional<Point> testCalculateIntersection(Window window, Point p1, Point p2, double clipBoard, bool isVertical) {
+    return window.calculateIntersection(p1, p2, clipBoard, isVertical);
+  }
+
+  static LineStatus testResolveIntersection(Window window, Line line) {
+    return window.resolveIntersection(line);
+  }
+
+  static LineStatus testCalculateRCStatus(Window window, Line line) {
+    return window.calculateRCStatus(line);
+  }
+
+  static void testClip(Window window, std::vector<Line>* lines) {
+    return window.clip(lines);
+  }
 };
 
 void window() {
@@ -51,7 +71,92 @@ void window() {
     });
 
     return matrix == correctMatrix;
-  }(), "it tests matrix transformation without rotation");
+  }(), "it tests matrix transformation");
+
+  suite.add([]() -> bool { 
+    Window window = Window(100, 100, new std::vector<Drawable*>());
+
+    return WindowFriend::testCalculateRC(window, Point(10, 10)) == 0;
+  }(), "it tests calculateRC method case 1");
+
+  suite.add([]() -> bool { 
+    Window window = Window(100, 100, new std::vector<Drawable*>());
+
+    return WindowFriend::testCalculateRC(window, Point(-60, 10)) == 1; 
+  }(), "it tests calculateRC method case 2");
+
+  suite.add([]() -> bool { 
+    Window window = Window(100, 100, new std::vector<Drawable*>());
+
+    return WindowFriend::testCalculateRC(window, Point(200, 200)) == 10;
+  }(), "it tests calculateRC method case 3");
+
+  suite.add([]() -> bool { 
+    Window window = Window(100, 100, new std::vector<Drawable*>());
+
+    return *WindowFriend::testCalculateIntersection(window, Point(100, 20), Point(0, 0), 50, true) == Point(50, 10);
+  }(), "it tests intersection calculation");
+
+  suite.add([]() -> bool { 
+    Window window = Window(100, 100, new std::vector<Drawable*>());
+
+    return WindowFriend::testCalculateIntersection(window, Point(10, 20), Point(0, 0), 100, true) == std::nullopt;
+  }(), "it tests intersection calculation");
+
+  suite.add([]() -> bool { 
+    Window window = Window(100, 100, new std::vector<Drawable*>());
+
+    return WindowFriend::testResolveIntersection(window, Line(new Point(400, 400), new Point(500, 500))) == LineStatus::COMPLETELY_OUTSIDE;
+  }(), "it tests intersection solving");
+
+  suite.add([]() -> bool { 
+    Window window = Window(100, 100, new std::vector<Drawable*>());
+    Line line = Line(new Point(0, 0), new Point(100, 0));
+
+    return WindowFriend::testResolveIntersection(window, line) == LineStatus::HAS_INTERSECTION &&
+    *line.a == Point(0, 0) && *line.b == Point(50, 0);
+  }(), "it tests intersection solving");
+
+  suite.add([]() -> bool { 
+    Window window = Window(100, 100, new std::vector<Drawable*>());
+    Line line = Line(new Point(0, 0), new Point(30, 0));
+
+    return WindowFriend::testCalculateRCStatus(window, line) == LineStatus::COMPLETELY_INSIDE;
+  }(), "it tests RC status of line case 1");
+
+  suite.add([]() -> bool { 
+    Window window = Window(100, 100, new std::vector<Drawable*>());
+    Line line = Line(new Point(0, 0), new Point(200, 0));
+
+    return WindowFriend::testCalculateRCStatus(window, line) == LineStatus::HAS_INTERSECTION;
+  }(), "it tests RC status of line case 2");
+
+  suite.add([]() -> bool { 
+    Window window = Window(100, 100, new std::vector<Drawable*>());
+    Line line = Line(new Point(200, 0), new Point(0, 200));
+
+    return WindowFriend::testCalculateRCStatus(window, line) == LineStatus::INTERSECTION_CHECK_NEEDED;
+  }(), "it tests RC status of line case 3");
+
+  suite.add([]() -> bool { 
+    Window window = Window(100, 100, new std::vector<Drawable*>());
+    Line line = Line(new Point(200, 200), new Point(200, 200));
+
+    return WindowFriend::testCalculateRCStatus(window, line) == LineStatus::COMPLETELY_OUTSIDE;
+  }(), "it tests RC status of line case 4");
+
+  suite.add([]() -> bool { 
+    std::vector<Line> lines = std::vector<Line>();
+
+    lines.push_back(Line(new Point(0, 0), new Point(0, 20)));
+    lines.push_back(Line(new Point(0, 0), new Point(200, 0)));
+    lines.push_back(Line(new Point(200, 200), new Point(400, 400)));
+
+    Window window = Window(100, 100, new std::vector<Drawable*>());
+
+    WindowFriend::testClip(window, &lines);
+    return lines.size() == 2 && *lines[1].b == Point(50, 0);
+  }(), "it tests clip");
 
   suite.run();
 }
