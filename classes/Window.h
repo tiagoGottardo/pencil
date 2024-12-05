@@ -95,32 +95,27 @@ private:
     
     iterator = calculateIntersection(*line.a, *line.b, (double) this->maxPoint().y, false);
     if(iterator && iterator->x >= this->minPoint().x && iterator->x <= this->maxPoint().x) {
-      printf("Has top\n");
       (line.a->y > line.b->y) ? *line.a = *iterator : *line.b = *iterator;
       lineStatus = LineStatus::HAS_INTERSECTION;
     }
 
     iterator = calculateIntersection(*line.a, *line.b, (double) this->minPoint().y, false);
     if(iterator && iterator->x >= this->minPoint().x && iterator->x <= this->maxPoint().x) {
-      printf("Has bottom\n");
       (line.a->y < line.b->y) ? *line.a = *iterator : *line.b = *iterator;
       lineStatus = LineStatus::HAS_INTERSECTION;
     }
 
     iterator = calculateIntersection(*line.a, *line.b, (double) this->maxPoint().x, true);
     if(iterator && iterator->y >= this->minPoint().y && iterator->y <= this->maxPoint().y) {
-      printf("Has right\n");
       (line.a->x > line.b->x) ? *line.a = *iterator : *line.b = *iterator;
       lineStatus = LineStatus::HAS_INTERSECTION;
     }
 
     iterator = calculateIntersection(*line.a, *line.b, (double) this->minPoint().x, true);
     if(iterator && iterator->y >= this->minPoint().y && iterator->y <= this->maxPoint().y) {
-      printf("Has left\n");
       (line.a->x < line.b->x) ? *line.a = *iterator : *line.b = *iterator;
       lineStatus = LineStatus::HAS_INTERSECTION;
     }
-    printf("\n");
     
     return lineStatus;
   }
@@ -128,22 +123,10 @@ private:
   LineStatus calculateRCStatus(Line line) {
     char aRC = calculateRC(*line.a);
     char bRC = calculateRC(*line.b);
-    printf("a: %b\n", aRC);
-    printf("b: %b\n", bRC);
-    if(aRC == 0 && bRC == 0) {
-      printf("COMPLETELY_INSIDE\n");
-      return COMPLETELY_INSIDE;
-    }
-    if(aRC == 0 || bRC == 0) {
-      printf("HAS_INTERSECTION\n");
-      return HAS_INTERSECTION; 
-    }
-    if((aRC & bRC) == 0) {
-      printf("INTERSECTION_CHECK_NEEDED\n");
-      return INTERSECTION_CHECK_NEEDED;
-    }
-
-    printf("COMPLETELY_OUTSIDE\n");
+    if(aRC == 0 && bRC == 0) return COMPLETELY_INSIDE;
+    if(aRC == 0 || bRC == 0) return HAS_INTERSECTION; 
+    if((aRC & bRC) == 0) return INTERSECTION_CHECK_NEEDED;
+    
     return COMPLETELY_OUTSIDE;
   }
 
@@ -176,15 +159,7 @@ public:
   std::vector<Line> transformViewport(RectangleSize viewportSize) {
     std::vector<Line> lines = this->normalizeDisplayFile();
 
-    printf("\n\n\n\n\n");
-    // printf("Amount of lines before clip: %d\n", (int) lines.size());
     this->clip(&lines);
-    // printf("Amount of lines after clip: %d\n", (int) lines.size());
-
-    for(Line line : lines) {
-      line.checkItself();
-      printf("\n");
-    }
 
     Matrix transformationMatrix = calculateTransformationMatrix(viewportSize);
 
