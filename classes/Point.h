@@ -34,9 +34,9 @@ public:
 
   Matrix toMatrix() { 
     return Matrix({
-      {(double) this->x},
-      {(double) this->y},
-      {(double) this->z},
+      {(double) x},
+      {(double) y},
+      {(double) z},
       {1.0},
     }); 
   }
@@ -45,21 +45,21 @@ public:
     if(other.getHeight() < 3) throw std::invalid_argument("Invalid Matrix!");
 
     if(other.getWidth() >= 3) {
-      this->x = std::round(other[0][0]); 
-      this->y = std::round(other[1][1]); 
-      this->z = std::round(other[2][2]);
+      x = std::round(other[0][0]); 
+      y = std::round(other[1][1]); 
+      z = std::round(other[2][2]);
     } else {
-      this->x = std::round(other[0][0]); 
-      this->y = std::round(other[1][0]); 
-      this->z = std::round(other[2][0]);
+      x = std::round(other[0][0]); 
+      y = std::round(other[1][0]); 
+      z = std::round(other[2][0]);
     }
   }
 
   void applyMatrix(Matrix matrix) {
-    *this = matrix * this->toMatrix();
+    *this = matrix * toMatrix();
   }
 
-  Point operator-() const { return Point(-this->x, -this->y, -this->z); }
+  Point operator-() const { return Point(-x, -y, -z); }
   Point operator+(const Point& other) const { return Point(x + other.x, y + other.y, z + other.z); }
   Point& operator+=(const Point& other) { *this = *this + other; return *this; }
   Point operator-(const Point& other) const { return Point(x - other.x, y - other.y, z - other.z); }

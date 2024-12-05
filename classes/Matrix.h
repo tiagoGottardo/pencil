@@ -258,8 +258,8 @@ public:
 
   Matrix operator!() {
     if(width != height) throw std::invalid_argument("Matrix need to be squared to invert it.");
-    double factor = this->determinant(); 
-    Matrix result = this->adjoint();
+    double factor = determinant(); 
+    Matrix result = adjoint();
 
     for(sizet i = 0; i < height; i++)
       for(sizet j = 0; j < width; j++)

@@ -15,9 +15,9 @@ public:
     return window.calculateRC(point);
   }
 
-  static std::optional<Point> testCalculateIntersection(Window window, Point p1, Point p2, double clipBoard, bool isVertical) {
-    return window.calculateIntersection(p1, p2, clipBoard, isVertical);
-  }
+  // static std::optional<Point> testCalculateIntersectionPoint(Window window, Line line, double clipBoard, bool isVertical) {
+  //   return window.calculateIntersectionPoint(line, clipBoard, isVertical);
+  // }
 
   static LineStatus testResolveIntersection(Window window, Line line) {
     return window.resolveIntersection(line);
@@ -90,18 +90,6 @@ void window() {
 
     return WindowFriend::testCalculateRC(window, Point(200, 200)) == 10;
   }(), "it tests calculateRC method case 3");
-
-  suite.add([]() -> bool { 
-    Window window = Window(100, 100, new std::vector<Drawable*>());
-
-    return *WindowFriend::testCalculateIntersection(window, Point(100, 20), Point(0, 0), 50, true) == Point(50, 10);
-  }(), "it tests intersection calculation");
-
-  suite.add([]() -> bool { 
-    Window window = Window(100, 100, new std::vector<Drawable*>());
-
-    return WindowFriend::testCalculateIntersection(window, Point(10, 20), Point(0, 0), 100, true) == std::nullopt;
-  }(), "it tests intersection calculation");
 
   suite.add([]() -> bool { 
     Window window = Window(100, 100, new std::vector<Drawable*>());

@@ -30,24 +30,24 @@ public:
   }
 
   void connectWindow(std::vector<Drawable*>* displayFile) {
-    if(!this->window)
-      this->window = new Window(WINDOW_INIT_WIDTH, WINDOW_INIT_HEIGHT, displayFile);
+    if(!window)
+      window = new Window(WINDOW_INIT_WIDTH, WINDOW_INIT_HEIGHT, displayFile);
   }
 
   void connectWindow(Window* window) {
-    if(!this->window)
-      this->window = window;
+    if(!window)
+      window = window;
   }
 
   Window* getWindow() { 
-    return (this->window) ? this->window : nullptr; 
+    return (window) ? window : nullptr; 
   }
 
 protected:
   void paintEvent(QPaintEvent *) override {
-    if(!this->window) return;
+    if(!window) return;
 
-    std::vector<Line> draws = this->window->transformViewport(this->getSize());
+    std::vector<Line> draws = window->transformViewport(this->getSize());
 
     QPainter painter(this);
     painter.setPen(Qt::black);

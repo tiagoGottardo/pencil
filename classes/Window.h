@@ -24,19 +24,19 @@ private:
   double rotation;
   Point centroid;
 
-  Point maxPoint() { return Point((int) this->width / 2, (int) this->height / 2); }
-  Point minPoint() { return -this->maxPoint(); }
+  Point maxPoint() { return Point((int) width / 2, (int) height / 2); }
+  Point minPoint() { return -maxPoint(); }
 
   friend class WindowFriend;
 
   std::vector<Line> normalizeDisplayFile() {
     std::vector<Line> result = std::vector<Line>();
 
-    for(Drawable* drawable : *this->displayFile) {
+    for(Drawable* drawable : *displayFile) {
       Polygon* iterator = dynamic_cast<Polygon*>(drawable);
 
-      Point diffToOrigin = iterator->ref - this->centroid;
-      Matrix normalizationMatrix = Matrix::ZRotationMatrix(-this->rotation) * Matrix::TranslationMatrix(diffToOrigin.x, diffToOrigin.y);
+      Point diffToOrigin = iterator->ref - centroid;
+      Matrix normalizationMatrix = Matrix::ZRotationMatrix(-rotation) * Matrix::TranslationMatrix(diffToOrigin.x, diffToOrigin.y);
 
       for(Line oldLine : *iterator->lines) {
         Line newLine = Line(new Point(*oldLine.a), new Point(*oldLine.b));
@@ -51,11 +51,11 @@ private:
   }
 
   Matrix calculateTransformationMatrix(RectangleSize viewportSize) {
-    double scaleX = (double) viewportSize.width / (double) this->width;
-    double scaleY = (double) viewportSize.height / (double) this->height;
+    double scaleX = (double) viewportSize.width / (double) width;
+    double scaleY = (double) viewportSize.height / (double) height;
 
-    double halfViewportWidth = ((double)(viewportSize.width))/2.0;
-    double halfViewportHeight = ((double)(viewportSize.height))/2.0;
+    double halfViewportWidth = (double) viewportSize.width / 2.0;
+    double halfViewportHeight = (double) viewportSize.height / 2.0;
 
     return Matrix::TranslationMatrix(halfViewportWidth, halfViewportHeight) * Matrix::ScaleMatrix(scaleX, scaleY);
   }
@@ -63,61 +63,73 @@ private:
   char calculateRC(Point point) {
     char result = 0;
 
-    if(point.x < this->minPoint().x) result += 1;
-    if(point.x > this->maxPoint().x) result += 2;
-    if(point.y < this->minPoint().y) result += 4;
-    if(point.y > this->maxPoint().y) result += 8;
+    if(point.x < minPoint().x) result += 1;
+    if(point.x > maxPoint().x) result += 2;
+    if(point.y < minPoint().y) result += 4;
+    if(point.y > maxPoint().y) result += 8;
 
     return result;
   }
 
-  std::optional<Point> calculateIntersection(Point p1, Point p2, double clipCoord, bool isVertical) {
-    double t;
-
-    if (isVertical) {
-      if (p1.x == p2.x) return std::nullopt;
-      t = (clipCoord - (double) p1.x) / ((double) p2.x - (double) p1.x);
-    } else {
-      if (p1.y == p2.y) return std::nullopt; 
-      t = (clipCoord - (double) p1.y) / ((double) p2.y - (double) p1.y);
-    }
-
-    if (t < 0 || t > 1) return std::nullopt; 
-
-    double x = p1.x + t * (p2.x - p1.x);
-    double y = p1.y + t * (p2.y - p1.y);
-    return Point(x, y);
+  Point getIntersectionPoint(Line line, double t) {
+    return Point(line.a->x + t * (line.b->x - line.a->x), line.a->y + t * (line.b->y - line.a->y));
   }
 
+  std::optional<Point> findHorizontalIntersection(Line line, double coordinate) {
+    if(line.a->y == line.b->y) return std::nullopt; 
+    double t = (coordinate - (double) line.a->y) / ((double) line.b->y - (double) line.a->y);
+
+    if (t < 0 || t > 1) return std::nullopt; 
+    return getIntersectionPoint(line, t);
+  }
+
+  std::optional<Point> findVerticalIntersection(Line line, double coordinate) {
+    if(line.a->x == line.b->x) return std::nullopt;
+    double t = (coordinate - (double) line.a->x) / ((double) line.b->x - (double) line.a->x);
+
+    if (t < 0 || t > 1) return std::nullopt; 
+    return getIntersectionPoint(line, t);
+  }
+
+  bool isBetweenLeftAndRight(Point point) { return point.x > minPoint().x && point.x < maxPoint().x; }
+  bool isBetweenTopAndBottom(Point point) { return point.y > minPoint().y && point.y < maxPoint().y; }
+
   LineStatus resolveIntersection(Line line) {
-    std::optional<Point> iterator;
-    LineStatus lineStatus = LineStatus::COMPLETELY_OUTSIDE;
+    std::optional<Point> intersection;
+    LineStatus result = COMPLETELY_OUTSIDE;
+
+    auto handleIntersection = [&](std::optional<Point> intersection, bool condition, Point*& pointToUpdate) {
+      if (intersection && condition) {
+        *pointToUpdate = *intersection;
+        result = HAS_INTERSECTION;
+      }
+    };
+
+    handleIntersection(
+        findHorizontalIntersection(line, maxPoint().y),
+        isBetweenLeftAndRight(*intersection),
+        (line.a->y > line.b->y) ? line.a : line.b
+    );
+
+    handleIntersection(
+        findHorizontalIntersection(line, minPoint().y),
+        isBetweenLeftAndRight(*intersection),
+        (line.a->y < line.b->y) ? line.a : line.b
+    );
+
+    handleIntersection(
+        findVerticalIntersection(line, maxPoint().x),
+        isBetweenTopAndBottom(*intersection),
+        (line.a->x > line.b->x) ? line.a : line.b
+    );
+
+    handleIntersection(
+        findVerticalIntersection(line, minPoint().x),
+        isBetweenTopAndBottom(*intersection),
+        (line.a->x < line.b->x) ? line.a : line.b
+    );
     
-    iterator = calculateIntersection(*line.a, *line.b, (double) this->maxPoint().y, false);
-    if(iterator && iterator->x >= this->minPoint().x && iterator->x <= this->maxPoint().x) {
-      (line.a->y > line.b->y) ? *line.a = *iterator : *line.b = *iterator;
-      lineStatus = LineStatus::HAS_INTERSECTION;
-    }
-
-    iterator = calculateIntersection(*line.a, *line.b, (double) this->minPoint().y, false);
-    if(iterator && iterator->x >= this->minPoint().x && iterator->x <= this->maxPoint().x) {
-      (line.a->y < line.b->y) ? *line.a = *iterator : *line.b = *iterator;
-      lineStatus = LineStatus::HAS_INTERSECTION;
-    }
-
-    iterator = calculateIntersection(*line.a, *line.b, (double) this->maxPoint().x, true);
-    if(iterator && iterator->y >= this->minPoint().y && iterator->y <= this->maxPoint().y) {
-      (line.a->x > line.b->x) ? *line.a = *iterator : *line.b = *iterator;
-      lineStatus = LineStatus::HAS_INTERSECTION;
-    }
-
-    iterator = calculateIntersection(*line.a, *line.b, (double) this->minPoint().x, true);
-    if(iterator && iterator->y >= this->minPoint().y && iterator->y <= this->maxPoint().y) {
-      (line.a->x < line.b->x) ? *line.a = *iterator : *line.b = *iterator;
-      lineStatus = LineStatus::HAS_INTERSECTION;
-    }
-    
-    return lineStatus;
+    return result;
   }
 
   LineStatus calculateRCStatus(Line line) {
@@ -134,13 +146,13 @@ private:
     for(int i = 0; i < (int) lines->size(); i++) {
       LineStatus RCStatus = calculateRCStatus((*lines)[i]);
 
-      if(RCStatus == LineStatus::COMPLETELY_OUTSIDE) {
-        lines->erase(lines->begin() + i); 
-        i--; continue;
+      if(RCStatus == COMPLETELY_OUTSIDE) {
+        lines->erase(lines->begin() + i); i--; continue;
       }
 
-      if(RCStatus != LineStatus::COMPLETELY_INSIDE && resolveIntersection((*lines)[i]) != LineStatus::HAS_INTERSECTION)
-        lines->erase(lines->begin() + i);
+      if(RCStatus != COMPLETELY_INSIDE && resolveIntersection((*lines)[i]) != HAS_INTERSECTION) {
+        lines->erase(lines->begin() + i); i--;
+      }
     }
   }
 
@@ -148,18 +160,18 @@ public:
   Window(uint width, uint height, std::vector<Drawable*>* displayFile) : width(width), height(height), displayFile(displayFile), rotation(0), centroid(Point(0, 0)) { }
 
   void setSize(){
-    this->width = (this->width == 500) ? 100 : 500;
-    this->height = (this->height == 250) ? 100 : 250;
+    width = (width == 500) ? 100 : 500;
+    height = (height == 250) ? 100 : 250;
   }
 
-  void rotate(double diffRotation) { this->rotation += diffRotation; }
+  void rotate(double diffRotation) { rotation += diffRotation; }
 
-  void move(Point to) { this->centroid += to; }
+  void move(Point to) { centroid += to; }
 
   std::vector<Line> transformViewport(RectangleSize viewportSize) {
-    std::vector<Line> lines = this->normalizeDisplayFile();
+    std::vector<Line> lines = normalizeDisplayFile();
 
-    this->clip(&lines);
+    clip(&lines);
 
     Matrix transformationMatrix = calculateTransformationMatrix(viewportSize);
 

@@ -30,8 +30,8 @@ public:
   }
 
   void applyMatrix(Matrix matrix) {
-    this->a->applyMatrix(matrix);
-    this->b->applyMatrix(matrix);
+    a->applyMatrix(matrix);
+    b->applyMatrix(matrix);
   }
 
   void draw(QPainter* painter) const override {
