@@ -21,6 +21,7 @@ public:
   Line(Point a, Point b, const string& name = "Line") : name(name), a(a), b(b) {}
 
   string getName() const override { return name; }
+
   vector<Line> getLines() const override { return vector<Line>{ Line(a, b) }; }
 
   void checkItself() const override {
@@ -34,6 +35,6 @@ public:
     b.applyMatrix(matrix);
   }
 
-  void draw(QPainter* painter) const override { painter->drawLine(a.x, a.y, b.x, b.y); } };
+  void draw(QPainter* painter) const { painter->drawLine(a.x, a.y, b.x, b.y); } };
 
 #endif

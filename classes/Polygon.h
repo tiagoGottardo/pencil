@@ -87,8 +87,6 @@ public:
     return C / size;
   }
 
-  void draw(QPainter*) const override { }
-
   void move(Point to) { ref = ref + to; }
   void rotate(double theta_degree) { this->applyMatrix(Matrix::ZRotationMatrix(theta_degree)); }
   void scale(double x, double y, double z) { this->applyMatrix(Matrix::ScaleMatrix(x, y, z)); }
