@@ -12,16 +12,16 @@
 
 class Line : public Drawable {
 private:
-  std::string name;
+  string name;
 
 public:
   Point a;
   Point b;
 
-  Line(Point a, Point b, const std::string& name = "Line") : name(name), a(a), b(b) {}
+  Line(Point a, Point b, const string& name = "Line") : name(name), a(a), b(b) {}
 
-  std::string getName() const override { return name; }
-  std::vector<Line> getLines() const override { return std::vector<Line>{ Line(a, b) }; }
+  string getName() const override { return name; }
+  vector<Line> getLines() const override { return vector<Line>{ Line(a, b) }; }
 
   void checkItself() const override {
     printf("%s: ", name.c_str());

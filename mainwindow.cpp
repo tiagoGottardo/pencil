@@ -105,7 +105,7 @@ void MainWindow::on_antiClockRotation_clicked() {
 
 void MainWindow::on_createPolygon_clicked() {
   int size, sides;
-  std::string name;
+  string name;
   bool okSize, okSides;
   size = ui->sizeEdit->displayText().toInt(&okSize);
   sides = ui->sidesEdit->displayText().toInt(&okSides);

@@ -25,7 +25,7 @@ private:
   Ui::MainWindow *ui;
   Viewport viewport;
   int displayFileIndex;
-  std::vector<Drawable*> displayFile = std::vector<Drawable*>();
+  vector<Drawable*> displayFile = vector<Drawable*>();
 
 protected:
   void keyPressEvent(QKeyEvent *event) override;

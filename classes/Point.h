@@ -12,18 +12,18 @@
 
 class Point : public Drawable {
 private:
-  std::string name;
+  string name;
 
 public:
   int32_t x;
   int32_t y;
   int32_t z;
 
-  Point(int32_t x = 0, int32_t y = 0, int32_t z = 0, const std::string& name = "Point") : name(name), x(x), y(y), z(z) {}
+  Point(int32_t x = 0, int32_t y = 0, int32_t z = 0, const string& name = "Point") : name(name), x(x), y(y), z(z) {}
 
-  std::string getName() const override { return name; }
+  string getName() const override { return name; }
 
-  std::vector<Line> getLines() const override { return std::vector<Line>(); }
+  vector<Line> getLines() const override { return vector<Line>(); }
 
   void draw(QPainter* painter) const override { painter->drawPoint(x, y); }
 
@@ -34,12 +34,12 @@ public:
   Matrix toMatrix() { return Matrix({ {(double) x}, {(double) y}, {(double) z}, {1}, }); }
 
   Point& operator=(const Matrix& other) {
-    if(other.getHeight() < 3) throw std::invalid_argument("Invalid Matrix!");
+    if(other.getHeight() < 3) throw invalid_argument("Invalid Matrix!");
 
     this->name = "Point";
-    x = std::round(other[0][0]); 
-    y = std::round(other[1][0]); 
-    z = std::round(other[2][0]);
+    x = round(other[0][0]); 
+    y = round(other[1][0]); 
+    z = round(other[2][0]);
 
     return *this;
   }

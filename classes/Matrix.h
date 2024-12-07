@@ -9,7 +9,7 @@
 #include <vector>
 #include <cmath>
 
-using sizet = std::size_t;
+using sizet = size_t;
 
 class Matrix {
 private:
@@ -42,10 +42,10 @@ public:
     }
   }
 
-  static bool areNearlyEqual(double a, double b, double epsilon = 1e-2) { return std::fabs(a - b) < epsilon; }
+  static bool areNearlyEqual(double a, double b, double epsilon = 1e-2) { return fabs(a - b) < epsilon; }
 
   Matrix static IdentityMatrix(int size){
-    std::vector<PointInitializer> points;
+    vector<PointInitializer> points;
     for(sizet i = 0; i < (sizet) size; i++)
       points.push_back({i, i, 1});
     
@@ -66,17 +66,17 @@ public:
     return Matrix({
       {1,                      0,                       0, 0},
       {0,                      1,                       0, 0},
-      {0, std::cos(theta_radian), -std::sin(theta_radian), 0},
-      {0, std::sin(theta_radian),  std::cos(theta_radian), 1}
+      {0, cos(theta_radian), -sin(theta_radian), 0},
+      {0, sin(theta_radian),  cos(theta_radian), 1}
     });
   }
 
   Matrix static YRotationMatrix(double theta_degree) {
     double theta_radian = theta_degree * M_PI / 180.0;
     return Matrix({
-      { std::cos(theta_radian), 0, std::sin(theta_radian), 0},
+      { cos(theta_radian), 0, sin(theta_radian), 0},
       {                      0, 1,                      0, 0},
-      {-std::sin(theta_radian), 0, std::cos(theta_radian), 0},
+      {-sin(theta_radian), 0, cos(theta_radian), 0},
       {                      0, 0,                      0, 1}
     });
   }
@@ -84,8 +84,8 @@ public:
   Matrix static ZRotationMatrix(double theta_degree) {
     double theta_radian = theta_degree * M_PI / 180.0;
     return Matrix({
-      {std::cos(theta_radian), -std::sin(theta_radian), 0, 0},
-      {std::sin(theta_radian),  std::cos(theta_radian), 0, 0},
+      {cos(theta_radian), -sin(theta_radian), 0, 0},
+      {sin(theta_radian),  cos(theta_radian), 0, 0},
       {                     0,                       0, 1, 0},
       {                     0,                       0, 0, 1}
     });
@@ -103,7 +103,7 @@ public:
 
   Matrix(sizet w, sizet h) : Matrix(w, h, {}) {}
 
-  Matrix(int w, int h, std::vector<PointInitializer> points) {
+  Matrix(int w, int h, vector<PointInitializer> points) {
     width = w;
     height = h;
 
@@ -116,7 +116,7 @@ public:
       matrix[point.y][point.x] = point.value;
   }
 
-  Matrix(const std::vector<std::vector<double>>& input) {
+  Matrix(const vector<vector<double>>& input) {
     if(input.size() == 0) return; 
 
     width = input[0].size();
@@ -136,9 +136,9 @@ public:
 
   Matrix operator+(const Matrix& other) const {
     if(height != other.height || width != other.width)
-      throw std::invalid_argument("Matrix dimensions must match for addition.");
+      throw invalid_argument("Matrix dimensions must match for addition.");
 
-    std::vector<std::vector<double>> result(height, std::vector<double>(width, 0));
+    vector<vector<double>> result(height, vector<double>(width, 0));
     for(sizet i = 0; i < height; i++)
       for(sizet j = 0; j < width; j++)
         result[i][j] = matrix[i][j] + other[i][j];   
@@ -151,7 +151,7 @@ public:
   Matrix operator-(const Matrix& other) const { return *this + (-other); }
 
   Matrix operator-() const {
-    std::vector<std::vector<double>> negated(height, std::vector<double>(width, 0));
+    vector<vector<double>> negated(height, vector<double>(width, 0));
 
     for(sizet i = 0; i < height; i++)
       for(sizet j = 0; j < width; j++)
@@ -192,9 +192,9 @@ public:
 
   Matrix operator*(const Matrix& other) const {
     if(width != other.height) 
-      throw std::invalid_argument("Matrix dimensions must match for multiplication.");
+      throw invalid_argument("Matrix dimensions must match for multiplication.");
     
-    std::vector<std::vector<double>> result(height, std::vector<double>(other.width, 0));
+    vector<vector<double>> result(height, vector<double>(other.width, 0));
     for(sizet i = 0; i < height; i++)
       for(sizet j = 0; j < other.width; j++) 
         for(sizet k = 0; k < width; k++) 
@@ -205,7 +205,7 @@ public:
   Matrix& operator*=(const Matrix& other) { *this = *this * other; return *this; }
 
   Matrix operator*(const double& value) const {
-    std::vector<std::vector<double>> result(height, std::vector<double>(width, 0));
+    vector<vector<double>> result(height, vector<double>(width, 0));
     for(sizet i = 0; i < height; i++)
       for(sizet j = 0; j < width; j++)
         result[i][j] = matrix[i][j] * value;   
@@ -216,7 +216,7 @@ public:
   bool operator!=(const Matrix& other) const { return !(*this == other); }
 
   double determinant() { 
-    if(width != height) throw std::invalid_argument("Matrix need to be squared for this operation.");
+    if(width != height) throw invalid_argument("Matrix need to be squared for this operation.");
     if(width == 1) return matrix[0][0];
     sizet size = width;
     double result = 0;
@@ -236,7 +236,7 @@ public:
   } 
 
   Matrix adjoint() {
-    if(width != height) throw std::invalid_argument("Matrix need to be squared for this operation.");
+    if(width != height) throw invalid_argument("Matrix need to be squared for this operation.");
 
     sizet size = width;
     Matrix adjoint = Matrix(size, size);
@@ -258,7 +258,7 @@ public:
   }
 
   Matrix operator!() {
-    if(width != height) throw std::invalid_argument("Matrix need to be squared to invert it.");
+    if(width != height) throw invalid_argument("Matrix need to be squared to invert it.");
     double factor = determinant(); 
     Matrix result = adjoint();
 
@@ -270,42 +270,42 @@ public:
   }
 
   void checkItself() const {
-    printf("Matrix: {\n");
-    for(sizet i = 0; i < height; i++) {
-      printf("  ");
-      for(sizet j = 0; j < width; j++) 
-          printf("%.2f ", matrix[i][j]);
-      printf("\n");
-    }
-    printf("}\n");
-  }
-
-  class Row {
-  public:
-    Row(double* row, sizet width) : row(row), width(width) {}
-
-    double& operator[](sizet col) {
-      if (col >= width) throw std::out_of_range("Column index out of range");
-      return row[col];
+      printf("Matrix: {\n");
+      for(sizet i = 0; i < height; i++) {
+        printf("  ");
+        for(sizet j = 0; j < width; j++) 
+            printf("%.2f ", matrix[i][j]);
+        printf("\n");
+      }
+      printf("}\n");
     }
 
-    const double& operator[](std::size_t col) const {
-      if (col >= width) throw std::out_of_range("Column index out of range");
-      return row[col];
+    class Row {
+    public:
+      Row(double* row, sizet width) : row(row), width(width) {}
+
+      double& operator[](sizet col) {
+        if (col >= width) throw out_of_range("Column index out of range");
+        return row[col];
+      }
+
+      const double& operator[](size_t col) const {
+        if (col >= width) throw out_of_range("Column index out of range");
+        return row[col];
+      }
+
+    private:
+      double* row;
+      sizet width;
+    };
+
+    Row operator[](sizet row) {
+      if (row >= height) throw out_of_range("Row index out of range");
+      return Row(matrix[row], width);
     }
 
-  private:
-    double* row;
-    sizet width;
-  };
-
-  Row operator[](sizet row) {
-    if (row >= height) throw std::out_of_range("Row index out of range");
-    return Row(matrix[row], width);
-  }
-
-  const Row operator[](sizet row) const {
-    if (row >= height) throw std::out_of_range("Row index out of range");
+    const Row operator[](sizet row) const {
+      if (row >= height) throw out_of_range("Row index out of range");
     return Row(matrix[row], width);
   }
 

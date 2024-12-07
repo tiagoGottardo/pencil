@@ -20,7 +20,7 @@ typedef struct RectangleSize {
 class Window {
 private:
   uint width, height;
-  std::vector<Drawable*> *displayFile;
+  vector<Drawable*> *displayFile;
   double rotation;
   Point centroid;
 
@@ -29,13 +29,13 @@ private:
 
   friend class WindowFriend;
 
-  std::vector<Line> normalizeDisplayFile() {
-    std::vector<Line> result = std::vector<Line>();
+  vector<Line> normalizeDisplayFile() {
+    vector<Line> result = vector<Line>();
 
     Matrix normalizationMatrix = Matrix::ZRotationMatrix(-rotation) * Matrix::TranslationMatrix(-centroid.x, -centroid.y, -centroid.z);
 
     for(Drawable* drawable : *displayFile) {
-      std::vector<Line> lines = drawable->getLines();
+      vector<Line> lines = drawable->getLines();
 
       for(Line line : lines) {
         line.applyMatrix(normalizationMatrix);
@@ -71,19 +71,19 @@ private:
     return Point(line->a.x + t * (line->b.x - line->a.x), line->a.y + t * (line->b.y - line->a.y));
   }
 
-  std::optional<Point> findHorizontalIntersection(Line* line, double coordinate) {
-    if(line->a.y == line->b.y) return std::nullopt; 
+  optional<Point> findHorizontalIntersection(Line* line, double coordinate) {
+    if(line->a.y == line->b.y) return nullopt; 
     double t = (coordinate - (double) line->a.y) / ((double) line->b.y - (double) line->a.y);
 
-    if (t < 0 || t > 1) return std::nullopt; 
+    if (t < 0 || t > 1) return nullopt; 
     return getIntersectionPoint(line, t);
   }
 
-  std::optional<Point> findVerticalIntersection(Line* line, double coordinate) {
-    if(line->a.x == line->b.x) return std::nullopt;
+  optional<Point> findVerticalIntersection(Line* line, double coordinate) {
+    if(line->a.x == line->b.x) return nullopt;
     double t = (coordinate - (double) line->a.x) / ((double) line->b.x - (double) line->a.x);
 
-    if (t < 0 || t > 1) return std::nullopt; 
+    if (t < 0 || t > 1) return nullopt; 
     return getIntersectionPoint(line, t);
   }
 
@@ -91,10 +91,10 @@ private:
   bool isBetweenTopAndBottom(Point point) { return point.y > minPoint().y && point.y < maxPoint().y; }
 
   LineStatus resolveIntersection(Line *line) {
-    std::optional<Point> intersection;
+    optional<Point> intersection;
     LineStatus result = COMPLETELY_OUTSIDE;
 
-    auto handleIntersection = [&](std::optional<Point> intersection, bool condition, Point pointToUpdate) {
+    auto handleIntersection = [&](optional<Point> intersection, bool condition, Point pointToUpdate) {
       if (intersection && condition) {
         pointToUpdate = *intersection;
         result = HAS_INTERSECTION;
@@ -138,7 +138,7 @@ private:
     return COMPLETELY_OUTSIDE;
   }
 
-  void clip(std::vector<Line>* lines) {
+  void clip(vector<Line>* lines) {
     for(int i = 0; i < (int) lines->size(); i++) {
       LineStatus RCStatus = calculateRCStatus((*lines)[i]);
 
@@ -153,7 +153,7 @@ private:
   }
 
 public:
-  Window(uint width, uint height, std::vector<Drawable*>* displayFile) : width(width), height(height), displayFile(displayFile), rotation(0), centroid(Point(0, 0)) { }
+  Window(uint width, uint height, vector<Drawable*>* displayFile) : width(width), height(height), displayFile(displayFile), rotation(0), centroid(Point(0, 0)) { }
 
   void setSize() { width = (width == 500) ? 100 : 500; height = (height == 250) ? 100 : 250; }
 
@@ -161,8 +161,8 @@ public:
 
   void move(Point to) { centroid += to; }
 
-  std::vector<Line> transformViewport(RectangleSize viewportSize) {
-    std::vector<Line> lines = normalizeDisplayFile();
+  vector<Line> transformViewport(RectangleSize viewportSize) {
+    vector<Line> lines = normalizeDisplayFile();
 
     // clip(&lines);
 

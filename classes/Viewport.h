@@ -40,7 +40,7 @@ public:
     timer->start(100); // milliseconds to trigger
   }
 
-  void connectWindow(std::vector<Drawable*>* displayFile) {
+  void connectWindow(vector<Drawable*>* displayFile) {
     if(!window) window = new Window(WINDOW_INIT_WIDTH, WINDOW_INIT_HEIGHT, displayFile);
   }
 
@@ -51,7 +51,7 @@ public:
   void debugWindow() {
     if(!window) { printf("No window connected yet.\n"); return; }
 
-    std::vector<Line> draws = window->transformViewport(this->getSize());
+    vector<Line> draws = window->transformViewport(this->getSize());
 
     printf("Window connected\n");
 
@@ -67,7 +67,7 @@ protected:
   void paintEvent(QPaintEvent *) override {
     if(!window) return;
 
-    std::vector<Line> draws = window->transformViewport(this->getSize());
+    vector<Line> draws = window->transformViewport(this->getSize());
 
     QPainter painter(this);
     painter.setPen(Qt::black);

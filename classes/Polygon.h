@@ -14,35 +14,33 @@
 #include <vector>
 #include <cmath>
 
-using sizet = std::size_t;
-
 class Polygon : public Drawable {
 private:
-  std::string name;
+  string name;
   Point ref;
-  std::vector<Point> points;
+  vector<Point> points;
 
 public:
 
-  std::string getName() const override { return name; }
+  string getName() const override { return name; }
 
-  std::vector<Line> getLines() const override { 
-    std::vector<Line> lines;
+  vector<Line> getLines() const override { 
+    vector<Line> lines;
 
-    for(sizet i = 0; i < points.size(); i++)
+    for(size_t i = 0; i < points.size(); i++)
       lines.push_back(Line(points[i] + ref, points[(i + 1 < points.size()) ? i + 1 : 0] + ref));
 
     return lines; 
   }
 
-  static Polygon* createRegularPolygon(int size = 100, int sides = 3, Point centroid = Point(), std::string name = "Polygon") {
-    if(sides < 3) throw std::invalid_argument("It must has at least 3 sides.");
+  static Polygon* createRegularPolygon(int size = 100, int sides = 3, Point centroid = Point(), string name = "Polygon") {
+    if(sides < 3) throw invalid_argument("It must has at least 3 sides.");
 
     double R = size / 2;
     double initialAng = -M_PI/2;
     double ang;
 
-    std::vector<Point> points;
+    vector<Point> points;
 
     for(int i = 0; i < sides; i++) {
       if(sides % 2 == 0) initialAng = 0;
@@ -50,13 +48,13 @@ public:
       
       ang = initialAng + (i * 2 * M_PI / sides);
 
-      points.push_back(Point(R * std::cos(ang), R * std::sin(ang)));
+      points.push_back(Point(R * cos(ang), R * sin(ang)));
     }
 
     return new Polygon(points, centroid, name);
   }
 
-  Polygon(std::vector<Point> points, Point ref = Point(), const std::string& name = "Polygon") : name(name), ref(Point(ref.x, ref.y, ref.z, "Ref")), points(points) {}
+  Polygon(vector<Point> points, Point ref = Point(), const string& name = "Polygon") : name(name), ref(Point(ref.x, ref.y, ref.z, "Ref")), points(points) {}
   
   void checkItself() const override {
     printf("%s: {\n", name.c_str());
@@ -68,7 +66,7 @@ public:
 
   Point calculateCentroid() const {
     int size = points.size();
-    if (size == 0) throw std::invalid_argument("There is no points in centroid calculation.");
+    if (size == 0) throw invalid_argument("There is no points in centroid calculation.");
 
     Point C = Point();
     for(Point point : points) C += point;
