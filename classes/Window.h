@@ -32,18 +32,14 @@ private:
   std::vector<Line> normalizeDisplayFile() {
     std::vector<Line> result = std::vector<Line>();
 
+    Matrix normalizationMatrix = Matrix::ZRotationMatrix(-rotation) * Matrix::TranslationMatrix(-centroid.x, -centroid.y, -centroid.z);
+
     for(Drawable* drawable : *displayFile) {
-      Polygon* iterator = dynamic_cast<Polygon*>(drawable);
+      std::vector<Line> lines = drawable->getLines();
 
-      Point diffToOrigin = iterator->ref - centroid;
-      Matrix normalizationMatrix = Matrix::ZRotationMatrix(-rotation) * Matrix::TranslationMatrix(diffToOrigin.x, diffToOrigin.y);
-
-      for(Line oldLine : *iterator->lines) {
-        Line newLine = Line(new Point(*oldLine.a), new Point(*oldLine.b));
-
-        newLine.applyMatrix(normalizationMatrix);
-
-        result.push_back(newLine);
+      for(Line line : lines) {
+        line.applyMatrix(normalizationMatrix);
+        result.push_back(line);
       }
     }
 
@@ -71,21 +67,21 @@ private:
     return result;
   }
 
-  Point getIntersectionPoint(Line line, double t) {
-    return Point(line.a->x + t * (line.b->x - line.a->x), line.a->y + t * (line.b->y - line.a->y));
+  Point getIntersectionPoint(Line* line, double t) {
+    return Point(line->a.x + t * (line->b.x - line->a.x), line->a.y + t * (line->b.y - line->a.y));
   }
 
-  std::optional<Point> findHorizontalIntersection(Line line, double coordinate) {
-    if(line.a->y == line.b->y) return std::nullopt; 
-    double t = (coordinate - (double) line.a->y) / ((double) line.b->y - (double) line.a->y);
+  std::optional<Point> findHorizontalIntersection(Line* line, double coordinate) {
+    if(line->a.y == line->b.y) return std::nullopt; 
+    double t = (coordinate - (double) line->a.y) / ((double) line->b.y - (double) line->a.y);
 
     if (t < 0 || t > 1) return std::nullopt; 
     return getIntersectionPoint(line, t);
   }
 
-  std::optional<Point> findVerticalIntersection(Line line, double coordinate) {
-    if(line.a->x == line.b->x) return std::nullopt;
-    double t = (coordinate - (double) line.a->x) / ((double) line.b->x - (double) line.a->x);
+  std::optional<Point> findVerticalIntersection(Line* line, double coordinate) {
+    if(line->a.x == line->b.x) return std::nullopt;
+    double t = (coordinate - (double) line->a.x) / ((double) line->b.x - (double) line->a.x);
 
     if (t < 0 || t > 1) return std::nullopt; 
     return getIntersectionPoint(line, t);
@@ -94,13 +90,13 @@ private:
   bool isBetweenLeftAndRight(Point point) { return point.x > minPoint().x && point.x < maxPoint().x; }
   bool isBetweenTopAndBottom(Point point) { return point.y > minPoint().y && point.y < maxPoint().y; }
 
-  LineStatus resolveIntersection(Line line) {
+  LineStatus resolveIntersection(Line *line) {
     std::optional<Point> intersection;
     LineStatus result = COMPLETELY_OUTSIDE;
 
-    auto handleIntersection = [&](std::optional<Point> intersection, bool condition, Point*& pointToUpdate) {
+    auto handleIntersection = [&](std::optional<Point> intersection, bool condition, Point pointToUpdate) {
       if (intersection && condition) {
-        *pointToUpdate = *intersection;
+        pointToUpdate = *intersection;
         result = HAS_INTERSECTION;
       }
     };
@@ -108,33 +104,33 @@ private:
     handleIntersection(
         findHorizontalIntersection(line, maxPoint().y),
         isBetweenLeftAndRight(*intersection),
-        (line.a->y > line.b->y) ? line.a : line.b
+        (line->a.y > line->b.y) ? line->a : line->b
     );
 
     handleIntersection(
         findHorizontalIntersection(line, minPoint().y),
         isBetweenLeftAndRight(*intersection),
-        (line.a->y < line.b->y) ? line.a : line.b
+        (line->a.y < line->b.y) ? line->a : line->b
     );
 
     handleIntersection(
         findVerticalIntersection(line, maxPoint().x),
         isBetweenTopAndBottom(*intersection),
-        (line.a->x > line.b->x) ? line.a : line.b
+        (line->a.x > line->b.x) ? line->a : line->b
     );
 
     handleIntersection(
         findVerticalIntersection(line, minPoint().x),
         isBetweenTopAndBottom(*intersection),
-        (line.a->x < line.b->x) ? line.a : line.b
+        (line->a.x < line->b.x) ? line->a : line->b
     );
     
     return result;
   }
 
   LineStatus calculateRCStatus(Line line) {
-    char aRC = calculateRC(*line.a);
-    char bRC = calculateRC(*line.b);
+    char aRC = calculateRC(line.a);
+    char bRC = calculateRC(line.b);
     if(aRC == 0 && bRC == 0) return COMPLETELY_INSIDE;
     if(aRC == 0 || bRC == 0) return HAS_INTERSECTION; 
     if((aRC & bRC) == 0) return INTERSECTION_CHECK_NEEDED;
@@ -150,7 +146,7 @@ private:
         lines->erase(lines->begin() + i); i--; continue;
       }
 
-      if(RCStatus != COMPLETELY_INSIDE && resolveIntersection((*lines)[i]) != HAS_INTERSECTION) {
+      if(RCStatus != COMPLETELY_INSIDE && resolveIntersection(&(*lines)[i]) != HAS_INTERSECTION) {
         lines->erase(lines->begin() + i); i--;
       }
     }
@@ -168,11 +164,11 @@ public:
   std::vector<Line> transformViewport(RectangleSize viewportSize) {
     std::vector<Line> lines = normalizeDisplayFile();
 
-    clip(&lines);
+    // clip(&lines);
 
     Matrix transformationMatrix = calculateTransformationMatrix(viewportSize);
 
-    for(Line line : lines)
+    for(Line& line : lines)
       line.applyMatrix(transformationMatrix);
     
     return lines;

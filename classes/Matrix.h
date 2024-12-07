@@ -91,6 +91,7 @@ public:
     });
   }
 
+
   Matrix static TranslationMatrix(double x = 0, double y = 0, double z = 0) {
     return Matrix({
       {1, 0, 0, x},
@@ -269,12 +270,14 @@ public:
   }
 
   void checkItself() const {
+    printf("Matrix: {\n");
     for(sizet i = 0; i < height; i++) {
+      printf("  ");
       for(sizet j = 0; j < width; j++) 
           printf("%.2f ", matrix[i][j]);
       printf("\n");
     }
-    printf("\n");
+    printf("}\n");
   }
 
   class Row {

@@ -11,8 +11,8 @@
 #define WINDOW_INIT_WIDTH 100
 #define WINDOW_INIT_HEIGHT 100
 
-#define FRAME_DIFF_WIDTH 20 
-#define FRAME_DIFF_HEIGHT 10 
+#define FRAME_DIFF_WIDTH 0 
+#define FRAME_DIFF_HEIGHT 0 
 
 // This class couldn't has test ):
 // cause it's related with QFrame
@@ -57,11 +57,9 @@ public:
 
     if(draws.size() == 0) { printf("No lines to draw\n"); return; }
 
-    printf("Lines after displayFile clipping: \n");
-    for(Line line : draws) {
+    printf("Lines after clipping: \n");
+    for(Line line : draws) 
       line.checkItself();
-      printf("\n");
-    }
     printf("\n");
   }
 

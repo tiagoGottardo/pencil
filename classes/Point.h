@@ -22,50 +22,39 @@ public:
   Point(int32_t x = 0, int32_t y = 0, int32_t z = 0, const std::string& name = "Point") : name(name), x(x), y(y), z(z) {}
 
   std::string getName() const override { return name; }
+
   std::vector<Line> getLines() const override { return std::vector<Line>(); }
 
   void draw(QPainter* painter) const override { painter->drawPoint(x, y); }
 
-  void checkItself() const override { printf("%s(%d, %d, %d)", name.c_str(), x, y, z); }
-
-  bool operator==(const Point& other) const {
-    return (x == other.x && y == other.y && z == other.z);
-  }
-
+  void checkItself() const override { printf("  %s: (%d, %d, %d)\n", name.c_str(), x, y, z); }
+  bool operator==(const Point& other) const { return (x == other.x && y == other.y && z == other.z); }
   bool operator!=(const Point& other) const { return !(*this == other); }
 
-  Matrix toMatrix() { 
-    return Matrix({
-      {(double) x},
-      {(double) y},
-      {(double) z},
-      {1.0},
-    }); 
-  }
+  Matrix toMatrix() { return Matrix({ {(double) x}, {(double) y}, {(double) z}, {1}, }); }
 
-  void operator=(const Matrix& other) {
+  Point& operator=(const Matrix& other) {
     if(other.getHeight() < 3) throw std::invalid_argument("Invalid Matrix!");
 
-    if(other.getWidth() >= 3) {
-      x = std::round(other[0][0]); 
-      y = std::round(other[1][1]); 
-      z = std::round(other[2][2]);
-    } else {
-      x = std::round(other[0][0]); 
-      y = std::round(other[1][0]); 
-      z = std::round(other[2][0]);
-    }
+    this->name = "Point";
+    x = std::round(other[0][0]); 
+    y = std::round(other[1][0]); 
+    z = std::round(other[2][0]);
+
+    return *this;
   }
 
-  void applyMatrix(Matrix matrix) {
-    *this = matrix * toMatrix();
-  }
+  Point& applyMatrix(Matrix matrix) { *this = matrix * this->toMatrix(); return *this; }
+
+  void static applyMatrix(Point* point, Matrix matrix) { *point = matrix * point->toMatrix(); }
 
   Point operator-() const { return Point(-x, -y, -z); }
   Point operator+(const Point& other) const { return Point(x + other.x, y + other.y, z + other.z); }
   Point& operator+=(const Point& other) { *this = *this + other; return *this; }
   Point operator-(const Point& other) const { return Point(x - other.x, y - other.y, z - other.z); }
   Point& operator-=(const Point& other) { *this = *this - other; return *this; }
+
+  Point operator/(const int& num) const { return Point(x / num, y / num, z / num, name); }
 };
 
 #endif

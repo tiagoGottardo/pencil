@@ -15,29 +15,25 @@ private:
   std::string name;
 
 public:
+  Point a;
+  Point b;
 
-  Point* a;
-  Point* b;
-
-  Line(Point* a, Point* b, const std::string& name = "Line") : name(name), a(a), b(b) {}
+  Line(Point a, Point b, const std::string& name = "Line") : name(name), a(a), b(b) {}
 
   std::string getName() const override { return name; }
-
-  std::vector<Line> getLines() const override { return std::vector<Line>(); }
+  std::vector<Line> getLines() const override { return std::vector<Line>{ Line(a, b) }; }
 
   void checkItself() const override {
-    printf("%s |", name.c_str());
-    a->checkItself();
-    printf(", ");
-    b->checkItself();
-    printf("|");
+    printf("%s: ", name.c_str());
+    printf("(%d, %d, %d) -> ", a.x, a.y, a.z);
+    printf("(%d, %d, %d)\n", b.x, b.y, b.z);
   }
 
   void applyMatrix(Matrix matrix) {
-    a->applyMatrix(matrix);
-    b->applyMatrix(matrix);
+    a.applyMatrix(matrix);
+    b.applyMatrix(matrix);
   }
 
-  void draw(QPainter* painter) const override { painter->drawLine(a->x, a->y, b->x, b->y); } };
+  void draw(QPainter* painter) const override { painter->drawLine(a.x, a.y, b.x, b.y); } };
 
 #endif
