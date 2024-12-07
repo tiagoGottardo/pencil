@@ -23,6 +23,8 @@ public:
 
   std::string getName() const override { return name; }
 
+  std::vector<Line> getLines() const override { return std::vector<Line>(); }
+
   void checkItself() const override {
     printf("%s |", name.c_str());
     a->checkItself();

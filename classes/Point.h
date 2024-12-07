@@ -13,8 +13,8 @@
 class Point : public Drawable {
 private:
   std::string name;
-public:
 
+public:
   int32_t x;
   int32_t y;
   int32_t z;
@@ -22,6 +22,7 @@ public:
   Point(int32_t x = 0, int32_t y = 0, int32_t z = 0, const std::string& name = "Point") : name(name), x(x), y(y), z(z) {}
 
   std::string getName() const override { return name; }
+  std::vector<Line> getLines() const override { return std::vector<Line>(); }
 
   void draw(QPainter* painter) const override { painter->drawPoint(x, y); }
 

@@ -9,10 +9,13 @@ using namespace std;
 #include "../tests/mocks/QPainterMock.h"
 #endif
 
+class Line;
+
 class Drawable {
 public:
   virtual void draw(QPainter* painter) const = 0;
   virtual std::string getName() const = 0;
+  virtual std::vector<Line> getLines() const = 0;
   virtual void checkItself() const = 0;
   virtual ~Drawable() = default;
 };

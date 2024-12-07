@@ -26,6 +26,7 @@ public:
   Point ref;
 
   std::string getName() const override { return name; }
+  std::vector<Line> getLines() const override { return std::vector<Line>(); }
 
   Polygon clone() {
     std::vector<Point*> points = getPoints();
