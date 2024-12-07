@@ -33,7 +33,7 @@ public:
     return lines; 
   }
 
-  static Polygon* createRegularPolygon(int size = 100, int sides = 3, Point centroid = Point(), string name = "Polygon") {
+  static Polygon createRegularPolygon(int size = 100, int sides = 3, Point centroid = Point(), string name = "Polygon") {
     if(sides < 3) throw invalid_argument("It must has at least 3 sides.");
 
     double R = size / 2;
@@ -51,7 +51,7 @@ public:
       points.push_back(Point(R * cos(ang), R * sin(ang)));
     }
 
-    return new Polygon(points, centroid, name);
+    return Polygon(points, centroid, name);
   }
 
   Polygon(vector<Point> points, Point ref = Point(), const string& name = "Polygon") : name(name), ref(Point(ref.x, ref.y, ref.z, "Ref")), points(points) {}

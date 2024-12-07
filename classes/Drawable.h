@@ -20,4 +20,6 @@ public:
   virtual ~Drawable() = default;
 };
 
+using DisplayFile = vector<unique_ptr<Drawable>>;
+
 #endif

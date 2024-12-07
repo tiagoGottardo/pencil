@@ -20,7 +20,7 @@ typedef struct RectangleSize {
 class Window {
 private:
   uint width, height;
-  vector<Drawable*> *displayFile;
+  DisplayFile *displayFile;
   double rotation;
   Point centroid;
 
@@ -34,7 +34,7 @@ private:
 
     Matrix normalizationMatrix = Matrix::ZRotationMatrix(-rotation) * Matrix::TranslationMatrix(-centroid.x, -centroid.y, -centroid.z);
 
-    for(Drawable* drawable : *displayFile) {
+    for(unique_ptr<Drawable>& drawable : *displayFile) {
       vector<Line> lines = drawable->getLines();
 
       for(Line line : lines) {
@@ -153,7 +153,7 @@ private:
   }
 
 public:
-  Window(uint width, uint height, vector<Drawable*>* displayFile) : width(width), height(height), displayFile(displayFile), rotation(0), centroid(Point(0, 0)) { }
+  Window(uint width, uint height, DisplayFile* displayFile) : width(width), height(height), displayFile(displayFile), rotation(0), centroid(Point(0, 0)) { }
 
   void setSize() { width = (width == 500) ? 100 : 500; height = (height == 250) ? 100 : 250; }
 

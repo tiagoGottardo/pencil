@@ -40,7 +40,7 @@ public:
     timer->start(100); // milliseconds to trigger
   }
 
-  void connectWindow(vector<Drawable*>* displayFile) {
+  void connectWindow(DisplayFile* displayFile) {
     if(!window) window = new Window(WINDOW_INIT_WIDTH, WINDOW_INIT_HEIGHT, displayFile);
   }
 
