@@ -40,13 +40,13 @@ MainWindow::~MainWindow() { delete ui; }
 void MainWindow::on_left_clicked() {
   if(displayFileIndex == 0) displayFileIndex = ((int) displayFile.size()) - 1; else displayFileIndex--;
 
-  ui->label->setText(QString::fromStdString(displayFile[displayFileIndex]->name));
+  ui->label->setText(QString::fromStdString(displayFile[displayFileIndex]->getName()));
 }
 
 void MainWindow::on_right_clicked() {
   if(displayFileIndex == (int) displayFile.size() - 1) displayFileIndex = 0; else displayFileIndex++;
 
-  ui->label->setText(QString::fromStdString(displayFile[displayFileIndex]->name));
+  ui->label->setText(QString::fromStdString(displayFile[displayFileIndex]->getName()));
 }
 
 void movePolygon(Ui::MainWindow *ui, Polygon* polygon, char x, char y) {
@@ -114,6 +114,6 @@ void MainWindow::on_createPolygon_clicked() {
   if(okSize && okSides) {
     displayFile.push_back(Polygon::createRegularPolygon(size, sides, Point(0, 0), name));
     displayFileIndex = (int) displayFile.size() - 1;
-    ui->label->setText(QString::fromStdString(displayFile[displayFileIndex]->name));
+    ui->label->setText(QString::fromStdString(displayFile[displayFileIndex]->getName()));
   }
 }

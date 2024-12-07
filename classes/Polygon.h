@@ -17,9 +17,15 @@
 using sizet = std::size_t;
 
 class Polygon : public Drawable {
+private:
+  std::string name;
+
 public:
+  std::vector<Point> points;
   std::vector<Line>* lines;
   Point ref;
+
+  std::string getName() const override { return name; }
 
   Polygon clone() {
     std::vector<Point*> points = getPoints();
@@ -46,11 +52,7 @@ public:
     return true;
   }
 
-  static Polygon* createRegularPolygon(int size, int sides, Point centroid) {
-    return createRegularPolygon(size, sides, centroid, "Polygon");
-  }
-
-  static Polygon* createRegularPolygon(int size, int sides, Point centroid, std::string name) {
+  static Polygon* createRegularPolygon(int size, int sides, Point centroid, std::string name = "Polygon") {
     if(sides <= 0) return NULL;
 
     double R = size / 2;
@@ -78,10 +80,11 @@ public:
   }
 
   Polygon(std::vector<Line>* linesList, Point ref) : Polygon("Polygon", ref, linesList) {} 
-  Polygon(const std::string& name, Point ref, std::vector<Line>* linesList) : Drawable(name) {
+  Polygon(const std::string& name, Point ref, std::vector<Line>* linesList) {
     if(!Polygon::isPolygon(linesList)) 
       throw std::invalid_argument("It couldn't be polygon.");
 
+    this->name = name;
     this->ref = ref;
     this->lines = linesList;
 
@@ -131,9 +134,8 @@ public:
   }
 
   void draw(QPainter* painter) const override {
-    Line line;
     for(uint i = 0; i < (*lines).size(); i++) {
-      line = Line(new Point(*((*lines)[i].a) + ref), new Point((*(*lines)[i].b) + ref));
+      Line line = Line(new Point(*((*lines)[i].a) + ref), new Point((*(*lines)[i].b) + ref));
       line.draw(painter);
     }
   }

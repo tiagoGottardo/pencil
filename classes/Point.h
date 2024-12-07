@@ -11,16 +11,17 @@
 #include "Matrix.h"
 
 class Point : public Drawable {
+private:
+  std::string name;
 public:
+
   int32_t x;
   int32_t y;
   int32_t z;
 
-  Point() : Point(0, 0, 0, "Point") {} 
-  Point(int32_t x, int32_t y) : Point(x, y, 0, "Point") {} 
-  Point(int32_t x, int32_t y, const std::string& name) : Point(x, y, 0, name) {} 
-  Point(int32_t x, int32_t y, int32_t z) : Point(x, y, z, "Point") {} 
-  Point(int32_t x, int32_t y, int32_t z, const std::string& name) : Drawable(name), x(x), y(y), z(z) {}
+  Point(int32_t x = 0, int32_t y = 0, int32_t z = 0, const std::string& name = "Point") : name(name), x(x), y(y), z(z) {}
+
+  std::string getName() const override { return name; }
 
   void draw(QPainter* painter) const override { painter->drawPoint(x, y); }
 

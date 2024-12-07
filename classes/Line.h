@@ -11,15 +11,17 @@
 #include "Point.h"
 
 class Line : public Drawable {
+private:
+  std::string name;
+
 public:
+
   Point* a;
   Point* b;
 
-  Line(Point* a, Point* b) : Line(a, b, "Line") {}
+  Line(Point* a, Point* b, const std::string& name = "Line") : name(name), a(a), b(b) {}
 
-  Line() : Line(new Point(), new Point(), "Line") {}
-
-  Line(Point* a, Point* b, const std::string& name) : Drawable(name), a(a), b(b) {}
+  std::string getName() const override { return name; }
 
   void checkItself() const override {
     printf("%s |", name.c_str());

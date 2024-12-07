@@ -1,6 +1,8 @@
 #ifndef DRAWABLE_H
 #define DRAWABLE_H
 
+using namespace std;
+
 #ifndef TEST_MODE
 #include <QPainter>
 #else 
@@ -9,11 +11,10 @@
 
 class Drawable {
 public:
-  std::string name;
-
-  Drawable (std::string name) : name(name) {}
   virtual void draw(QPainter* painter) const = 0;
+  virtual std::string getName() const = 0;
   virtual void checkItself() const = 0;
+  virtual ~Drawable() = default;
 };
 
 #endif
