@@ -31,8 +31,6 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
   // Rotate window
   if(event->key() == Qt::Key_Q) { ui->frame->getWindow()->rotate(-1); }
   if(event->key() == Qt::Key_E) { ui->frame->getWindow()->rotate(1); }
-
-  if(event->key() == Qt::Key_C) { ui->frame->debugWindow(); }
 };
 
 MainWindow::~MainWindow() { delete ui; }

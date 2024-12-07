@@ -54,6 +54,19 @@ public:
     return Polygon(points, centroid, name);
   }
 
+  static Polygon createRectangle(uint width, uint height, Point centroid, string name = "Rectangle") {
+    vector<Point> points;
+
+    points.push_back(Point());
+    points.push_back(Point(0, height));
+    points.push_back(Point(width, height));
+    points.push_back(Point(width));
+
+    for(Point& point : points) point -= Point(width / 2, height / 2);
+
+    return Polygon(points, centroid, name);
+  }
+
   Polygon(vector<Point> points, Point ref = Point(), const string& name = "Polygon") : name(name), ref(Point(ref.x, ref.y, ref.z, "Ref")), points(points) {}
   
   void checkItself() const override {

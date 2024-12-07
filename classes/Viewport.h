@@ -11,8 +11,8 @@
 #define WINDOW_INIT_WIDTH 100
 #define WINDOW_INIT_HEIGHT 100
 
-#define FRAME_DIFF_WIDTH 0 
-#define FRAME_DIFF_HEIGHT 0 
+#define FRAME_WIDTH 460 
+#define FRAME_HEIGHT 230 
 
 // This class couldn't has test ):
 // cause it's related with QFrame
@@ -20,19 +20,22 @@
 class Viewport : public QFrame {
 private:
   Window* window;
-  
-  RectangleSize getSize() {
-    return { (uint) this->width() - (2*FRAME_DIFF_WIDTH), (uint) this->height() - (2*FRAME_DIFF_HEIGHT) };
+
+  RectangleSize getFrameSize() { return { FRAME_WIDTH, FRAME_HEIGHT }; }
+
+  Point center() { 
+    return Point(this->width() / 2, this->height() / 2); 
   }
 
-  void drawFrame(QPainter* painter) {
-    painter->drawLine(FRAME_DIFF_WIDTH, FRAME_DIFF_HEIGHT, this->width() - FRAME_DIFF_WIDTH, FRAME_DIFF_HEIGHT);
-    painter->drawLine(FRAME_DIFF_WIDTH, FRAME_DIFF_HEIGHT, FRAME_DIFF_WIDTH, this->height() - FRAME_DIFF_HEIGHT);
-
-    painter->drawLine(this->width() - FRAME_DIFF_WIDTH, FRAME_DIFF_HEIGHT, this->width() - FRAME_DIFF_WIDTH, this->height() - FRAME_DIFF_HEIGHT);
-    painter->drawLine(FRAME_DIFF_WIDTH, this->height() - FRAME_DIFF_HEIGHT, this->width() - FRAME_DIFF_WIDTH, this->height() - FRAME_DIFF_HEIGHT);
+  Polygon frame() { 
+    return Polygon::createRectangle(FRAME_WIDTH, FRAME_HEIGHT, center(), "Frame"); 
   }
-  
+
+  void draw(QPainter* painter, vector<Line>* lines) {
+    for(Line line : *lines) line.draw(painter);
+    for(Line line : frame().getLines()) line.draw(painter);
+  }
+
 public:
   explicit Viewport(QWidget *parent = nullptr) : QFrame(parent) {
     QTimer *timer = new QTimer(this);
@@ -48,38 +51,16 @@ public:
 
   Window* getWindow() { return (window) ? window : nullptr; }
 
-  void debugWindow() {
-    if(!window) { printf("No window connected yet.\n"); return; }
-
-    vector<Line> draws = window->transformViewport(this->getSize());
-
-    printf("Window connected\n");
-
-    if(draws.size() == 0) { printf("No lines to draw\n"); return; }
-
-    printf("Lines after clipping: \n");
-    for(Line line : draws) 
-      line.checkItself();
-    printf("\n");
-  }
-
 protected:
   void paintEvent(QPaintEvent *) override {
     if(!window) return;
 
-    vector<Line> draws = window->transformViewport(this->getSize());
+    vector<Line> lines = window->transformViewport(getFrameSize(), center());
 
     QPainter painter(this);
     painter.setPen(Qt::black);
 
-    Matrix frameCorrectionMatrix = Matrix::TranslationMatrix(FRAME_DIFF_WIDTH, FRAME_DIFF_HEIGHT);
-
-    for(int i = 0; i < (int) draws.size(); i++) {
-      draws[i].applyMatrix(frameCorrectionMatrix);
-      draws[i].draw(&painter);
-    } 
-
-    drawFrame(&painter);
+    draw(&painter, &lines);
   }
 
 private slots:

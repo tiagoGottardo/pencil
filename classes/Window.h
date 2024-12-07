@@ -29,16 +29,19 @@ private:
 
   friend class WindowFriend;
 
+  Matrix normalizationMatrix() {
+    return Matrix::ZRotationMatrix(-rotation) * 
+    Matrix::TranslationMatrix(-centroid.x, -centroid.y, -centroid.z);
+  }
+
   vector<Line> normalizeDisplayFile() {
     vector<Line> result = vector<Line>();
-
-    Matrix normalizationMatrix = Matrix::ZRotationMatrix(-rotation) * Matrix::TranslationMatrix(-centroid.x, -centroid.y, -centroid.z);
 
     for(unique_ptr<Drawable>& drawable : *displayFile) {
       vector<Line> lines = drawable->getLines();
 
-      for(Line line : lines) {
-        line.applyMatrix(normalizationMatrix);
+      for(Line& line : lines) {
+        line.applyMatrix(normalizationMatrix());
         result.push_back(line);
       }
     }
@@ -46,14 +49,12 @@ private:
     return result;
   }
 
-  Matrix calculateTransformationMatrix(RectangleSize viewportSize) {
-    double scaleX = (double) viewportSize.width / (double) width;
-    double scaleY = (double) viewportSize.height / (double) height;
+  Matrix transformationMatrix(RectangleSize frameSize, Point viewportCenter) {
+    double scaleX = (double) frameSize.width / (double) width;
+    double scaleY = (double) frameSize.height / (double) height;
 
-    double halfViewportWidth = (double) viewportSize.width / 2.0;
-    double halfViewportHeight = (double) viewportSize.height / 2.0;
-
-    return Matrix::TranslationMatrix(halfViewportWidth, halfViewportHeight) * Matrix::ScaleMatrix(scaleX, scaleY);
+    return Matrix::TranslationMatrix(viewportCenter.x, viewportCenter.y) * 
+           Matrix::ScaleMatrix(scaleX, scaleY);
   }
 
   char calculateRC(Point point) {
@@ -94,9 +95,9 @@ private:
     optional<Point> intersection;
     LineStatus result = COMPLETELY_OUTSIDE;
 
-    auto handleIntersection = [&](optional<Point> intersection, bool condition, Point pointToUpdate) {
+    auto handleIntersection = [&](optional<Point> intersection, bool condition, Point* pointToUpdate) {
       if (intersection && condition) {
-        pointToUpdate = *intersection;
+        *pointToUpdate = *intersection;
         result = HAS_INTERSECTION;
       }
     };
@@ -104,25 +105,25 @@ private:
     handleIntersection(
         findHorizontalIntersection(line, maxPoint().y),
         isBetweenLeftAndRight(*intersection),
-        (line->a.y > line->b.y) ? line->a : line->b
+        (line->a.y > line->b.y) ? &line->a : &line->b
     );
 
     handleIntersection(
         findHorizontalIntersection(line, minPoint().y),
         isBetweenLeftAndRight(*intersection),
-        (line->a.y < line->b.y) ? line->a : line->b
+        (line->a.y < line->b.y) ? &line->a : &line->b
     );
 
     handleIntersection(
         findVerticalIntersection(line, maxPoint().x),
         isBetweenTopAndBottom(*intersection),
-        (line->a.x > line->b.x) ? line->a : line->b
+        (line->a.x > line->b.x) ? &line->a : &line->b
     );
 
     handleIntersection(
         findVerticalIntersection(line, minPoint().x),
         isBetweenTopAndBottom(*intersection),
-        (line->a.x < line->b.x) ? line->a : line->b
+        (line->a.x < line->b.x) ? &line->a : &line->b
     );
     
     return result;
@@ -161,15 +162,13 @@ public:
 
   void move(Point to) { centroid += to; }
 
-  vector<Line> transformViewport(RectangleSize viewportSize) {
+  vector<Line> transformViewport(RectangleSize frameSize, Point viewportCenter) {
     vector<Line> lines = normalizeDisplayFile();
 
-    // clip(&lines);
-
-    Matrix transformationMatrix = calculateTransformationMatrix(viewportSize);
+    clip(&lines);
 
     for(Line& line : lines)
-      line.applyMatrix(transformationMatrix);
+      line.applyMatrix(transformationMatrix(frameSize, viewportCenter));
     
     return lines;
   }
