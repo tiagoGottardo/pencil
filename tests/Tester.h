@@ -1,5 +1,4 @@
-#ifndef TESTER_H
-#define TESTER_H
+#pragma once
 
 #include <functional>
 #include <stdio.h>
@@ -49,5 +48,3 @@ public:
   }
 
 };
-
-#endif

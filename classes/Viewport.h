@@ -1,5 +1,4 @@
-#ifndef VIEWPORT_H
-#define VIEWPORT_H
+#pragma once
 
 #include <QFrame>
 #include <QPainter>
@@ -66,5 +65,3 @@ protected:
 private slots:
   void triggerRepaint() { this->update(); }
 };
-
-#endif

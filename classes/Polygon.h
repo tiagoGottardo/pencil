@@ -1,5 +1,4 @@
-#ifndef POLYGON_H
-#define POLYGON_H
+#pragma once
 
 #ifndef TEST_MODE
 #include <QPainter>
@@ -93,5 +92,3 @@ public:
   void scale(double factor) { this->scale(factor, factor, factor); }
   void applyMatrix(Matrix matrix) { for(Point& point : points) point.applyMatrix(matrix); }
 };
-
-#endif

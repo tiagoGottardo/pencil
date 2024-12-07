@@ -1,5 +1,4 @@
-#ifndef MATRIX_H
-#define MATRIX_H
+#pragma once
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -312,5 +311,3 @@ public:
   int getWidth() const { return (int) width; }
   int getHeight() const { return (int) height; }
 };
-
-#endif

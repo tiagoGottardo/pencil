@@ -1,5 +1,4 @@
-#ifndef LINE_H
-#define LINE_H
+#pragma once
 
 #ifndef TEST_MODE
 #include <QPainter>
@@ -36,5 +35,3 @@ public:
   }
 
   void draw(QPainter* painter) const { painter->drawLine(a.x, a.y, b.x, b.y); } };
-
-#endif

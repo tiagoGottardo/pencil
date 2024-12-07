@@ -1,5 +1,4 @@
-#ifndef DRAWABLE_H
-#define DRAWABLE_H
+#pragma once
 
 using namespace std;
 
@@ -20,5 +19,3 @@ public:
 };
 
 using DisplayFile = vector<unique_ptr<Drawable>>;
-
-#endif

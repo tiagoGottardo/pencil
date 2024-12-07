@@ -1,5 +1,4 @@
-#ifndef WINDOW_H
-#define WINDOW_H
+#pragma once
 
 #include <optional>
 
@@ -173,5 +172,3 @@ public:
     return lines;
   }
 };
-
-#endif

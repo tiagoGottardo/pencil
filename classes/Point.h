@@ -1,5 +1,4 @@
-#ifndef POINT_H
-#define POINT_H
+#pragma once
 
 #ifndef TEST_MODE
 #include <QPainter>
@@ -47,5 +46,3 @@ public:
   Point& operator-=(const Point& other) { *this = *this - other; return *this; }
   Point operator/(const int& num) const { return Point(x / num, y / num, z / num, name); }
 };
-
-#endif
