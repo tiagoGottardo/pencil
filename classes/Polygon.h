@@ -19,15 +19,49 @@ private:
   Point ref;
   vector<Point> points;
 
+  double xRotation;
+  double yRotation;
+  double zRotation;
 public:
+  double validTheta(double theta) {
+    while(theta > 360.0 || theta < .0) {
+      if(theta > 360.0) theta -= 360.0;
+      if(theta < 360.0) theta += 360.0;
+    } 
+    return theta;
+  }
+
+  void rotate(double x, double y, double z) { 
+    xRotation += validTheta(x); 
+    yRotation += validTheta(y); 
+    zRotation += validTheta(z); 
+  }
+
+  void rotate(double theta) { rotate(theta, theta, theta); }
+  void rotateX(double theta) { xRotation += validTheta(theta); }
+  void rotateY(double theta) { yRotation += validTheta(theta); }
+  void rotateZ(double theta) { zRotation += validTheta(theta); }
 
   string getName() const override { return name; }
+
+  vector<Point> getTranformedPoints() const {  
+    vector<Point> result;
+
+    for(Point point : points) {
+      point.applyMatrix(transformationMatrix());
+      result.push_back(point);
+    }
+
+    return result;
+  }
 
   vector<Line> getLines() const override { 
     vector<Line> lines;
 
-    for(size_t i = 0; i < points.size(); i++)
-      lines.push_back(Line(points[i] + ref, points[(i + 1 < points.size()) ? i + 1 : 0] + ref));
+    vector<Point> transformedPoints = getTranformedPoints();
+
+    for(size_t i = 0; i < transformedPoints.size(); i++)
+      lines.push_back(Line(transformedPoints[i], transformedPoints[(i + 1 < transformedPoints.size()) ? i + 1 : 0]));
 
     return lines; 
   }
@@ -66,7 +100,28 @@ public:
     return Polygon(points, centroid, name);
   }
 
-  Polygon(vector<Point> points, Point ref = Point(), const string& name = "Polygon") : name(name), ref(Point(ref.x, ref.y, ref.z, "Ref")), points(points) {}
+  static Polygon createSquare(int size, int distance, Point rotation) {
+    vector<Point> points;
+
+    int half = size / 2;
+
+    points.push_back(Point(-half, -half, distance));
+    points.push_back(Point(half, -half, distance));
+    points.push_back(Point(half, half, distance));
+    points.push_back(Point(-half, half, distance));
+
+    Polygon p = Polygon(points, Point());
+
+    p.applyMatrix(
+      Matrix::XRotationMatrix(rotation.x) *
+      Matrix::YRotationMatrix(rotation.y) *
+      Matrix::ZRotationMatrix(rotation.z)
+    );
+
+    return p;
+  };
+
+  Polygon(vector<Point> points, Point ref = Point(), const string& name = "Polygon") : name(name), ref(Point(ref.x, ref.y, ref.z, "Ref")), points(points) { }
   
   void checkItself() const override {
     printf("%s: {\n", name.c_str());
@@ -87,8 +142,20 @@ public:
   }
 
   void move(Point to) { ref = ref + to; }
-  void rotate(double theta_degree) { this->applyMatrix(Matrix::ZRotationMatrix(theta_degree)); }
+
+  Matrix transformationMatrix() const {
+    return  
+      Matrix::TranslationMatrix(ref.x, ref.y, ref.z) *
+      Matrix::XRotationMatrix(xRotation) *
+      Matrix::YRotationMatrix(yRotation) *
+      Matrix::ZRotationMatrix(zRotation);
+  }
+
+
   void scale(double x, double y, double z) { this->applyMatrix(Matrix::ScaleMatrix(x, y, z)); }
   void scale(double factor) { this->scale(factor, factor, factor); }
   void applyMatrix(Matrix matrix) { for(Point& point : points) point.applyMatrix(matrix); }
+
+private slots:
+  void triggerRotate() { rotate(1); }
 };

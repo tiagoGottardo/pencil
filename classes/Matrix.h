@@ -63,10 +63,10 @@ public:
   Matrix static XRotationMatrix(double theta_degree) {
     double theta_radian = theta_degree * M_PI / 180.0;
     return Matrix({
-      {1,                      0,                       0, 0},
-      {0,                      1,                       0, 0},
+      {1,                 0,                  0, 0},
       {0, cos(theta_radian), -sin(theta_radian), 0},
-      {0, sin(theta_radian),  cos(theta_radian), 1}
+      {0, sin(theta_radian),  cos(theta_radian), 0},
+      {0,                 0,                  0, 1}
     });
   }
 
@@ -74,9 +74,9 @@ public:
     double theta_radian = theta_degree * M_PI / 180.0;
     return Matrix({
       { cos(theta_radian), 0, sin(theta_radian), 0},
-      {                      0, 1,                      0, 0},
+      {                 0, 1,                 0, 0},
       {-sin(theta_radian), 0, cos(theta_radian), 0},
-      {                      0, 0,                      0, 1}
+      {                 0, 0,                  0, 1}
     });
   }
 
@@ -85,8 +85,8 @@ public:
     return Matrix({
       {cos(theta_radian), -sin(theta_radian), 0, 0},
       {sin(theta_radian),  cos(theta_radian), 0, 0},
-      {                     0,                       0, 1, 0},
-      {                     0,                       0, 0, 1}
+      {                0,                  0, 1, 0},
+      {                0,                  0, 0, 1}
     });
   }
 

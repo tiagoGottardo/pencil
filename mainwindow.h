@@ -30,6 +30,8 @@ private:
 protected:
   void keyPressEvent(QKeyEvent *event) override;
 private slots:
+  void triggerRotate();
+
   void on_left_clicked();
   void on_right_clicked();
 
