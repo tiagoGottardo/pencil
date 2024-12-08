@@ -100,6 +100,48 @@ public:
     return Polygon(points, centroid, name);
   }
 
+  static vector<Polygon> createDonut(int sides) {
+    std::vector<Polygon> polygons;
+
+    int R = 60; 
+    int smallR = 35; 
+
+    for (int i = 0; i < sides; i++) {
+      double ang = i * 2 * M_PI / sides;
+      double nextAng = (i + 1) * 2 * M_PI / sides;
+
+      for (int j = 0; j < sides; j++) {
+        double ang2 = j * 2 * M_PI / sides;
+        double nextAng2 = (j + 1) * 2 * M_PI / sides;
+
+        Point p1(
+          (R + smallR * cos(ang2)) * cos(ang),
+          (R + smallR * cos(ang2)) * sin(ang),
+          smallR * sin(ang2)
+        );
+        Point p2(
+          (R + smallR * cos(nextAng2)) * cos(ang),
+          (R + smallR * cos(nextAng2)) * sin(ang),
+          smallR * sin(nextAng2)
+        );
+        Point p3(
+          (R + smallR * cos(nextAng2)) * cos(nextAng),
+          (R + smallR * cos(nextAng2)) * sin(nextAng),
+          smallR * sin(nextAng2)
+        );
+        Point p4(
+          (R + smallR * cos(ang2)) * cos(nextAng),
+          (R + smallR * cos(ang2)) * sin(nextAng),
+          smallR * sin(ang2)
+        );
+
+        polygons.push_back(Polygon({p1, p2, p3, p4}));
+      }
+    }
+
+    return polygons;
+  };
+
   static Polygon createSquare(int size, int distance, Point rotation) {
     vector<Point> points;
 

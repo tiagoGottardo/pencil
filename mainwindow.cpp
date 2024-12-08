@@ -8,32 +8,25 @@
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow) {
   ui->setupUi(this);
   ui->frame->connectWindow(&displayFile);
+  
+  vector<Polygon> donut = Polygon::createDonut(40);
 
-  Polygon p0 = Polygon::createSquare(100, 50, Point(0, 0, 0));
-  Polygon p1 = Polygon::createSquare(100, 50, Point(90, 0, 0));
-  Polygon p2 = Polygon::createSquare(100, 50, Point(180, 0, 0));
-  Polygon p3 = Polygon::createSquare(100, 50, Point(270, 0, 0));
-  Polygon p4 = Polygon::createSquare(100, 50, Point(0, 90, 0));
-  Polygon p5 = Polygon::createSquare(100, 50, Point(0, 270, 0));
-
-  displayFile.push_back(make_unique<Polygon>(p0));
-  displayFile.push_back(make_unique<Polygon>(p1));
-  displayFile.push_back(make_unique<Polygon>(p2));
-  displayFile.push_back(make_unique<Polygon>(p3));
-  displayFile.push_back(make_unique<Polygon>(p4));
-  displayFile.push_back(make_unique<Polygon>(p5));
+  for(Polygon polygon : donut) 
+    displayFile.push_back(make_unique<Polygon>(polygon));
 
   QTimer *timer = new QTimer(this);
   connect(timer, &QTimer::timeout, this, &MainWindow::triggerRotate);
-  timer->start(100); 
+  timer->start(5); 
 }
 
 void MainWindow::triggerRotate() {
   for(unique_ptr<Drawable>& drawable : this->displayFile) {
     Polygon* polygon = dynamic_cast<Polygon*>(drawable.get());
-    if(polygon)
-      polygon->rotate(3);
-    // polygon->checkItself();
+    if(polygon) {
+      polygon->rotateX(1);
+      polygon->rotateY(2);
+      polygon->rotateZ(4);
+    }
   }
 }
 
