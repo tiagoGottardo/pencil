@@ -22,6 +22,8 @@ private:
   double xRotation;
   double yRotation;
   double zRotation;
+
+  void triggerRotate() { rotate(1); }
 public:
   double validTheta(double theta) {
     while(theta > 360.0 || theta < .0) {
@@ -163,12 +165,19 @@ public:
     return p;
   };
 
-  Polygon(vector<Point> points, Point ref = Point(), const string& name = "Polygon") : name(name), ref(Point(ref.x, ref.y, ref.z, "Ref")), points(points) { }
+  Polygon(vector<Point> points, Point ref = Point(), const string& name = "Polygon") : name(name), ref(Point(ref.x, ref.y, ref.z, "Ref")), points(points) { 
+    xRotation = .0;
+    yRotation = .0;
+    zRotation = .0;
+  }
   
   void checkItself() const override {
     printf("%s: {\n", name.c_str());
     ref.checkItself(); 
     calculateCentroid().checkItself();
+    printf("  X rotation: %.2f\n", xRotation);
+    printf("  Y rotation: %.2f\n", yRotation);
+    printf("  Z rotation: %.2f\n\n", zRotation);
     for(Point point : points) point.checkItself();
     printf("}\n");
   }
@@ -197,7 +206,4 @@ public:
   void scale(double x, double y, double z) { this->applyMatrix(Matrix::ScaleMatrix(x, y, z)); }
   void scale(double factor) { this->scale(factor, factor, factor); }
   void applyMatrix(Matrix matrix) { for(Point& point : points) point.applyMatrix(matrix); }
-
-private slots:
-  void triggerRotate() { rotate(1); }
 };

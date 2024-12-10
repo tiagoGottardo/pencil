@@ -1,12 +1,14 @@
 extern void matrix();
-extern void polygon();
-extern void point();
+// extern void polygon();
+// extern void point();
 extern void window();
+
+using namespace std;
 
 int main() {
   matrix();
-  point();
-  polygon();
+  // point();
+  // polygon();
   window();
 
   return 0;

@@ -8,6 +8,8 @@ using namespace std;
 #include "../tests/mocks/QPainterMock.h"
 #endif
 
+#include <memory>
+
 class Line;
 
 class Drawable {
