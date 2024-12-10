@@ -34,4 +34,8 @@ public:
     b.applyMatrix(matrix);
   }
 
-  void draw(QPainter* painter) const { painter->drawLine(a.x, a.y, b.x, b.y); } };
+  void draw(QPainter* painter) const { painter->drawLine(a.x, a.y, b.x, b.y); } 
+
+  bool operator==(const Line& other) const { return (a == other.a && b == other.b); }
+  bool operator!=(const Line& other) const { return !(*this == other); }
+};

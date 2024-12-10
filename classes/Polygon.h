@@ -15,6 +15,8 @@
 
 class Polygon : public Drawable {
 private:
+  friend class PolygonFriend;
+
   string name;
   Point ref;
   vector<Point> points;
@@ -46,7 +48,7 @@ public:
 
   string getName() const override { return name; }
 
-  vector<Point> getTranformedPoints() const {  
+  vector<Point> getTransformedPoints() const {  
     vector<Point> result;
 
     for(Point point : points) {
@@ -60,7 +62,7 @@ public:
   vector<Line> getLines() const override { 
     vector<Line> lines;
 
-    vector<Point> transformedPoints = getTranformedPoints();
+    vector<Point> transformedPoints = getTransformedPoints();
 
     for(size_t i = 0; i < transformedPoints.size(); i++)
       lines.push_back(Line(transformedPoints[i], transformedPoints[(i + 1 < transformedPoints.size()) ? i + 1 : 0]));
@@ -201,7 +203,6 @@ public:
       Matrix::YRotationMatrix(yRotation) *
       Matrix::ZRotationMatrix(zRotation);
   }
-
 
   void scale(double x, double y, double z) { this->applyMatrix(Matrix::ScaleMatrix(x, y, z)); }
   void scale(double factor) { this->scale(factor, factor, factor); }
