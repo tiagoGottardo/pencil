@@ -4,15 +4,6 @@
 void matrix() {
   Tester suite = Tester("Matrix Suite");
 
-  suite.add([]() -> bool { 
-    Matrix identity4 = Matrix::IdentityMatrix(4);
-
-    for(int i = 0; i < 4; i++)
-      if(identity4[i][i] != 1) return false;
-
-    return true;
-  }(), "it tests identity matrix constructor");
-
   suite.add([]() -> bool {
     Matrix m({
       {0, 1, 2},
@@ -102,6 +93,16 @@ void matrix() {
 
     return result == m1 * m2;
   }(), "it tests multiplication matrix operation");
+
+  suite.add([]() -> bool {
+    Matrix m(4, 4);
+
+    for(size_t i = 0; i < 4; i++)
+      for(size_t j = 0; j < 4; j++)
+        if(m[i][j] != 0) return false;
+
+    return true;
+  }(), "it tests matrix contructor");
 
   suite.run();
 }

@@ -44,14 +44,6 @@ public:
 
   static bool areNearlyEqual(double a, double b, double epsilon = 1e-2) { return fabs(a - b) < epsilon; }
 
-  Matrix static IdentityMatrix(int size){
-    vector<PointInitializer> points;
-    for(sizet i = 0; i < (sizet) size; i++)
-      points.push_back({i, i, 1});
-    
-    return Matrix(size, size, points);
-  }
-
   Matrix static ScaleMatrix(double x = 1, double y = 1, double z = 1) {
     return Matrix({
       {x, 0, 0, 0},
@@ -91,7 +83,6 @@ public:
     });
   }
 
-
   Matrix static TranslationMatrix(double x = 0, double y = 0, double z = 0) {
     return Matrix({
       {1, 0, 0, x},
@@ -101,9 +92,7 @@ public:
     });
   }
 
-  Matrix(sizet w, sizet h) : Matrix(w, h, {}) {}
-
-  Matrix(int w, int h, vector<PointInitializer> points) {
+  Matrix(int w, int h) {
     width = w;
     height = h;
 
@@ -111,9 +100,6 @@ public:
 
     for(sizet i = 0; i < height; i++)
       matrix[i] = (double*) calloc(width, sizeof(double));
-
-    for(PointInitializer point : points)
-      matrix[point.y][point.x] = point.value;
   }
 
   Matrix(const vector<vector<double>>& input) {
@@ -214,60 +200,6 @@ public:
   }
 
   bool operator!=(const Matrix& other) const { return !(*this == other); }
-
-  double determinant() { 
-    if(width != height) throw invalid_argument("Matrix need to be squared for this operation.");
-    if(width == 1) return matrix[0][0];
-    sizet size = width;
-    double result = 0;
-
-    Matrix iterator = Matrix(size - 1, size - 1);
-    for(sizet i = 0; i < size; i++) {
-      for(sizet j = 1; j < size; j++) 
-        for(sizet k = 0; k < size; k++) {
-          if(k == i) continue; 
-          iterator[j - 1][(k < i) ? k : k - 1] = matrix[j][k];
-        }
-      
-      result += matrix[0][i] * iterator.determinant() * pow(-1, i);
-    }
-
-    return result; 
-  } 
-
-  Matrix adjoint() {
-    if(width != height) throw invalid_argument("Matrix need to be squared for this operation.");
-
-    sizet size = width;
-    Matrix adjoint = Matrix(size, size);
-
-    Matrix iterator = Matrix(size - 1, size - 1);
-    for(sizet i = 0; i < size; i++)
-      for(sizet j = 0; j < size; j++) {
-        for(sizet il = 0; il < size; il++) {
-          if (il == i) continue;
-          for(sizet jl = 0; jl < size; jl++) {
-            if (jl == j) continue;
-            iterator[(il > i) ? il - 1 : il][(jl > j) ? jl - 1 : jl] = matrix[il][jl];
-          }
-        }
-        adjoint[j][i] = pow(-1, i + j) * iterator.determinant();
-      }
-
-    return adjoint;
-  }
-
-  Matrix operator!() {
-    if(width != height) throw invalid_argument("Matrix need to be squared to invert it.");
-    double factor = determinant(); 
-    Matrix result = adjoint();
-
-    for(sizet i = 0; i < height; i++)
-      for(sizet j = 0; j < width; j++)
-        result[i][j] /= factor; 
-
-    return result; 
-  }
 
   void checkItself() const {
       printf("Matrix: {\n");
