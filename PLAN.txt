@@ -64,13 +64,12 @@ Insights:
 
 Próximos passos:
 - Cobrir tudo com testes
-  - Consertar os testes existentes 
-  - Criar testes para Polygon
-  - Criar testes para Line 
-  - Criar testes para Point 
-  - Criar testes para Matrix
-  - Criar testes para Window
-  - Criar testes para Object 
+  X Consertar os testes existentes 
+  X Criar testes para Polygon
+  X Criar testes para Line 
+  X Criar testes para Point 
+  X Criar testes para Matrix
+  X Criar testes para Window
   - Criar testes para Parser 
   - Criar testes para Funções diversas
 X Refatorar
@@ -85,7 +84,7 @@ X Refatorar
 X Adicionar o 3D
   X Criar um objeto 3D
   X Adicionar rotação nos três eixos
-- Adicionar o Object
+- Adicionar o Model 
 - Adicionar o Parser
 - Atualizar display do app
 
