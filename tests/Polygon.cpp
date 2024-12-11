@@ -13,7 +13,7 @@ public:
   }
 
   static vector<Point> getTransformedPoints(Polygon polygon) {
-    return polygon.getTransformedPoints();
+    return polygon.getTransformedPoints(polygon.transformationMatrix());
   }
 };
 

@@ -31,11 +31,11 @@ private:
       Matrix::ZRotationMatrix(zRotation);
   }
 
-  vector<Point> getTransformedPoints() const {  
+  vector<Point> getTransformedPoints(Matrix transformationMatrix) const {  
     vector<Point> result;
 
     for(Point point : points) {
-      point.applyMatrix(transformationMatrix());
+      point.applyMatrix(transformationMatrix);
       result.push_back(point);
     }
 
@@ -59,10 +59,12 @@ public:
 
   string getName() const override { return name; }
 
-  vector<Line> getLines() const override { 
+  vector<Line> getLines() const override { return getLines(transformationMatrix()); }
+
+  vector<Line> getLines(Matrix transformationMatrix) const { 
     vector<Line> lines;
 
-    vector<Point> transformedPoints = getTransformedPoints();
+    vector<Point> transformedPoints = getTransformedPoints(transformationMatrix);
 
     for(size_t i = 0; i < transformedPoints.size(); i++)
       lines.push_back(Line(transformedPoints[i], transformedPoints[(i + 1 < transformedPoints.size()) ? i + 1 : 0]));
