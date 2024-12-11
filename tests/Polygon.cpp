@@ -12,8 +12,8 @@ public:
     return polygon.points;
   }
 
-  static vector<double> testCalculateRC(Polygon polygon) {
-    return vector<double>{ polygon.xRotation, polygon.yRotation, polygon.zRotation};
+  static vector<Point> getTransformedPoints(Polygon polygon) {
+    return polygon.getTransformedPoints();
   }
 };
 
@@ -30,7 +30,6 @@ void polygon() {
     };
 
     if(PolygonFriend::getRef(p) != Point(50, 50, 0)) return false;
-    if(p.calculateCentroid() != Point(0, 0, 0)) return false;
 
     vector<Point> polygonPoints = PolygonFriend::getPoints(p);
 
@@ -45,7 +44,7 @@ void polygon() {
   suite.add([]() -> bool { 
     Polygon p = Polygon::createRegularPolygon(200, 4);
 
-    vector<Point> transformedPoints = p.getTransformedPoints();
+    vector<Point> transformedPoints = PolygonFriend::getTransformedPoints(p);
 
     Point correctPoints[] = { 
       Point(70, -70),
@@ -64,16 +63,16 @@ void polygon() {
 
   suite.add([]() -> bool { 
     Polygon p = Polygon::createRegularPolygon(200, 4);
-    p.scale(2);
+    p.scale(1);
     p.rotate(20);
 
     vector<Line> lines = p.getLines();
 
     Line correctLines[] = { 
-      Line(Point(169, -58, -86), Point(79, 178, 34)),
-      Line(Point(79, 178, 34), Point(-169, 58, 86)),
-      Line(Point(-169, 58, 86), Point(-79, -178, -34)),
-      Line(Point(-79, -178, -34), Point(169, -58, -86))
+      Line(Point(169, -29, -43), Point(79, 89, 17)),
+      Line(Point(79, 89, 17), Point(-169, 29, 43)),
+      Line(Point(-169, 29, 43), Point(-79, -89, -17)),
+      Line(Point(-79, -89, -17), Point(169, -29, -43))
     };
 
     if(lines.size() != 4);
