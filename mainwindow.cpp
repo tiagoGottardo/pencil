@@ -1,6 +1,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+
 #include "./classes/Polygon.h"
+#include "./classes/Model.h"
 
 #include <QPainter>
 #include <vector>
@@ -9,10 +11,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
   ui->setupUi(this);
   ui->frame->connectWindow(&displayFile);
   
-  vector<Polygon> donut = Polygon::createDonut(40);
-
-  for(Polygon polygon : donut) 
-    displayFile.push_back(make_unique<Polygon>(polygon));
+  displayFile.push_back(make_unique<Model>(Model::createDonut(40)));
 
   QTimer *timer = new QTimer(this);
   connect(timer, &QTimer::timeout, this, &MainWindow::triggerRotate);
@@ -21,11 +20,11 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
 void MainWindow::triggerRotate() {
   for(unique_ptr<Drawable>& drawable : this->displayFile) {
-    Polygon* polygon = dynamic_cast<Polygon*>(drawable.get());
-    if(polygon) {
-      polygon->rotateX(1);
-      polygon->rotateY(2);
-      polygon->rotateZ(4);
+    Model* model = dynamic_cast<Model*>(drawable.get());
+    if(model) {
+      model->rotateX(1);
+      model->rotateY(2);
+      model->rotateZ(4);
     }
   }
 }

@@ -18,6 +18,8 @@ HEADERS += \
     classes/Point.h \
     classes/Line.h \
     classes/Polygon.h \
+    classes/Model.h \
+    classes/Clipping.h \
     classes/Viewport.h \
     classes/Window.h \
     classes/Matrix.h

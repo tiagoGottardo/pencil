@@ -7,8 +7,8 @@
 #include "./Polygon.h"
 #include "./Window.h"
 
-#define WINDOW_INIT_WIDTH 100
-#define WINDOW_INIT_HEIGHT 100
+#define WINDOW_INIT_WIDTH 460
+#define WINDOW_INIT_HEIGHT 230
 
 #define FRAME_WIDTH 460 
 #define FRAME_HEIGHT 230 
