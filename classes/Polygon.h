@@ -25,7 +25,7 @@ private:
   Matrix transformationMatrix() const {
     return  
       Matrix::TranslationMatrix(ref.x, ref.y, ref.z) *
-      Matrix::ScaleMatrix(scaleFactor) *
+      Matrix::ScaleMatrix(scaleFactor, scaleFactor, scaleFactor) *
       Matrix::XRotationMatrix(xRotation) *
       Matrix::YRotationMatrix(yRotation) *
       Matrix::ZRotationMatrix(zRotation);
@@ -54,7 +54,7 @@ public:
   void rotateX(double theta) { xRotation += theta; }
   void rotateY(double theta) { yRotation += theta; }
   void rotateZ(double theta) { zRotation += theta; }
-  void scale(double factor) { scaleFactor += factor; }
+  void scale(double factor) { if(scaleFactor + factor != .0) scaleFactor += factor; }
   void move(Point to) { ref = ref + to; }
 
   string getName() const override { return name; }
