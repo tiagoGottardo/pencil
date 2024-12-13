@@ -98,12 +98,14 @@ public:
     return Model(polygons);
   };
 
-  Model(vector<Polygon> polygons, Point ref = Point(), const string& name = "Polygon") : name(name), ref(Point(ref.x, ref.y, ref.z, "Ref")), polygons(polygons) { 
-    xRotation = .0;
-    yRotation = .0;
-    zRotation = .0;
-    scaleFactor = 1.;
-  }
+  Model(vector<Polygon> polygons, Point ref = Point(), const string& name = "Model") : 
+    name(name), 
+    ref(Point(ref.x, ref.y, ref.z, "Ref")), 
+    polygons(polygons),
+    xRotation(.0),  
+    yRotation(.0),  
+    zRotation(.0),
+    scaleFactor(1.) {}
   
   void checkItself() const override {
     printf("Model %s\n", name.c_str());

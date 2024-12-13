@@ -106,12 +106,14 @@ public:
     return Polygon(points, centroid, name);
   }
 
-  Polygon(vector<Point> points, Point ref = Point(), const string& name = "Polygon") : name(name), ref(Point(ref.x, ref.y, ref.z, "Ref")), points(points) { 
-    xRotation = .0;
-    yRotation = .0;
-    zRotation = .0;
-    scaleFactor = 1.;
-  }
+  Polygon(vector<Point> points, Point ref = Point(), const string& name = "Polygon") : 
+    name(name), 
+    ref(Point(ref.x, ref.y, ref.z, "Ref")), 
+    points(points),
+    xRotation(.0), 
+    yRotation(.0), 
+    zRotation(.0), 
+    scaleFactor(1.) {}
   
   void checkItself() const override {
     printf("%s: {\n", name.c_str());
