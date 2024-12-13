@@ -10,10 +10,10 @@
 #define WINDOW_INIT_WIDTH 460
 #define WINDOW_INIT_HEIGHT 230
 
-#define FRAME_WIDTH 460 
-#define FRAME_HEIGHT 230 
+#define FRAME_WIDTH 1511
+#define FRAME_HEIGHT 1061 
 
-// This class couldn't has test ):
+// This class couldn't has tests ):
 // cause it's related with QFrame
 
 class Viewport : public QFrame {

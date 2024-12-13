@@ -34,9 +34,8 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
 
   if(event->key() == Qt::Key_F) {
     printf("Display file: \n");
-    for(unique_ptr<Drawable>& drawable : this->displayFile) {
+    for(unique_ptr<Drawable>& drawable : this->displayFile) 
       drawable->checkItself();
-    }
   }
 
   // Resize window
@@ -54,84 +53,3 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
 };
 
 MainWindow::~MainWindow() { delete ui; }
-
-void MainWindow::on_left_clicked() {
-  if(displayFileIndex == 0) displayFileIndex = ((int) displayFile.size()) - 1; else displayFileIndex--;
-
-  ui->label->setText(QString::fromStdString(displayFile[displayFileIndex]->getName()));
-}
-
-void MainWindow::on_right_clicked() {
-  if(displayFileIndex == (int) displayFile.size() - 1) displayFileIndex = 0; else displayFileIndex++;
-
-  ui->label->setText(QString::fromStdString(displayFile[displayFileIndex]->getName()));
-}
-
-void movePolygon(Ui::MainWindow *ui, Polygon* polygon, char x, char y) {
-  bool ok;
-  int num = ui->moveEdit->displayText().toInt(&ok);
-  if(ok) polygon->move(Point((x - 1) * num, (y - 1) * num));
-}
-
-void MainWindow::on_moveRight_clicked() {
-  Polygon* polygon = dynamic_cast<Polygon*>(displayFile[displayFileIndex].get());
-  movePolygon(ui, polygon, 2, 1);
-}
-
-void MainWindow::on_moveLeft_clicked() {
-  Polygon* polygon = dynamic_cast<Polygon*>(displayFile[displayFileIndex].get());
-  movePolygon(ui, polygon, 0, 1);
-}
-
-void MainWindow::on_moveTop_clicked() {
-  Polygon* polygon = dynamic_cast<Polygon*>(displayFile[displayFileIndex].get());
-  movePolygon(ui, polygon, 1, 0);
-}
-
-void MainWindow::on_moveBottom_clicked() {
-  Polygon* polygon = dynamic_cast<Polygon*>(displayFile[displayFileIndex].get());
-  movePolygon(ui, polygon, 1, 2);
-}
-
-void MainWindow::on_upScale_clicked() {
-  Polygon* polygon = dynamic_cast<Polygon*>(displayFile[displayFileIndex].get());
-  bool ok;
-  int num = ui->scaleEdit->displayText().toInt(&ok);
-  if(ok) polygon->scale((100 + (double) num) / 100.0);
-}
-
-void MainWindow::on_downScale_clicked() {
-  Polygon* polygon = dynamic_cast<Polygon*>(displayFile[displayFileIndex].get());
-  bool ok;
-  int num = ui->scaleEdit->displayText().toInt(&ok);
-  if(ok) polygon->scale((100 - (double) num) / 100.0);
-}
-
-void MainWindow::on_clockRotation_clicked() {
-  Polygon* polygon = dynamic_cast<Polygon*>(displayFile[displayFileIndex].get());
-  bool ok;
-  int num = ui->rotateEdit->displayText().toInt(&ok);
-  if(ok) polygon->rotate(num);
-}
-
-void MainWindow::on_antiClockRotation_clicked() {
-  Polygon* polygon = dynamic_cast<Polygon*>(displayFile[displayFileIndex].get());
-  bool ok;
-  int num = ui->rotateEdit->displayText().toInt(&ok);
-  if(ok) polygon->rotate(-num);
-}
-
-void MainWindow::on_createPolygon_clicked() {
-  int size, sides;
-  string name;
-  bool okSize, okSides;
-  size = ui->sizeEdit->displayText().toInt(&okSize);
-  sides = ui->sidesEdit->displayText().toInt(&okSides);
-  name = ui->nameEdit->displayText().toStdString();
-
-  if(okSize && okSides) {
-    displayFile.push_back(make_unique<Polygon>(Polygon::createRegularPolygon(size, sides, Point(), name)));
-    displayFileIndex = (int) displayFile.size() - 1;
-    ui->label->setText(QString::fromStdString(displayFile[displayFileIndex].get()->getName()));
-  }
-}
