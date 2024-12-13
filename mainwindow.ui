@@ -67,7 +67,7 @@
     <property name="geometry">
      <rect>
       <x>1540</x>
-      <y>50</y>
+      <y>60</y>
       <width>41</width>
       <height>41</height>
      </rect>
@@ -76,7 +76,7 @@
      <string>←</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="left_2">
+   <widget class="QPushButton" name="decreaseX">
     <property name="geometry">
      <rect>
       <x>1560</x>
@@ -89,7 +89,7 @@
      <string>←</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="left_3">
+   <widget class="QPushButton" name="increaseX">
     <property name="geometry">
      <rect>
       <x>1660</x>
@@ -102,7 +102,7 @@
      <string>→</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="left_4">
+   <widget class="QPushButton" name="increaseY">
     <property name="geometry">
      <rect>
       <x>1610</x>
@@ -115,7 +115,7 @@
      <string>↑</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="left_5">
+   <widget class="QPushButton" name="decreaseY">
     <property name="geometry">
      <rect>
       <x>1610</x>
@@ -128,7 +128,7 @@
      <string>↓</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="left_7">
+   <widget class="QPushButton" name="increaseXRotation">
     <property name="geometry">
      <rect>
       <x>1800</x>
@@ -141,7 +141,7 @@
      <string>↻</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="left_8">
+   <widget class="QPushButton" name="decreaseXRotation">
     <property name="geometry">
      <rect>
       <x>1750</x>
@@ -154,7 +154,7 @@
      <string>↺</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="left_9">
+   <widget class="QPushButton" name="increaseYRotation">
     <property name="geometry">
      <rect>
       <x>1800</x>
@@ -167,7 +167,7 @@
      <string>↻</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="left_10">
+   <widget class="QPushButton" name="decreaseYRotation">
     <property name="geometry">
      <rect>
       <x>1750</x>
@@ -180,7 +180,7 @@
      <string>↺</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="left_11">
+   <widget class="QPushButton" name="increaseZRotation">
     <property name="geometry">
      <rect>
       <x>1800</x>
@@ -193,7 +193,7 @@
      <string>↻</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="left_12">
+   <widget class="QPushButton" name="decreaseZRotation">
     <property name="geometry">
      <rect>
       <x>1750</x>
@@ -206,7 +206,7 @@
      <string>↺</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="left_13">
+   <widget class="QPushButton" name="toggleFixedXRotation">
     <property name="geometry">
      <rect>
       <x>1750</x>
@@ -219,7 +219,7 @@
      <string>X</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="left_14">
+   <widget class="QPushButton" name="toggleFixedYRotation">
     <property name="geometry">
      <rect>
       <x>1800</x>
@@ -232,7 +232,7 @@
      <string>Y</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="left_15">
+   <widget class="QPushButton" name="toggleFixedZRotation">
     <property name="geometry">
      <rect>
       <x>1850</x>
@@ -245,7 +245,7 @@
      <string>Z</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="left_16">
+   <widget class="QPushButton" name="increaseScale">
     <property name="geometry">
      <rect>
       <x>1550</x>
@@ -322,7 +322,7 @@
      <string>Scale</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="left_18">
+   <widget class="QPushButton" name="decreaseScale">
     <property name="geometry">
      <rect>
       <x>1640</x>
@@ -415,7 +415,7 @@
      <string>Add Object</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="left_19">
+   <widget class="QPushButton" name="addDonut">
     <property name="geometry">
      <rect>
       <x>1540</x>
@@ -517,6 +517,32 @@
     </property>
     <property name="text">
      <string>Import</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="increaseZ">
+    <property name="geometry">
+     <rect>
+      <x>1660</x>
+      <y>160</y>
+      <width>41</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>+Z</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="decreaseZ">
+    <property name="geometry">
+     <rect>
+      <x>1660</x>
+      <y>260</y>
+      <width>41</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>-Z</string>
     </property>
    </widget>
   </widget>

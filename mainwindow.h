@@ -28,6 +28,35 @@ private:
 
 protected:
   void keyPressEvent(QKeyEvent *event) override;
+
 private slots:
   void triggerRotate();
+
+  void on_left_clicked();
+  void on_right_clicked();
+
+  void on_increaseX_clicked();
+  void on_increaseY_clicked();
+  void on_increaseZ_clicked();
+
+  void on_decreaseX_clicked();
+  void on_decreaseY_clicked();
+  void on_decreaseZ_clicked();
+
+  void on_increaseXRotation_clicked();
+  void on_increaseYRotation_clicked();
+  void on_increaseZRotation_clicked();
+
+  void on_decreaseXRotation_clicked();
+  void on_decreaseYRotation_clicked();
+  void on_decreaseZRotation_clicked();
+
+  void on_increaseScale_clicked();
+  void on_decreaseScale_clicked();
+
+  void on_toggleFixedXRotation_clicked();
+  void on_toggleFixedYRotation_clicked();
+  void on_toggleFixedZRotation_clicked();
+
+  void on_addDonut_clicked();
 };

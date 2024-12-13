@@ -11,3 +11,6 @@ moc_predefs.h
 Point.o
 Polygon.o
 ui_mainwindow.h
+.qtcreator
+mainwindow.ui.autosave
+mainwindowButtons.o

@@ -7,25 +7,25 @@
 #include <QPainter>
 #include <vector>
 
-MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow) {
+MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow), displayFileIndex(0) {
   ui->setupUi(this);
   ui->frame->connectWindow(&displayFile);
-  
-  displayFile.push_back(make_unique<Model>(Model::createDonut(40)));
-
+  // displayFile.push_back(make_unique<Model>(Model::createDonut(40)));
   QTimer *timer = new QTimer(this);
   connect(timer, &QTimer::timeout, this, &MainWindow::triggerRotate);
   timer->start(5); 
 }
 
 void MainWindow::triggerRotate() {
+  ui->label->setText((displayFile.size() == 0) ? QString::fromStdString("") : QString::fromStdString(displayFile[displayFileIndex].get()->getName()));
+
   for(unique_ptr<Drawable>& drawable : this->displayFile) {
     Model* model = dynamic_cast<Model*>(drawable.get());
-    if(model) {
-      model->rotateX(1);
-      model->rotateY(2);
-      model->rotateZ(4);
-    }
+    if(model) 
+      model->rotate(
+        (model->fixedXRotation) ? 1 : 0, 
+        (model->fixedYRotation) ? 2 : 0, 
+        (model->fixedZRotation) ? 4 : 0);
   }
 }
 

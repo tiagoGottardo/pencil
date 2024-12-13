@@ -10,6 +10,7 @@ CONFIG += c++17
 
 SOURCES += \
     main.cpp \
+    mainwindowButtons.cpp \
     mainwindow.cpp 
 
 HEADERS += \

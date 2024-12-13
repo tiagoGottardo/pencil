@@ -53,8 +53,10 @@ OBJECTS_DIR   = ./
 ####### Files
 
 SOURCES       = main.cpp \
+		mainwindowButtons.cpp \
 		mainwindow.cpp moc_mainwindow.cpp
 OBJECTS       = main.o \
+		mainwindowButtons.o \
 		mainwindow.o \
 		moc_mainwindow.o
 DIST          = /usr/lib/qt/mkspecs/features/spec_pre.prf \
@@ -155,6 +157,7 @@ DIST          = /usr/lib/qt/mkspecs/features/spec_pre.prf \
 		classes/Viewport.h \
 		classes/Window.h \
 		classes/Matrix.h main.cpp \
+		mainwindowButtons.cpp \
 		mainwindow.cpp
 QMAKE_TARGET  = pencil
 DESTDIR       = 
@@ -362,7 +365,7 @@ distdir: FORCE
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/qt/mkspecs/features/data/dummy.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents mainwindow.h classes/Drawable.h classes/Point.h classes/Line.h classes/Polygon.h classes/Model.h classes/Clipping.h classes/Viewport.h classes/Window.h classes/Matrix.h $(DISTDIR)/
-	$(COPY_FILE) --parents main.cpp mainwindow.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents main.cpp mainwindowButtons.cpp mainwindow.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents mainwindow.ui $(DISTDIR)/
 
 
@@ -454,7 +457,7 @@ main.o: main.cpp mainwindow.h \
 		classes/Clipping.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o main.cpp
 
-mainwindow.o: mainwindow.cpp mainwindow.h \
+mainwindowButtons.o: mainwindowButtons.cpp mainwindow.h \
 		classes/Drawable.h \
 		tests/mocks/QPainterMock.h \
 		classes/Viewport.h \
@@ -465,6 +468,20 @@ mainwindow.o: mainwindow.cpp mainwindow.h \
 		classes/Window.h \
 		classes/Clipping.h \
 		ui_mainwindow.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindowButtons.o mainwindowButtons.cpp
+
+mainwindow.o: mainwindow.cpp mainwindow.h \
+		classes/Drawable.h \
+		tests/mocks/QPainterMock.h \
+		classes/Viewport.h \
+		classes/Polygon.h \
+		classes/Point.h \
+		classes/Matrix.h \
+		classes/Line.h \
+		classes/Window.h \
+		classes/Clipping.h \
+		ui_mainwindow.h \
+		classes/Model.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o mainwindow.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 
