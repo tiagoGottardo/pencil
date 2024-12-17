@@ -64,8 +64,8 @@ public:
   static Model createDonut(int sides) {
     std::vector<Polygon> polygons;
 
-    int R = 60; 
-    int smallR = 35; 
+    int R = 5000; 
+    int smallR = 2500; 
 
     for (int i = 0; i < sides; i++) {
       double ang = i * 2 * M_PI / sides;
