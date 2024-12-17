@@ -154,6 +154,7 @@ DIST          = /usr/lib/qt/mkspecs/features/spec_pre.prf \
 		classes/Polygon.h \
 		classes/Model.h \
 		classes/Clipping.h \
+		classes/Parser.h \
 		classes/Viewport.h \
 		classes/Window.h \
 		classes/Matrix.h main.cpp \
@@ -364,7 +365,7 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/qt/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents mainwindow.h classes/Drawable.h classes/Point.h classes/Line.h classes/Polygon.h classes/Model.h classes/Clipping.h classes/Viewport.h classes/Window.h classes/Matrix.h $(DISTDIR)/
+	$(COPY_FILE) --parents mainwindow.h classes/Drawable.h classes/Point.h classes/Line.h classes/Polygon.h classes/Model.h classes/Clipping.h classes/Parser.h classes/Viewport.h classes/Window.h classes/Matrix.h $(DISTDIR)/
 	$(COPY_FILE) --parents main.cpp mainwindowButtons.cpp mainwindow.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents mainwindow.ui $(DISTDIR)/
 
@@ -467,7 +468,9 @@ mainwindowButtons.o: mainwindowButtons.cpp mainwindow.h \
 		classes/Line.h \
 		classes/Window.h \
 		classes/Clipping.h \
-		ui_mainwindow.h
+		ui_mainwindow.h \
+		classes/Model.h \
+		classes/Parser.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindowButtons.o mainwindowButtons.cpp
 
 mainwindow.o: mainwindow.cpp mainwindow.h \
