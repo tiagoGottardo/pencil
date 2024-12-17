@@ -119,7 +119,12 @@ void MainWindow::on_addCharizard_clicked() {
 }
 
 void MainWindow::on_addPsyduck_clicked() { 
-  displayFile.push_back(make_unique<Model>(Parser::parse("./assets/psyduck2.obj")));
+  displayFile.push_back(make_unique<Model>(Parser::parse("./assets/psyduck.obj")));
+  displayFileIndex = (int) displayFile.size() - 1;
+}
+
+void MainWindow::on_addBuilding_clicked() { 
+  displayFile.push_back(make_unique<Model>(Parser::parse("./assets/building.obj")));
   displayFileIndex = (int) displayFile.size() - 1;
 }
 

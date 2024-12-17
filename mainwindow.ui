@@ -454,7 +454,7 @@
      <string>Psyduck</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="left_23">
+   <widget class="QPushButton" name="addBuilding">
     <property name="geometry">
      <rect>
       <x>1540</x>
@@ -464,53 +464,14 @@
      </rect>
     </property>
     <property name="text">
-     <string/>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="left_24">
-    <property name="geometry">
-     <rect>
-      <x>1540</x>
-      <y>720</y>
-      <width>361</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="left_25">
-    <property name="geometry">
-     <rect>
-      <x>1540</x>
-      <y>780</y>
-      <width>361</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="left_26">
-    <property name="geometry">
-     <rect>
-      <x>1540</x>
-      <y>840</y>
-      <width>361</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
+     <string>Building</string>
     </property>
    </widget>
    <widget class="QPushButton" name="importObject">
     <property name="geometry">
      <rect>
       <x>1540</x>
-      <y>900</y>
+      <y>720</y>
       <width>361</width>
       <height>41</height>
      </rect>

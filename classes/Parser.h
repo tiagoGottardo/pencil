@@ -11,7 +11,7 @@
 class Parser {
 public:
 
-  static vector<Polygon> parse(string filename) {
+  static Model parse(string filename) {
     vector<Point> points = vector<Point>();
     vector<Polygon> polygons = vector<Polygon>();
     points.push_back(Point());
@@ -22,8 +22,6 @@ public:
     int i = 0;
 
     while (getline (file, line) && i < 30) {
-      // printf("%s\n", line.c_str());
-
       istringstream lineStream(line);
       string prefix;
       lineStream >> prefix;
@@ -47,6 +45,12 @@ public:
       } 
     }
 
-    return polygons;
+    size_t lastSlashPos = filename.find_last_of('/');
+    string name = filename.substr(lastSlashPos + 1);
+    size_t dotPos = name.find_last_of('.');
+    if (dotPos != string::npos) name = name.substr(0, dotPos); 
+    if (!name.empty()) name[0] = toupper(name[0]); 
+
+    return Model(polygons, Point(), name);
   }
 };
