@@ -1,7 +1,13 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+#include <QMainWindow>
+#include <QPushButton>
+#include <QVBoxLayout>
+#include <QFileDialog>
+
 #include "./classes/Model.h"
+#include "./classes/Parser.h"
 
 void MainWindow::on_left_clicked() { if(displayFile.size() == 0) return;
   if(displayFile.size() == 0) return;
@@ -19,32 +25,32 @@ void MainWindow::on_right_clicked() {
 
 void MainWindow::on_increaseX_clicked() {
   Model* model = dynamic_cast<Model*>(displayFile[displayFileIndex].get());
-  model->move(Point(50));
+  model->move(Point(500));
 }
 
 void MainWindow::on_increaseY_clicked() { 
   Model* model = dynamic_cast<Model*>(displayFile[displayFileIndex].get());
-  model->move(Point(0, 50));
+  model->move(Point(0, 500));
 }
 
 void MainWindow::on_increaseZ_clicked() { 
   Model* model = dynamic_cast<Model*>(displayFile[displayFileIndex].get());
-  model->move(Point(0, 0, 50));
+  model->move(Point(0, 0, 500));
 }
 
 void MainWindow::on_decreaseX_clicked() {
   Model* model = dynamic_cast<Model*>(displayFile[displayFileIndex].get());
-  model->move(Point(-50, 0, 0));
+  model->move(Point(-500, 0, 0));
 }
 
 void MainWindow::on_decreaseY_clicked() {
   Model* model = dynamic_cast<Model*>(displayFile[displayFileIndex].get());
-  model->move(Point(0, -50, 0));
+  model->move(Point(0, -500, 0));
 }
 
 void MainWindow::on_decreaseZ_clicked() {
   Model* model = dynamic_cast<Model*>(displayFile[displayFileIndex].get());
-  model->move(Point(0, 0, -50));
+  model->move(Point(0, 0, -500));
 }
 
 void MainWindow::on_increaseXRotation_clicked() {
@@ -105,4 +111,32 @@ void MainWindow::on_toggleFixedZRotation_clicked() {
 void MainWindow::on_addDonut_clicked() { 
   displayFile.push_back(make_unique<Model>(Model::createDonut(40)));
   displayFileIndex = (int) displayFile.size() - 1;
+}
+
+void MainWindow::on_addCharizard_clicked() { 
+  displayFile.push_back(make_unique<Model>(Parser::parse("./assets/charizard.obj")));
+  displayFileIndex = (int) displayFile.size() - 1;
+}
+
+void MainWindow::on_addPsyduck_clicked() { 
+  displayFile.push_back(make_unique<Model>(Parser::parse("./assets/psyduck2.obj")));
+  displayFileIndex = (int) displayFile.size() - 1;
+}
+
+void MainWindow::on_importObject_clicked() {
+  QString fileName = QFileDialog::getOpenFileName(
+    nullptr,                           // Parent widget
+    "Open File",                       // Dialog title
+    QDir::homePath(),                  // Initial directory
+    "OBJ Files (*.obj)" // File filters
+  );
+  displayFile.push_back(make_unique<Model>(Parser::parse(fileName.toStdString())));
+  displayFileIndex = (int) displayFile.size() - 1;
+}
+
+void MainWindow::on_deleteObject_clicked() {
+  if(displayFile.size() == 0) return;
+
+  displayFile.erase(displayFile.begin() +displayFileIndex);
+  displayFileIndex = 0;
 }

@@ -21,6 +21,7 @@ HEADERS += \
     classes/Polygon.h \
     classes/Model.h \
     classes/Clipping.h \
+    classes/Parser.h \
     classes/Viewport.h \
     classes/Window.h \
     classes/Matrix.h

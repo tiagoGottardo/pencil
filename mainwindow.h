@@ -59,4 +59,11 @@ private slots:
   void on_toggleFixedZRotation_clicked();
 
   void on_addDonut_clicked();
+  void on_addCharizard_clicked();
+  void on_addPsyduck_clicked();
+
+  void on_deleteObject_clicked();
+  void on_importObject_clicked();
+
+
 };
