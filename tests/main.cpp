@@ -3,15 +3,15 @@ extern void polygon();
 extern void point();
 extern void window();
 extern void clipping();
-
-using namespace std;
+extern void parser();
 
 int main() {
-  matrix();
-  point();
-  polygon();
-  window();
-  clipping();
+  // matrix();
+  // point();
+  // polygon();
+  // window();
+  // clipping();
+  parser();
 
   return 0;
 }
