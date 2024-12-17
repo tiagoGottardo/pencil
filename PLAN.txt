@@ -63,6 +63,8 @@ Insights:
 - DisplayFile é uma referência para uma lista de Drawables
 
 Próximos passos:
+X Commitar tudo
+X Adicionar o Parser
 - Cobrir tudo com testes
   X Consertar os testes existentes 
   X Criar testes para Polygon
@@ -70,8 +72,8 @@ Próximos passos:
   X Criar testes para Point 
   X Criar testes para Matrix
   X Criar testes para Window
+  - Criar testes para Model 
   - Criar testes para Parser 
-  - Criar testes para Funções diversas
 X Refatorar
   X Transformar polygons
   X Transformar drawables
@@ -84,24 +86,26 @@ X Refatorar
 X Adicionar o 3D
   X Criar um objeto 3D
   X Adicionar rotação nos três eixos
-- Adicionar o Model 
-- Adicionar o Parser
-- Atualizar display do app
+X Adicionar o Model
+P Atualizar display do app
+- Criar Factory
+- Arrumar bug do clip
+- Criar o Transformable
 
 Entrega 5:
-a) Incluir a leitura de arquivo do tipo OBJ.
-b) Escolha pelo menos dois pokemons diferentes para visualizar em seu projeto. Exemplos de modelos podem ser 
-encontrados acessando: https://free3d.com/3dmodel/charizard-85299.html.
-c) Os pokemons devem ser inseridos na cena que você já criou nas outras entregas e visualizados ao mesmo tempo.
-d) Ajustar as transformações geométricas para 3D;
-e) Incluir a projeção ortogonal ao projeto de visualização;
+X a) Incluir a leitura de arquivo do tipo OBJ.
+X b) Escolha pelo menos dois pokemons diferentes para visualizar em seu projeto. Exemplos de modelos podem ser encontrados acessando: 
+https://free3d.com/3dmodel/charizard-85299.html.
+X c) Os pokemons devem ser inseridos na cena que você já criou nas outras entregas e visualizados ao mesmo tempo.
+X d) Ajustar as transformações geométricas para 3D; 
+X e) Incluir a projeção ortogonal ao projeto de visualização;
 
 Entrega 6:
-a) Incluir a projeção perspectiva ao projeto;
+- a) Incluir a projeção perspectiva ao projeto;
 
 Entrega 7:
-a) Fazer os arremates finais para a entrega do projeto;
-b) Incluir na interface algum mecanismo para as transformações no objeto e navegação de câmera
+- a) Fazer os arremates finais para a entrega do projeto;
+- b) Incluir na interface algum mecanismo para as transformações no objeto e navegação de câmera
 
 ChatGPT: Pipeline resumido
 - Transformação do modelo para o espaço de mundo: Aplica as transformações locais de um objeto.
