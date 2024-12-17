@@ -7,8 +7,8 @@
 #include "./Polygon.h"
 #include "./Window.h"
 
-#define WINDOW_INIT_WIDTH 460
-#define WINDOW_INIT_HEIGHT 230
+#define WINDOW_INIT_WIDTH 100000
+#define WINDOW_INIT_HEIGHT 100000
 
 #define FRAME_WIDTH 1511
 #define FRAME_HEIGHT 1061 
@@ -31,8 +31,8 @@ private:
   }
 
   void draw(QPainter* painter, vector<Line>* lines) {
-    for(Line line : *lines) line.draw(painter);
-    for(Line line : frame().getLines()) line.draw(painter);
+    for(Line line : *lines) line.draw(painter, (int) this->height());
+    for(Line line : frame().getLines()) line.draw(painter, (int) this->height());
   }
 
 public:

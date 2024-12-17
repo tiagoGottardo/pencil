@@ -48,7 +48,7 @@ public:
 
   void rotate(double diffRotation) { rotation += diffRotation; }
 
-  void move(Point to) { centroid += to; }
+  void move(Point to) { centroid += Point(to.x, -to.y, to.z); }
 
   vector<Line> transformViewport(RectangleSize frameSize, Point viewportCenter) {
     vector<Line> lines = normalizeDisplayFile();
