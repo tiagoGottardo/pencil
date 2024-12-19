@@ -56,28 +56,12 @@ private:
   bool isBetweenLeftAndRight(Point point) { return point.x > minPoint.x && point.x < maxPoint.x; }
   bool isBetweenTopAndBottom(Point point) { return point.y > minPoint.y && point.y < maxPoint.y; }
 
-  LineStatus resolveIntersection(Line *line) {
+  void resolveIntersection(Line *line) {
     optional<Point> intersection;
-    LineStatus result = COMPLETELY_OUTSIDE;
 
     auto handleIntersection = [&](optional<Point> intersection, bool condition, Point* pointToUpdate) {
-      if (intersection && condition) {
-        *pointToUpdate = *intersection;
-        result = HAS_INTERSECTION;
-      }
+      if (intersection && condition) *pointToUpdate = *intersection;
     };
-
-    handleIntersection(
-        findHorizontalIntersection(line, maxPoint.y),
-        isBetweenLeftAndRight(*intersection),
-        (line->a.y > line->b.y) ? &line->a : &line->b
-    );
-
-    handleIntersection(
-        findHorizontalIntersection(line, minPoint.y),
-        isBetweenLeftAndRight(*intersection),
-        (line->a.y < line->b.y) ? &line->a : &line->b
-    );
 
     handleIntersection(
         findVerticalIntersection(line, maxPoint.x),
@@ -91,7 +75,17 @@ private:
         (line->a.x < line->b.x) ? &line->a : &line->b
     );
     
-    return result;
+    handleIntersection(
+        findHorizontalIntersection(line, maxPoint.y),
+        isBetweenLeftAndRight(*intersection),
+        (line->a.y > line->b.y) ? &line->a : &line->b
+    );
+
+    handleIntersection(
+        findHorizontalIntersection(line, minPoint.y),
+        isBetweenLeftAndRight(*intersection),
+        (line->a.y < line->b.y) ? &line->a : &line->b
+    );
   }
 
   LineStatus calculateRCStatus(Line line) {
@@ -119,8 +113,12 @@ public:
         lines->erase(lines->begin() + i); i--; continue;
       }
 
-      if(RCStatus != COMPLETELY_INSIDE && resolveIntersection(&(*lines)[i]) != HAS_INTERSECTION) {
-        lines->erase(lines->begin() + i); i--;
+      if(RCStatus != COMPLETELY_INSIDE) {
+        resolveIntersection(&(*lines)[i]);
+
+        if(calculateRCStatus((*lines)[i]) == COMPLETELY_OUTSIDE) {
+          lines->erase(lines->begin() + i); i--;
+        }
       }
     }
   }
