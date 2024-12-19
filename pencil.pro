@@ -22,6 +22,7 @@ HEADERS += \
     classes/Model.h \
     classes/Clipping.h \
     classes/Factory.h \
+    classes/Transformable.h \
     classes/Viewport.h \
     classes/Window.h \
     classes/Matrix.h

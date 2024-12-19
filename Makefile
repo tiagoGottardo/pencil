@@ -155,6 +155,7 @@ DIST          = /usr/lib/qt/mkspecs/features/spec_pre.prf \
 		classes/Model.h \
 		classes/Clipping.h \
 		classes/Factory.h \
+		classes/Transformable.h \
 		classes/Viewport.h \
 		classes/Window.h \
 		classes/Matrix.h main.cpp \
@@ -365,7 +366,7 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/qt/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents mainwindow.h classes/Drawable.h classes/Point.h classes/Line.h classes/Polygon.h classes/Model.h classes/Clipping.h classes/Factory.h classes/Viewport.h classes/Window.h classes/Matrix.h $(DISTDIR)/
+	$(COPY_FILE) --parents mainwindow.h classes/Drawable.h classes/Point.h classes/Line.h classes/Polygon.h classes/Model.h classes/Clipping.h classes/Factory.h classes/Transformable.h classes/Viewport.h classes/Window.h classes/Matrix.h $(DISTDIR)/
 	$(COPY_FILE) --parents main.cpp mainwindowButtons.cpp mainwindow.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents mainwindow.ui $(DISTDIR)/
 
@@ -406,10 +407,13 @@ moc_mainwindow.cpp: mainwindow.h \
 		classes/Drawable.h \
 		tests/mocks/QPainterMock.h \
 		classes/Viewport.h \
-		classes/Polygon.h \
+		classes/Factory.h \
 		classes/Point.h \
 		classes/Matrix.h \
+		classes/Polygon.h \
+		classes/Transformable.h \
 		classes/Line.h \
+		classes/Model.h \
 		classes/Window.h \
 		classes/Clipping.h \
 		moc_predefs.h \
@@ -426,12 +430,15 @@ compiler_uic_clean:
 ui_mainwindow.h: mainwindow.ui \
 		/usr/bin/uic \
 		classes/Viewport.h \
+		classes/Factory.h \
+		classes/Point.h \
+		tests/mocks/QPainterMock.h \
+		classes/Matrix.h \
 		classes/Polygon.h \
 		classes/Drawable.h \
-		tests/mocks/QPainterMock.h \
-		classes/Point.h \
-		classes/Matrix.h \
+		classes/Transformable.h \
 		classes/Line.h \
+		classes/Model.h \
 		classes/Window.h \
 		classes/Clipping.h
 	/usr/bin/uic mainwindow.ui -o ui_mainwindow.h
@@ -450,10 +457,13 @@ main.o: main.cpp mainwindow.h \
 		classes/Drawable.h \
 		tests/mocks/QPainterMock.h \
 		classes/Viewport.h \
-		classes/Polygon.h \
+		classes/Factory.h \
 		classes/Point.h \
 		classes/Matrix.h \
+		classes/Polygon.h \
+		classes/Transformable.h \
 		classes/Line.h \
+		classes/Model.h \
 		classes/Window.h \
 		classes/Clipping.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o main.cpp
@@ -462,28 +472,32 @@ mainwindowButtons.o: mainwindowButtons.cpp mainwindow.h \
 		classes/Drawable.h \
 		tests/mocks/QPainterMock.h \
 		classes/Viewport.h \
-		classes/Polygon.h \
+		classes/Factory.h \
 		classes/Point.h \
 		classes/Matrix.h \
+		classes/Polygon.h \
+		classes/Transformable.h \
 		classes/Line.h \
+		classes/Model.h \
 		classes/Window.h \
 		classes/Clipping.h \
-		ui_mainwindow.h \
-		classes/Model.h
+		ui_mainwindow.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindowButtons.o mainwindowButtons.cpp
 
 mainwindow.o: mainwindow.cpp mainwindow.h \
 		classes/Drawable.h \
 		tests/mocks/QPainterMock.h \
 		classes/Viewport.h \
-		classes/Polygon.h \
+		classes/Factory.h \
 		classes/Point.h \
 		classes/Matrix.h \
+		classes/Polygon.h \
+		classes/Transformable.h \
 		classes/Line.h \
+		classes/Model.h \
 		classes/Window.h \
 		classes/Clipping.h \
-		ui_mainwindow.h \
-		classes/Model.h
+		ui_mainwindow.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o mainwindow.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 

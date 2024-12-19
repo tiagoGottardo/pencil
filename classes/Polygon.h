@@ -4,32 +4,16 @@
 #include <cmath>
 
 #include "Drawable.h"
+#include "Transformable.h"
 #include "Point.h"
 #include "Line.h"
 
-class Polygon : public Drawable {
+class Polygon : public Drawable, public Transformable {
 private:
   friend class PolygonFriend;
 
   string name;
-  Point ref;
   vector<Point> points;
-
-  double xRotation;
-  double yRotation;
-  double zRotation;
-  double scaleFactor;
-
-  void triggerRotate() { rotate(1); }
-
-  Matrix transformationMatrix() const {
-    return  
-      Matrix::TranslationMatrix(ref.x, ref.y, ref.z) *
-      Matrix::ScaleMatrix(scaleFactor, scaleFactor, scaleFactor) *
-      Matrix::XRotationMatrix(xRotation) *
-      Matrix::YRotationMatrix(yRotation) *
-      Matrix::ZRotationMatrix(zRotation);
-  }
 
   vector<Point> getTransformedPoints(Matrix transformationMatrix) const {  
     vector<Point> result;
@@ -45,18 +29,6 @@ private:
   void applyMatrix(Matrix matrix) { for(Point& point : points) point.applyMatrix(matrix); }
 
 public:
-  void rotate(double x, double y, double z) { 
-    xRotation += x; 
-    yRotation += y; 
-    zRotation += z; 
-  }
-  void rotate(double theta) { rotate(theta, theta, theta); }
-  void rotateX(double theta) { xRotation += theta; }
-  void rotateY(double theta) { yRotation += theta; }
-  void rotateZ(double theta) { zRotation += theta; }
-  void scale(double factor) { if(scaleFactor + factor != .0) scaleFactor += factor; }
-  void move(Point to) { ref = ref + to; }
-
   string getName() const override { return name; }
 
   vector<Line> getLines() const override { return getLines(transformationMatrix()); }
@@ -72,15 +44,10 @@ public:
     return lines; 
   }
 
-
   Polygon(vector<Point> points, Point ref = Point(), const string& name = "Polygon") : 
+    Transformable(ref),
     name(name), 
-    ref(Point(ref.x, ref.y, ref.z, "Ref")), 
-    points(points),
-    xRotation(.0), 
-    yRotation(.0), 
-    zRotation(.0), 
-    scaleFactor(1.) {}
+    points(points) {}
   
   void checkItself() const override {
     printf("%s: {\n", name.c_str());
