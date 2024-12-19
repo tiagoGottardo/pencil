@@ -6,8 +6,12 @@
 #include "Drawable.h"
 #include "Polygon.h"
 
+class ModelFriend;
+
 class Model : public Drawable {
 private:
+  friend class ModelFriend;
+
   string name;
   Point ref;
   vector<Polygon> polygons;
@@ -16,7 +20,6 @@ private:
   double yRotation;
   double zRotation;
   double scaleFactor;
-
 
   void triggerRotate() { rotate(1); }
 

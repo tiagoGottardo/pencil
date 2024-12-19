@@ -25,14 +25,14 @@ void window() {
     std::vector<Line> lines = WindowFriend::testNormalizeDisplayFile(window);
 
     Line correctLines[] = {
-      Line(Point(5, -65), Point(5, 5)),
-      Line(Point(5, 5), Point(-65, 5)),
-      Line(Point(-65, 5), Point(-65, -65)),
-      Line(Point(-65, -65), Point(5, -65))
+      Line(Point(5, 15), Point(5, 85)),
+      Line(Point(5, 85), Point(-65, 85)),
+      Line(Point(-65, 85), Point(-65, 15)),
+      Line(Point(-65, 15), Point(5, 15))
     };
 
-    for(int i = 0; i < (int) lines.size(); i++)
-      if(lines[i].a != correctLines[i].a || lines[i].b != correctLines[i].b) return false;
+    for(int i = 0; i < (int) lines.size(); i++)  
+      if(lines[i] != correctLines[i]) return false;
 
     return true;
   }(), "it tests window normalization on displayFile items");

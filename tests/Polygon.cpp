@@ -63,16 +63,16 @@ void polygon() {
 
   suite.add([]() -> bool { 
     Polygon p = Polygon::createRegularPolygon(200, 4);
-    p.scale(1);
     p.rotate(20);
+    p.scale(1);
 
     vector<Line> lines = p.getLines();
 
     Line correctLines[] = { 
-      Line(Point(169, -29, -43), Point(79, 89, 17)),
-      Line(Point(79, 89, 17), Point(-169, 29, 43)),
-      Line(Point(-169, 29, 43), Point(-79, -89, -17)),
-      Line(Point(-79, -89, -17), Point(169, -29, -43))
+      Line(Point(169, -58, -86), Point(79, 178, 34)),
+      Line(Point(79, 178, 34), Point(-169, 58, 86)),
+      Line(Point(-169, 58, 86), Point(-79, -178, -34)),
+      Line(Point(-79, -178, -34), Point(169, -58, -86))
     };
 
     if(lines.size() != 4);
