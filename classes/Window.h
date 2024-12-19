@@ -14,7 +14,7 @@ private:
   friend class WindowFriend;
 
   Matrix normalizationMatrix() {
-    return Matrix::ZRotationMatrix(-rotation) * 
+    return Matrix::ZRotationMatrix(rotation) * 
     Matrix::TranslationMatrix(-centroid.x, -centroid.y, -centroid.z);
   }
 
