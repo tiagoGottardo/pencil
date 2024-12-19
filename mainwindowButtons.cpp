@@ -123,11 +123,6 @@ void MainWindow::on_addPsyduck_clicked() {
   displayFileIndex = (int) displayFile.size() - 1;
 }
 
-void MainWindow::on_addBuilding_clicked() { 
-  displayFile.push_back(make_unique<Model>(Factory::import("./assets/building.obj")));
-  displayFileIndex = (int) displayFile.size() - 1;
-}
-
 void MainWindow::on_importObject_clicked() {
   QString fileName = QFileDialog::getOpenFileName(
     nullptr,                           // Parent widget

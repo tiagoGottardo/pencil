@@ -14,3 +14,4 @@ ui_mainwindow.h
 .qtcreator
 mainwindow.ui.autosave
 mainwindowButtons.o
+assets/*-.obj
