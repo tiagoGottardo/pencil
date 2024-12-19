@@ -3,7 +3,7 @@ extern void polygon();
 extern void point();
 extern void window();
 extern void clipping();
-extern void parser();
+extern void model();
 
 int main() {
   matrix();
@@ -11,6 +11,6 @@ int main() {
   polygon();
   window();
   clipping();
-  parser();
+  model();
   return 0;
 }

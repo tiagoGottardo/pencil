@@ -1,5 +1,6 @@
 #include "Tester.h"
 #include "../classes/Window.h"
+#include "../classes/Factory.h"
 
 class WindowFriend {
 public:
@@ -17,7 +18,7 @@ void window() {
 
   suite.add([]() -> bool { 
     DisplayFile* displayFile = new DisplayFile();
-    displayFile->push_back(make_unique<Polygon>(Polygon::createRegularPolygon(100, 4, Point(10, 10))));
+    displayFile->push_back(make_unique<Polygon>(Factory::createRegularPolygon(100, 4, Point(10, 10))));
 
     Window window = Window(100, 100, displayFile);
     window.move(Point(40, 40));

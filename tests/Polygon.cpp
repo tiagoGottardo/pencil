@@ -1,5 +1,5 @@
 #include "Tester.h"
-#include "../classes/Polygon.h"
+#include "../classes/Factory.h"
 #include "../classes/Point.h"
 
 class PolygonFriend {
@@ -21,7 +21,7 @@ void polygon() {
   Tester suite = Tester("Polygon Suite");
 
   suite.add([]() -> bool { 
-    Polygon p = Polygon::createRegularPolygon(100, 3, Point(50, 50));
+    Polygon p = Factory::createRegularPolygon(100, 3, Point(50, 50));
 
     Point correctPoints[] = { 
       Point(0, -50),
@@ -42,7 +42,7 @@ void polygon() {
   }(), "it tests create regular polygon method");
 
   suite.add([]() -> bool { 
-    Polygon p = Polygon::createRegularPolygon(200, 4);
+    Polygon p = Factory::createRegularPolygon(200, 4);
 
     vector<Point> transformedPoints = PolygonFriend::getTransformedPoints(p);
 
@@ -62,7 +62,7 @@ void polygon() {
   }(), "it tests polygon points transformation");
 
   suite.add([]() -> bool { 
-    Polygon p = Polygon::createRegularPolygon(200, 4);
+    Polygon p = Factory::createRegularPolygon(200, 4);
     p.rotate(20);
     p.scale(1);
 

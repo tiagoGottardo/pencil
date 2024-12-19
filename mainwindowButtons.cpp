@@ -7,7 +7,7 @@
 #include <QFileDialog>
 
 #include "./classes/Model.h"
-#include "./classes/Parser.h"
+#include "./classes/Factory.h"
 
 void MainWindow::on_left_clicked() { if(displayFile.size() == 0) return;
   if(displayFile.size() == 0) return;
@@ -109,22 +109,22 @@ void MainWindow::on_toggleFixedZRotation_clicked() {
 }
 
 void MainWindow::on_addDonut_clicked() { 
-  displayFile.push_back(make_unique<Model>(Model::createDonut(40)));
+  displayFile.push_back(make_unique<Model>(Factory::createDonut(40)));
   displayFileIndex = (int) displayFile.size() - 1;
 }
 
 void MainWindow::on_addCharizard_clicked() { 
-  displayFile.push_back(make_unique<Model>(Parser::parse("./assets/charizard.obj")));
+  displayFile.push_back(make_unique<Model>(Factory::import("./assets/charizard.obj")));
   displayFileIndex = (int) displayFile.size() - 1;
 }
 
 void MainWindow::on_addPsyduck_clicked() { 
-  displayFile.push_back(make_unique<Model>(Parser::parse("./assets/psyduck.obj")));
+  displayFile.push_back(make_unique<Model>(Factory::import("./assets/psyduck.obj")));
   displayFileIndex = (int) displayFile.size() - 1;
 }
 
 void MainWindow::on_addBuilding_clicked() { 
-  displayFile.push_back(make_unique<Model>(Parser::parse("./assets/building.obj")));
+  displayFile.push_back(make_unique<Model>(Factory::import("./assets/building.obj")));
   displayFileIndex = (int) displayFile.size() - 1;
 }
 
@@ -135,7 +135,7 @@ void MainWindow::on_importObject_clicked() {
     QDir::homePath(),                  // Initial directory
     "OBJ Files (*.obj)" // File filters
   );
-  displayFile.push_back(make_unique<Model>(Parser::parse(fileName.toStdString())));
+  displayFile.push_back(make_unique<Model>(Factory::import(fileName.toStdString())));
   displayFileIndex = (int) displayFile.size() - 1;
 }
 

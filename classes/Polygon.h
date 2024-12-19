@@ -72,39 +72,6 @@ public:
     return lines; 
   }
 
-  static Polygon createRegularPolygon(int size = 100, int sides = 3, Point centroid = Point(), string name = "Polygon") {
-    if(sides < 3) throw invalid_argument("It must has at least 3 sides.");
-
-    double R = size / 2;
-    double initialAng = -M_PI/2;
-    double ang;
-
-    vector<Point> points;
-
-    for(int i = 0; i < sides; i++) {
-      if(sides % 2 == 0) initialAng = 0;
-      if(sides % 4 == 0) initialAng = -M_PI/sides;
-      
-      ang = initialAng + (i * 2 * M_PI / sides);
-
-      points.push_back(Point(R * cos(ang), R * sin(ang)));
-    }
-
-    return Polygon(points, centroid, name);
-  }
-
-  static Polygon createRectangle(uint width, uint height, Point centroid, string name = "Rectangle") {
-    vector<Point> points;
-
-    points.push_back(Point());
-    points.push_back(Point(0, height));
-    points.push_back(Point(width, height));
-    points.push_back(Point(width));
-
-    for(Point& point : points) point -= Point(width / 2, height / 2);
-
-    return Polygon(points, centroid, name);
-  }
 
   Polygon(vector<Point> points, Point ref = Point(), const string& name = "Polygon") : 
     name(name), 

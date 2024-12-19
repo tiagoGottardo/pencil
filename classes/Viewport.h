@@ -4,14 +4,14 @@
 #include <QPainter>
 #include <QTimer>
 
-#include "./Polygon.h"
+#include "./Factory.h"
 #include "./Window.h"
 
 #define WINDOW_INIT_WIDTH 100000
 #define WINDOW_INIT_HEIGHT 100000
 
-#define FRAME_WIDTH 1511
-#define FRAME_HEIGHT 1061 
+#define FRAME_WIDTH 1311
+#define FRAME_HEIGHT 761 
 
 // This class couldn't has tests ):
 // cause it's related with QFrame
@@ -27,7 +27,7 @@ private:
   }
 
   Polygon frame() { 
-    return Polygon::createRectangle(FRAME_WIDTH, FRAME_HEIGHT, center(), "Frame"); 
+    return Factory::createRectangle(FRAME_WIDTH, FRAME_HEIGHT, center(), "Frame"); 
   }
 
   void draw(QPainter* painter, vector<Line>* lines) {
