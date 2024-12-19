@@ -24,22 +24,22 @@ public:
   } PointInitializer;
 
   ~Matrix() {
-    for(sizet i = 0; i < height; ++i) 
-      free(matrix[i]);  
-    free(matrix); 
+    for(sizet i = 0; i < height; i++)
+      delete[] matrix[i];
+    delete[] matrix;
   }
 
   Matrix(const Matrix& other) {
     width = other.width;
     height = other.height;
 
-    matrix = (double**) calloc(height, sizeof(double*));
-
-    for (sizet i = 0; i < height; ++i) {
-      matrix[i] = (double*) calloc(width, sizeof(double));
-      for (sizet j = 0; j < width; ++j) 
-        matrix[i][j] = other.matrix[i][j];
+    matrix = new double*[height];
+    for(sizet i = 0; i < height; i++) {
+      matrix[i] = new double[width];
+      for(sizet j = 0; j < width; j++)
+        matrix[i][j] = other[i][j];
     }
+
   }
 
   static bool areNearlyEqual(double a, double b, double epsilon = 1e-2) { return fabs(a - b) < epsilon; }
@@ -96,10 +96,10 @@ public:
     width = w;
     height = h;
 
-    matrix = (double **) calloc(height, sizeof(double*));
+    matrix = new double*[height];
 
     for(sizet i = 0; i < height; i++)
-      matrix[i] = (double*) calloc(width, sizeof(double));
+      matrix[i] = new double[width];
   }
 
   Matrix(const vector<vector<double>>& input) {
@@ -108,10 +108,10 @@ public:
     width = input[0].size();
     height = input.size();
 
-    matrix = (double **) calloc(height, sizeof(double*));
+    matrix = new double*[height];
 
     for(sizet i = 0; i < height; i++)
-      matrix[i] = (double*) calloc(width, sizeof(double));
+      matrix[i] = new double[width];
 
     for(sizet i = 0; i < height; i++)
       for(sizet j = 0; j < width; j++)
@@ -155,7 +155,7 @@ public:
 
     height = other.height;
     width = other.width;
-
+    
     matrix = new double*[height];
     for(sizet i = 0; i < height; i++) {
       matrix[i] = new double[width];
