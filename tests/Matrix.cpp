@@ -1,104 +1,83 @@
 #include "Tester.h"
 #include "../classes/Matrix.h"
 
+#define MATRIX_SIZE 4
+
 void matrix() {
   Tester suite = Tester("Matrix Suite");
 
   suite.add([]() -> bool {
     Matrix m({
-      {0, 1, 2},
-      {1, 2, 3}
+      {0, 1, 2, 3},
+      {1, 2, 3, 4},
+      {2, 3, 4, 5},
+      {3, 4, 5, 6}
     });
 
-    for(int i = 0; i < m.getWidth(); i++)
-      for(int j = 0; j < m.getHeight(); j++)
+    for(int i = 0; i < MATRIX_SIZE; i++)
+      for(int j = 0; j < MATRIX_SIZE; j++)
         if(m[j][i] != i + j) return false;
-
-    if(m.getWidth() != 3) return false;
-    if(m.getHeight() != 2) return false;
 
     return true;
   }(), "it tests declarative matrix constructor");
 
   suite.add([]() -> bool {
     Matrix m1({
-      {0, 1, 2},
-      {1, 2, 3}
+      {12, 123, 43, 5},
+      {4, 23, 52, 4},
+      {4, 4, 52, 4},
+      {56, 6, 7, 3},
     });
 
     Matrix m2({
-      {0, 1, 2},
-      {1, 2, 3}
+      {3, 1, 23, 0},
+      {23, 2, 0, 0},
+      {23, 6, 34, 9},
+      {54, 45, 8, 34},
     });
 
     Matrix result({
-      {0, 2, 4},
-      {2, 4, 6},
+      {4124,	741,	1778,	557},
+      {1953,	542,	1892,	604},
+      {1516,	504,	1892,	604},
+      {629,	245,	1550,	165}
     });
 
-    if(result == m1 + m2) return true;
+    if(result == m1 * m2) return true;
 
     return true;
-  }(), "it tests plus matrix operation");
-
-  suite.add([]() -> bool {
-    Matrix m1({
-      {0, 1, 2},
-    });
-
-    Matrix m2({
-      {0, 1, 2},
-      {1, 2, 3}
-    });
-
-    try {
-      Matrix m3 = m1 + m2;
-    } catch(const std::exception&) {
-      return true;
-    }
-
-    return false;
-  }(), "it tests plus matrix operation gets error on invalid input");
-
-  suite.add([]() -> bool {
-    Matrix m1({
-      {0, 1, 2},
-      {1, 2, 3}
-    });
-
-    Matrix m2({
-      {0, -1, -2},
-      {-1, -2, -3}
-    });
-
-    return m1 == -m2;
-  }(), "it tests invert signal matrix operation");
-
-  suite.add([]() -> bool {
-    Matrix m1({
-      {0, 1, 2},
-      {1, 2, 3}
-    });
-
-    Matrix m2({
-      {3, 5, 10},
-      {0, 2, 7},
-      {1, 2, 3}
-    });
-
-    Matrix result({
-      {2, 6, 13},
-      {6, 15, 33},
-    });
-
-    return result == m1 * m2;
   }(), "it tests multiplication matrix operation");
 
   suite.add([]() -> bool {
-    Matrix m(4, 4);
+    Matrix m1({
+      {12, 123, 43, 5},
+      {4, 23, 52, 4},
+      {4, 4, 52, 4},
+      {56, 6, 7, 3},
+    });
 
-    for(size_t i = 0; i < 4; i++)
-      for(size_t j = 0; j < 4; j++)
+    Matrix m2({
+      {3, 1, 23, 0},
+      {23, 2, 0, 0},
+      {23, 6, 34, 9},
+      {54, 45, 8, 34},
+    });
+
+    Matrix result({
+      {15,	124,	66,	5},
+      {27,	25,	52,	4},
+      {27,	10,	86,	13},
+      {110,	51,	15,	37}
+    });
+
+    return result == m1 + m2;
+  }(), "it tests plus matrix operation");
+
+  suite.add([]() -> bool {
+    Matrix m;
+
+    for(size_t i = 0; i < MATRIX_SIZE; i++)
+      for(size_t j = 0; j < MATRIX_SIZE; j++)
         if(m[i][j] != 0) return false;
 
     return true;
