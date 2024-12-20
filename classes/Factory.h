@@ -90,18 +90,21 @@ public:
   static Model import(string filename) {
     vector<Point> points = vector<Point>();
     vector<Polygon> polygons = vector<Polygon>();
-    points.push_back(Point());
-    ifstream file(filename);
-    string line;
-    int i = 0;
 
-    while (getline (file, line) && i < 30) {
+    points.push_back(Point());
+
+    ifstream file(filename);
+
+    string line;
+
+    while(getline (file, line)) {
       istringstream lineStream(line);
       string prefix;
       lineStream >> prefix;
 
       if (prefix == "v") {
         double x, y, z;
+
         lineStream >> x >> y >> z;
         points.push_back(Point(round(x * 1000), round(y * 1000), round(z * 1000)));
       } 
@@ -109,12 +112,15 @@ public:
       if (prefix == "f") {
         vector<Point> polygonPoints = vector<Point>();
         string slice;
+
         while(lineStream >> slice) {
           istringstream sliceStream(slice);
           string sliceIndex;
+
           if(std::getline(sliceStream, sliceIndex, '/')) 
             polygonPoints.push_back(points[stoi(sliceIndex)]);
         }
+
         polygons.push_back(Polygon(polygonPoints));
       } 
     }
@@ -122,6 +128,7 @@ public:
     size_t lastSlashPos = filename.find_last_of('/');
     string name = filename.substr(lastSlashPos + 1);
     size_t dotPos = name.find_last_of('.');
+
     if (dotPos != string::npos) name = name.substr(0, dotPos); 
     if (!name.empty()) name[0] = toupper(name[0]); 
 
