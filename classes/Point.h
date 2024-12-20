@@ -23,7 +23,7 @@ public:
 
   void checkItself() const { printf("  %s: (%d, %d, %d)\n", name.c_str(), x, y, z); }
 
-  void applyMatrix(Matrix matrix) {
+  Point& applyMatrix(Matrix matrix) {
     double vector[4] = { (double) x, (double) y, (double) z, 1. };
     double result[4] = {.0};
 
@@ -34,6 +34,8 @@ public:
     x = round(result[0]); 
     y = round(result[1]); 
     z = round(result[2]);
+
+    return *this;
   }
 
   bool operator==(const Point& other) const { return (x == other.x && y == other.y && z == other.z); }

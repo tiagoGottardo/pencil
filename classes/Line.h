@@ -29,9 +29,11 @@ public:
     printf("(%d, %d, %d)\n", b.x, b.y, b.z);
   }
 
-  void applyMatrix(Matrix matrix) {
+  Line& applyMatrix(Matrix matrix) {
     a.applyMatrix(matrix);
     b.applyMatrix(matrix);
+
+    return *this;
   }
 
   void draw(QPainter* painter, int frameHeight) const { painter->drawLine(a.x, frameHeight - a.y, b.x, frameHeight - b.y); } 

@@ -24,10 +24,8 @@ private:
     for(unique_ptr<Drawable>& drawable : *displayFile) {
       vector<Line> lines = drawable->getLines();
 
-      for(Line& line : lines) {
-        line.applyMatrix(normalizationMatrix());
-        result.push_back(line);
-      }
+      for(Line& line : lines) 
+        result.push_back(line.applyMatrix(normalizationMatrix()));
     }
 
     return result;

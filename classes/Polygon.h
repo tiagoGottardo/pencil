@@ -18,15 +18,11 @@ private:
   vector<Point> getTransformedPoints(Matrix transformationMatrix) const {  
     vector<Point> result;
 
-    for(Point point : points) {
-      point.applyMatrix(transformationMatrix);
-      result.push_back(point);
-    }
+    for(Point point : points) 
+      result.push_back(point.applyMatrix(transformationMatrix));
 
     return result;
   }
-
-  void applyMatrix(Matrix matrix) { for(Point& point : points) point.applyMatrix(matrix); }
 
 public:
   string getName() const override { return name; }
