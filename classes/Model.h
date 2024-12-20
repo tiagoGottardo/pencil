@@ -21,8 +21,7 @@ public:
     for(Polygon polygon : polygons) {
       vector<Line> polygonLines = polygon.getLines(transformationMatrix());
 
-      for(Line line : polygonLines) 
-        lines.push_back(line);
+      for(Line line : polygonLines) lines.push_back(line);
     }
 
     return lines; 

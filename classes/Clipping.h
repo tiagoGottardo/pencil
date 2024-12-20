@@ -5,7 +5,7 @@
 #include "./Point.h"
 #include "./Polygon.h"
 
-enum LineStatus {
+enum RCStatus {
   COMPLETELY_INSIDE,
   COMPLETELY_OUTSIDE,
   INTERSECTION_CHECK_NEEDED,
@@ -88,7 +88,7 @@ private:
     );
   }
 
-  LineStatus calculateRCStatus(Line line) {
+  RCStatus calculateRCStatus(Line line) {
     char aRC = calculateRC(line.a);
     char bRC = calculateRC(line.b);
     if(aRC == 0 && bRC == 0) return COMPLETELY_INSIDE;
@@ -107,7 +107,7 @@ public:
 
   void execute(vector<Line>* lines) {
     for(int i = 0; i < (int) lines->size(); i++) {
-      LineStatus RCStatus = calculateRCStatus((*lines)[i]);
+      RCStatus RCStatus = calculateRCStatus((*lines)[i]);
 
       if(RCStatus == COMPLETELY_OUTSIDE) {
         lines->erase(lines->begin() + i); i--; continue;
