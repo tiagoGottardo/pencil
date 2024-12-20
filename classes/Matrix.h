@@ -9,37 +9,31 @@ using namespace std;
 #include <vector>
 #include <cmath>
 
-using sizet = size_t;
+#define MATRIX_SIZE 4
 
 class Matrix {
 private:
-  double** matrix;
-  sizet width, height;
+  double matrix[MATRIX_SIZE][MATRIX_SIZE];
 
 public:
-  typedef struct {
-    sizet x;
-    sizet y;
-    double value;
-  } PointInitializer;
-
-  ~Matrix() {
-    for(sizet i = 0; i < height; i++)
-      delete[] matrix[i];
-    delete[] matrix;
+  Matrix() {
+    for (size_t i = 0; i < MATRIX_SIZE; ++i) 
+      for (size_t j = 0; j < MATRIX_SIZE; ++j) 
+        matrix[i][j] = 0; 
   }
 
   Matrix(const Matrix& other) {
-    width = other.width;
-    height = other.height;
-
-    matrix = new double*[height];
-    for(sizet i = 0; i < height; i++) {
-      matrix[i] = new double[width];
-      for(sizet j = 0; j < width; j++)
+    for(size_t i = 0; i < MATRIX_SIZE; i++)
+      for(size_t j = 0; j < MATRIX_SIZE; j++)
         matrix[i][j] = other[i][j];
-    }
+  }
 
+  Matrix(const vector<vector<double>>& input) {
+    if(input.size() == 0) return; 
+
+    for(size_t i = 0; i < MATRIX_SIZE; i++)
+      for(size_t j = 0; j < MATRIX_SIZE; j++)
+        matrix[i][j] = input[i][j];
   }
 
   static bool areNearlyEqual(double a, double b, double epsilon = 1e-2) { return fabs(a - b) < epsilon; }
@@ -79,7 +73,7 @@ public:
       {cos(theta_radian), -sin(theta_radian), 0, 0},
       {sin(theta_radian),  cos(theta_radian), 0, 0},
       {                0,                  0, 1, 0},
-      {                0,                  0, 0, 1}
+      {                0,                  0, 0, 1} 
     });
   }
 
@@ -92,155 +86,79 @@ public:
     });
   }
 
-  Matrix(int w, int h) {
-    width = w;
-    height = h;
-
-    matrix = new double*[height];
-
-    for(sizet i = 0; i < height; i++)
-      matrix[i] = new double[width];
-  }
-
-  Matrix(const vector<vector<double>>& input) {
-    if(input.size() == 0) return; 
-
-    width = input[0].size();
-    height = input.size();
-
-    matrix = new double*[height];
-
-    for(sizet i = 0; i < height; i++)
-      matrix[i] = new double[width];
-
-    for(sizet i = 0; i < height; i++)
-      for(sizet j = 0; j < width; j++)
-        matrix[i][j] = input[i][j];
+  void checkItself() const {
+    printf("Matrix: {\n");
+    for(size_t i = 0; i < MATRIX_SIZE; i++) {
+      printf("  ");
+      for(size_t j = 0; j < MATRIX_SIZE; j++) 
+        printf("%.2f ", matrix[i][j]);
+      printf("\n");
+    }
+    printf("}\n");
   }
 
   Matrix& operator+=(const Matrix& other) { *this = *this + other; return *this; }
 
   Matrix operator+(const Matrix& other) const {
-    if(height != other.height || width != other.width)
-      throw invalid_argument("Matrix dimensions must match for addition.");
+    Matrix result;
 
-    vector<vector<double>> result(height, vector<double>(width, 0));
-    for(sizet i = 0; i < height; i++)
-      for(sizet j = 0; j < width; j++)
+    for(size_t i = 0; i < MATRIX_SIZE; i++)
+      for(size_t j = 0; j < MATRIX_SIZE; j++) 
         result[i][j] = matrix[i][j] + other[i][j];   
 
-    return Matrix(result);
-  }
-
-  Matrix& operator-=(const Matrix& other) { *this = *this - other; return *this; }
-
-  Matrix operator-(const Matrix& other) const { return *this + (-other); }
-
-  Matrix operator-() const {
-    vector<vector<double>> negated(height, vector<double>(width, 0));
-
-    for(sizet i = 0; i < height; i++)
-      for(sizet j = 0; j < width; j++)
-        negated[i][j] = -matrix[i][j];
-
-    return Matrix(negated);
+    return result;
   }
 
   Matrix& operator=(const Matrix& other) {
     if (this == &other) return *this;
-
-    for(sizet i = 0; i < height; i++)
-      delete[] matrix[i];
-    delete[] matrix;
-
-    height = other.height;
-    width = other.width;
     
-    matrix = new double*[height];
-    for(sizet i = 0; i < height; i++) {
-      matrix[i] = new double[width];
-      for(sizet j = 0; j < width; j++)
+    for(size_t i = 0; i < MATRIX_SIZE; i++)
+      for(size_t j = 0; j < MATRIX_SIZE; j++)
         matrix[i][j] = other[i][j];
-    }
     
     return *this;
   }
 
   bool operator==(const Matrix& other) const {
-    if (height != other.height || width != other.width) return false;
-
-    for(sizet i = 0; i < height; i++)
-      for(sizet j = 0; j < width; j++)
+    for(size_t i = 0; i < MATRIX_SIZE; i++)
+      for(size_t j = 0; j < MATRIX_SIZE; j++)
         if(!Matrix::areNearlyEqual(matrix[i][j], other[i][j])) return false;
 
     return true;
   }
 
   Matrix operator*(const Matrix& other) const {
-    if(width != other.height) 
-      throw invalid_argument("Matrix dimensions must match for multiplication.");
-    
-    vector<vector<double>> result(height, vector<double>(other.width, 0));
-    for(sizet i = 0; i < height; i++)
-      for(sizet j = 0; j < other.width; j++) 
-        for(sizet k = 0; k < width; k++) 
+    Matrix result;
+
+    for(size_t i = 0; i < MATRIX_SIZE; i++)
+      for(size_t j = 0; j < MATRIX_SIZE; j++) 
+        for(size_t k = 0; k < MATRIX_SIZE; k++) 
           result[i][j] += matrix[i][k] * other[k][j];   
 
-    return Matrix(result);
+    return result;
   }
+
   Matrix& operator*=(const Matrix& other) { *this = *this * other; return *this; }
 
   Matrix operator*(const double& value) const {
-    vector<vector<double>> result(height, vector<double>(width, 0));
-    for(sizet i = 0; i < height; i++)
-      for(sizet j = 0; j < width; j++)
+    Matrix result;
+
+    for(size_t i = 0; i < MATRIX_SIZE; i++)
+      for(size_t j = 0; j < MATRIX_SIZE; j++)
         result[i][j] = matrix[i][j] * value;   
 
-    return Matrix(result);
+    return result;
   }
 
   bool operator!=(const Matrix& other) const { return !(*this == other); }
 
-  void checkItself() const {
-      printf("Matrix: {\n");
-      for(sizet i = 0; i < height; i++) {
-        printf("  ");
-        for(sizet j = 0; j < width; j++) 
-            printf("%.2f ", matrix[i][j]);
-        printf("\n");
-      }
-      printf("}\n");
-    }
-
-    class Row {
-    public:
-      Row(double* row, sizet width) : row(row), width(width) {}
-
-      double& operator[](sizet col) {
-        if (col >= width) throw out_of_range("Column index out of range");
-        return row[col];
-      }
-
-      const double& operator[](size_t col) const {
-        if (col >= width) throw out_of_range("Column index out of range");
-        return row[col];
-      }
-
-    private:
-      double* row;
-      sizet width;
-    };
-
-    Row operator[](sizet row) {
-      if (row >= height) throw out_of_range("Row index out of range");
-      return Row(matrix[row], width);
-    }
-
-    const Row operator[](sizet row) const {
-      if (row >= height) throw out_of_range("Row index out of range");
-    return Row(matrix[row], width);
+  double* operator[](size_t row) {
+    if (row >= MATRIX_SIZE) throw out_of_range("Row index out of range");
+    return matrix[row];
   }
 
-  int getWidth() const { return (int) width; }
-  int getHeight() const { return (int) height; }
+  const double* operator[](size_t row) const {
+    if (row >= MATRIX_SIZE) throw out_of_range("Row index out of range");
+    return matrix[row];
+  }
 };

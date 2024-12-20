@@ -23,18 +23,17 @@ public:
 
   void checkItself() const { printf("  %s: (%d, %d, %d)\n", name.c_str(), x, y, z); }
 
-  Matrix toMatrix() { return Matrix({ {(double) x}, {(double) y}, {(double) z}, {1}, }); }
+  void applyMatrix(Matrix matrix) {
+    double vector[4] = { (double) x, (double) y, (double) z, 1. };
+    double result[4] = {.0};
 
-  void applyMatrix(Matrix matrix) { *this = matrix * this->toMatrix(); }
+    for(size_t i = 0; i < MATRIX_SIZE; i++)
+      for(size_t j = 0; j < MATRIX_SIZE; j++) 
+        result[i] += matrix[i][j] * vector[j];   
 
-  Point& operator=(const Matrix& other) {
-    if(other.getHeight() < 3) throw invalid_argument("Invalid Matrix!");
-
-    x = round(other[0][0]); 
-    y = round(other[1][0]); 
-    z = round(other[2][0]);
-
-    return *this;
+    x = round(result[0]); 
+    y = round(result[1]); 
+    z = round(result[2]);
   }
 
   bool operator==(const Point& other) const { return (x == other.x && y == other.y && z == other.z); }
