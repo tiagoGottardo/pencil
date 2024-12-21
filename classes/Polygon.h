@@ -27,17 +27,13 @@ private:
 public:
   string getName() const override { return name; }
 
-  vector<Line> getLines() const override { return getLines(transformationMatrix()); }
+  Matrix getMatrix() const override {
+    return transformationMatrix();
+  }
 
-  vector<Line> getLines(Matrix transformationMatrix) const { 
-    vector<Line> lines;
-
-    vector<Point> transformedPoints = getTransformedPoints(transformationMatrix);
-
-    for(size_t i = 0; i < transformedPoints.size(); i++)
-      lines.push_back(Line(transformedPoints[i], transformedPoints[(i + 1 < transformedPoints.size()) ? i + 1 : 0]));
-
-    return lines; 
+  vector<Point> getPoints() const override { 
+    vector<Point> copyPoints = points;
+    return copyPoints; 
   }
 
   Polygon(vector<Point> points, Point ref = Point(), const string& name = "Polygon") : 

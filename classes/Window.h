@@ -25,10 +25,14 @@ private:
     vector<Line> result = vector<Line>();
 
     for(unique_ptr<Drawable>& drawable : *displayFile) {
-      vector<Line> lines = drawable->getLines();
+      vector<Point> points = drawable->getPoints();
 
-      for(Line& line : lines) 
-        result.push_back(line.applyMatrix(normalizationMatrix()));
+      Matrix transformationMatrix = normalizationMatrix() * drawable->getMatrix();
+      
+      for(Point& point : points) point.applyMatrix(transformationMatrix);
+
+      for(size_t i = 0; i < points.size(); i++) 
+        result.push_back(Line(points[i], points[(i + 1 < points.size()) ? i + 1 : 0]));
     }
 
     return result;

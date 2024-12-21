@@ -9,7 +9,7 @@
 #include "Drawable.h"
 #include "Point.h"
 
-class Line : public Drawable {
+class Line {
 private:
   string name;
 
@@ -19,11 +19,11 @@ public:
 
   Line(Point a, Point b, const string& name = "Line") : name(name), a(a), b(b) {}
 
-  string getName() const override { return name; }
+  string getName() const { return name; }
 
-  vector<Line> getLines() const override { return vector<Line>{ Line(a, b) }; }
+  vector<Line> getLines() const { return vector<Line>{ Line(a, b) }; }
 
-  void checkItself() const override {
+  void checkItself() const {
     printf("%s: ", name.c_str());
     printf("(%d, %d, %d) -> ", a.x, a.y, a.z);
     printf("(%d, %d, %d)\n", b.x, b.y, b.z);
