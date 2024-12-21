@@ -2,6 +2,10 @@
 
 #include <vector>
 #include <cmath>
+#include <thread>
+#include <vector>
+#include <mutex>
+#include <algorithm>
 
 #include "Drawable.h"
 #include "Transformable.h"
@@ -14,6 +18,44 @@ private:
 
 public:
   string getName() const override { return name; }
+
+  vector<Line> getLines2() const {
+    vector<Line> lines;  
+
+    size_t numThreads = size_t(8); 
+    size_t numPolygons = polygons.size();
+    size_t chunkSize = numPolygons / numThreads;
+
+    vector<vector<Line>> threadResults(numThreads);
+    vector<std::thread> threads;
+
+    std::mutex linesMutex;
+
+    for (size_t t = 0; t < numThreads; ++t) {
+      size_t start = t * chunkSize;
+      size_t end = (t == numThreads - 1) ? numPolygons : start + chunkSize;
+
+      threads.emplace_back([&, start, end, t]() {
+        vector<Line> localLines;
+
+        for (size_t i = start; i < end; ++i) {
+          vector<Line> polygonLines = polygons[i].getLines(transformationMatrix());
+          localLines.insert(localLines.end(), polygonLines.begin(), polygonLines.end());
+        }
+
+        {
+          std::lock_guard<std::mutex> guard(linesMutex);
+          threadResults[t] = std::move(localLines);  
+        }
+      });
+    }
+
+    for (auto& t : threads) if (t.joinable()) t.join();
+
+    for (const auto& threadResult : threadResults) lines.insert(lines.end(), threadResult.begin(), threadResult.end());
+
+    return lines; 
+  }
 
   vector<Line> getLines() const override { 
     vector<Line> lines;
