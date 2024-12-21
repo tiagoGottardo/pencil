@@ -1,5 +1,8 @@
 #pragma once
 
+#include <chrono>
+#include <iostream>
+
 #include "./Point.h"
 #include "./Polygon.h"
 #include "./Clipping.h"
@@ -49,14 +52,43 @@ public:
   void move(Point to) { centroid += Point(to.x, -to.y, to.z); }
 
   vector<Line> transformViewport(RectangleSize frameSize, Point viewportCenter) {
+    auto start = std::chrono::high_resolution_clock::now();
+
     vector<Line> lines = normalizeDisplayFile();
+
+    auto end = std::chrono::high_resolution_clock::now();
+
+    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+    cout << "Normalization executed in " << duration.count() << " milliseconds." << endl;
+
+
+
+
 
     Clipping clipping({width, height});
 
+    start = std::chrono::high_resolution_clock::now();
+
     clipping.execute(&lines);
 
-    for(Line& line : lines)
-      line.applyMatrix(transformationMatrix(frameSize, viewportCenter));
+    end = std::chrono::high_resolution_clock::now();
+
+    duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+    cout << "Clipping executed in " << duration.count() << " milliseconds." << endl;
+
+
+
+
+
+
+    start = std::chrono::high_resolution_clock::now();
+
+    for(Line& line : lines) line.applyMatrix(transformationMatrix(frameSize, viewportCenter));
+
+    end = std::chrono::high_resolution_clock::now();
+
+    duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+    cout << "Viewport Transformation executed in " << duration.count() << " milliseconds." << endl << endl;
     
     return lines;
   }
