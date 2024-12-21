@@ -59,7 +59,7 @@ public:
     auto end = std::chrono::high_resolution_clock::now();
 
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
-    cout << "Normalization executed in " << duration.count() << " milliseconds." << endl;
+    cout << "Normalization: " << duration.count() << endl;
 
 
 
@@ -74,7 +74,7 @@ public:
     end = std::chrono::high_resolution_clock::now();
 
     duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
-    cout << "Clipping executed in " << duration.count() << " milliseconds." << endl;
+    cout << "Clipping: " << duration.count() << endl;
 
 
 
@@ -88,7 +88,7 @@ public:
     end = std::chrono::high_resolution_clock::now();
 
     duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
-    cout << "Viewport Transformation executed in " << duration.count() << " milliseconds." << endl << endl;
+    cout << "Viewport Transformation: " << duration.count() << endl;
     
     return lines;
   }
