@@ -51,7 +51,7 @@ public:
   explicit Viewport(QWidget *parent = nullptr) : QFrame(parent) {
     QTimer *timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, &Viewport::triggerRepaint);
-    timer->start(500); // milliseconds to trigger
+    timer->start(5); // milliseconds to trigger
   }
 
   void connectWindow(DisplayFile* displayFile) {

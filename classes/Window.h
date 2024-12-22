@@ -57,42 +57,13 @@ public:
   void move(Point to) { centroid += Point(to.x, -to.y, to.z); }
 
   vector<Line> transformViewport(RectangleSize frameSize, Point viewportCenter) {
-    auto start = std::chrono::high_resolution_clock::now();
-
     vector<Line> lines = normalizeDisplayFile();
 
-    auto end = std::chrono::high_resolution_clock::now();
-
-    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
-    cout << "Normalization: " << duration.count() << endl;
-
-
-
-
-
     Clipping Clipping({ width, height });
-
-    start = std::chrono::high_resolution_clock::now();
-
     Clipping.executeParallel(&lines, 8);
 
-    end = std::chrono::high_resolution_clock::now();
-
-    duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
-    cout << "Clipping: " << duration.count() << endl;
-
-
-
-
-
-    start = std::chrono::high_resolution_clock::now();
-
-    for(Line& line : lines) line.applyMatrix(transformationMatrix(frameSize, viewportCenter));
-
-    end = std::chrono::high_resolution_clock::now();
-
-    duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
-    cout << "Viewport Transformation: " << duration.count() << endl;
+    Matrix transformationMatrix = this->transformationMatrix(frameSize, viewportCenter);
+    for(Line& line : lines) line.applyMatrix(transformationMatrix);
     
     return lines;
   }
