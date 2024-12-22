@@ -6,7 +6,6 @@
 #include "./Point.h"
 #include "./Polygon.h"
 #include "./Clipping.h"
-// #include "./Liang.h"
 
 class Window {
 private:
@@ -71,14 +70,11 @@ public:
 
 
 
-    Clipping clipping({width, height});
-    // Liang liangClipping({ width, height });
+    Clipping Clipping({ width, height });
 
     start = std::chrono::high_resolution_clock::now();
 
-    clipping.execute(&lines);
-    // liangClipping.execute(&lines);
-    // liangClipping.executeParallel(&lines, 8);
+    Clipping.executeParallel(&lines, 8);
 
     end = std::chrono::high_resolution_clock::now();
 

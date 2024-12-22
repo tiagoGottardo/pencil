@@ -1,20 +1,28 @@
 #pragma once
 
 #include <optional>
+#include <stdio.h>
+#include <thread>
+#include <future>
+#include <vector>
 
 #include "./Point.h"
 #include "./Polygon.h"
 
-enum RCStatus {
-  COMPLETELY_INSIDE,
-  COMPLETELY_OUTSIDE,
-  INTERSECTION_CHECK_NEEDED,
-  HAS_INTERSECTION,
+enum LineStatus {
+  CLIPPLED,
+  INSIDE,
+  OUTSIDE,
 };
 
-typedef struct RectangleSize {
+typedef struct {
   uint width, height;
 } RectangleSize;
+
+typedef struct {
+  LineStatus lineStatus;
+  Line line;
+} ClipResult;
 
 class Clipping {
 
@@ -22,80 +30,78 @@ private:
   Point minPoint;
   Point maxPoint;
 
-  char calculateRC(Point point) {
-    char result = 0;
-
-    if(point.x < minPoint.x) result += 1;
-    if(point.x > maxPoint.x) result += 2;
-    if(point.y < minPoint.y) result += 4;
-    if(point.y > maxPoint.y) result += 8;
-
-    return result;
+  float maxi(float arr[],int n) {
+    float m = 0;
+    for (int i = 0; i < n; ++i)
+      if (m < arr[i])
+        m = arr[i];
+    return m;
   }
 
-  Point getIntersectionPoint(Line* line, double t) {
-    return Point(line->a.x + t * (line->b.x - line->a.x), line->a.y + t * (line->b.y - line->a.y));
+  float mini(float arr[], int n) {
+    float m = 1;
+    for (int i = 0; i < n; ++i)
+      if (m > arr[i])
+        m = arr[i];
+    return m;
   }
 
-  optional<Point> findHorizontalIntersection(Line* line, double coordinate) {
-    if(line->a.y == line->b.y) return nullopt; 
-    double t = (coordinate - (double) line->a.y) / ((double) line->b.y - (double) line->a.y);
+  ClipResult liangClipper(float xmin, float ymin, float xmax, float ymax, float x1, float y1, float x2, float y2) {
+    float p1 = -(x2 - x1);
+    float p2 = -p1;
+    float p3 = -(y2 - y1);
+    float p4 = -p3;
 
-    if (t < 0 || t > 1) return nullopt; 
-    return getIntersectionPoint(line, t);
-  }
+    float q1 = x1 - xmin;
+    float q2 = xmax - x1;
+    float q3 = y1 - ymin;
+    float q4 = ymax - y1;
 
-  optional<Point> findVerticalIntersection(Line* line, double coordinate) {
-    if(line->a.x == line->b.x) return nullopt;
-    double t = (coordinate - (double) line->a.x) / ((double) line->b.x - (double) line->a.x);
+    float posarr[5], negarr[5];
+    int posind = 1, negind = 1;
+    posarr[0] = 1;
+    negarr[0] = 0;
 
-    if (t < 0 || t > 1) return nullopt; 
-    return getIntersectionPoint(line, t);
-  }
+    if ((p1 == 0 && q1 < 0) || (p2 == 0 && q2 < 0) || (p3 == 0 && q3 < 0) || (p4 == 0 && q4 < 0)) 
+      return { LineStatus::OUTSIDE, Line() };
 
-  bool isBetweenLeftAndRight(Point point) { return point.x > minPoint.x && point.x < maxPoint.x; }
-  bool isBetweenTopAndBottom(Point point) { return point.y > minPoint.y && point.y < maxPoint.y; }
+    if (p1 != 0) {
+      float r1 = q1 / p1;
+      float r2 = q2 / p2;
+      if (p1 < 0) {
+        negarr[negind++] = r1; 
+        posarr[posind++] = r2;
+      } else {
+        negarr[negind++] = r2;
+        posarr[posind++] = r1;
+      }
+    }
+    if (p3 != 0) {
+      float r3 = q3 / p3;
+      float r4 = q4 / p4;
+      if (p3 < 0) {
+        negarr[negind++] = r3;
+        posarr[posind++] = r4;
+      } else {
+        negarr[negind++] = r4;
+        posarr[posind++] = r3;
+      }
+    }
 
-  void resolveIntersection(Line *line) {
-    optional<Point> intersection;
-
-    auto handleIntersection = [&](optional<Point> intersection, bool condition, Point* pointToUpdate) {
-      if (intersection && condition) *pointToUpdate = *intersection;
-    };
-
-    handleIntersection(
-        findVerticalIntersection(line, maxPoint.x),
-        isBetweenTopAndBottom(*intersection),
-        (line->a.x > line->b.x) ? &line->a : &line->b
-    );
-
-    handleIntersection(
-        findVerticalIntersection(line, minPoint.x),
-        isBetweenTopAndBottom(*intersection),
-        (line->a.x < line->b.x) ? &line->a : &line->b
-    );
+    float xn1, yn1, xn2, yn2;
+    float rn1, rn2;
+    rn1 = maxi(negarr, negind); 
+    rn2 = mini(posarr, posind); 
     
-    handleIntersection(
-        findHorizontalIntersection(line, maxPoint.y),
-        isBetweenLeftAndRight(*intersection),
-        (line->a.y > line->b.y) ? &line->a : &line->b
-    );
+    if (rn1 > rn2) return { LineStatus::OUTSIDE, Line() };
 
-    handleIntersection(
-        findHorizontalIntersection(line, minPoint.y),
-        isBetweenLeftAndRight(*intersection),
-        (line->a.y < line->b.y) ? &line->a : &line->b
-    );
-  }
+    xn1 = x1 + p2 * rn1;
+    yn1 = y1 + p4 * rn1; 
 
-  RCStatus calculateRCStatus(Line line) {
-    char aRC = calculateRC(line.a);
-    char bRC = calculateRC(line.b);
-    if(aRC == 0 && bRC == 0) return COMPLETELY_INSIDE;
-    if(aRC == 0 || bRC == 0) return HAS_INTERSECTION; 
-    if((aRC & bRC) == 0) return INTERSECTION_CHECK_NEEDED;
-    
-    return COMPLETELY_OUTSIDE;
+    xn2 = x1 + p2 * rn2;
+    yn2 = y1 + p4 * rn2;
+
+    return { LineStatus::CLIPPLED, Line(Point(round(xn1), round(yn1)), Point(round(xn2), round(yn2))) };
   }
 
 public:
@@ -106,20 +112,47 @@ public:
   }
 
   void execute(vector<Line>* lines) {
-    for(int i = 0; i < (int) lines->size(); i++) {
-      RCStatus RCStatus = calculateRCStatus((*lines)[i]);
+    for (auto it = lines->begin(); it != lines->end(); ) {
+      ClipResult result = liangClipper(minPoint.x, minPoint.y, maxPoint.x, maxPoint.y, it->a.x, it->a.y, it->b.x, it->b.y);
 
-      if(RCStatus == COMPLETELY_OUTSIDE) {
-        lines->erase(lines->begin() + i); i--; continue;
-      }
-
-      if(RCStatus != COMPLETELY_INSIDE) {
-        resolveIntersection(&(*lines)[i]);
-
-        if(calculateRCStatus((*lines)[i]) == COMPLETELY_OUTSIDE) {
-          lines->erase(lines->begin() + i); i--;
-        }
+      if (result.lineStatus == LineStatus::OUTSIDE) {
+        it = lines->erase(it); 
+      } else {
+        *it = result.line; 
+        ++it;
       }
     }
+  }
+
+  void executeParallel(vector<Line>* lines, int numThreads) {
+    size_t n = lines->size();
+    size_t chunkSize = n / numThreads;
+    std::vector<std::future<void>> futures;
+
+    auto worker = [&](size_t start, size_t end) {
+      for (size_t i = start; i < end; ++i) {
+        ClipResult result = liangClipper(minPoint.x, minPoint.y, maxPoint.x, maxPoint.y, (*lines)[i].a.x, (*lines)[i].a.y, (*lines)[i].b.x, (*lines)[i].b.y);
+
+        if (result.lineStatus == LineStatus::OUTSIDE)
+          (*lines)[i] = Line();
+         else 
+          (*lines)[i] = result.line;
+      }
+    };
+
+    for (int i = 0; i < numThreads; ++i) {
+      size_t start = i * chunkSize;
+      size_t end = (i == numThreads - 1) ? n : start + chunkSize;
+
+      futures.push_back(std::async(std::launch::async, worker, start, end));
+    }
+
+    for (auto& fut : futures) 
+      fut.get();
+    
+
+    lines->erase(std::remove_if(lines->begin(), lines->end(), [](const Line& line) {
+      return line.a == line.b;
+    }), lines->end());
   }
 };
