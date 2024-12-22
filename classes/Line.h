@@ -17,7 +17,7 @@ public:
   Point a;
   Point b;
 
-  Line(Point a, Point b, const string& name = "Line") : name(name), a(a), b(b) {}
+  Line(Point a = Point(), Point b = Point(), const string& name = "Line") : name(name), a(a), b(b) {}
 
   string getName() const { return name; }
 

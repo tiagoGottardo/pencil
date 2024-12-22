@@ -6,6 +6,7 @@
 #include "./Point.h"
 #include "./Polygon.h"
 #include "./Clipping.h"
+// #include "./Liang.h"
 
 class Window {
 private:
@@ -25,14 +26,15 @@ private:
     vector<Line> result = vector<Line>();
 
     for(unique_ptr<Drawable>& drawable : *displayFile) {
-      vector<Point> points = drawable->getPoints();
-
       Matrix transformationMatrix = normalizationMatrix() * drawable->getMatrix();
-      
-      for(Point& point : points) point.applyMatrix(transformationMatrix);
 
-      for(size_t i = 0; i < points.size(); i++) 
-        result.push_back(Line(points[i], points[(i + 1 < points.size()) ? i + 1 : 0]));
+      for(Polygon polygon : drawable->getPolygons()) {
+        vector<Point> points = polygon.getPoints();
+        for(Point& point : points) point.applyMatrix(transformationMatrix);
+
+        for(size_t i = 0; i < points.size(); i++) 
+          result.push_back(Line(points[i], points[(i + 1 < points.size()) ? i + 1 : 0]));
+      }
     }
 
     return result;
@@ -70,10 +72,13 @@ public:
 
 
     Clipping clipping({width, height});
+    // Liang liangClipping({ width, height });
 
     start = std::chrono::high_resolution_clock::now();
 
     clipping.execute(&lines);
+    // liangClipping.execute(&lines);
+    // liangClipping.executeParallel(&lines, 8);
 
     end = std::chrono::high_resolution_clock::now();
 

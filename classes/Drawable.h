@@ -12,11 +12,12 @@ using namespace std;
 
 class Point;
 class Matrix;
+class Polygon;
 
 class Drawable {
 public:
   virtual string getName() const = 0;
-  virtual vector<Point> getPoints() const = 0;
+  virtual vector<Polygon> getPolygons() const = 0;
   virtual Matrix getMatrix() const = 0;
   virtual void checkItself() const = 0;
   virtual ~Drawable() = default;

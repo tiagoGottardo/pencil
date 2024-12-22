@@ -31,9 +31,12 @@ public:
     return transformationMatrix();
   }
 
-  vector<Point> getPoints() const override { 
-    vector<Point> copyPoints = points;
-    return copyPoints; 
+  vector<Polygon> getPolygons() const override {
+    return vector<Polygon>{*this};
+  }
+
+  vector<Point> getPoints() const { 
+    return points; 
   }
 
   Polygon(vector<Point> points, Point ref = Point(), const string& name = "Polygon") : 

@@ -23,16 +23,8 @@ public:
     return transformationMatrix();
   }
 
-  vector<Point> getPoints() const override { 
-    vector<Point> points;
-
-    for(Polygon polygon : polygons) {
-      vector<Point> polygonPoints = polygon.getPoints();
-
-      for(Point point : polygonPoints) points.push_back(point);
-    }
-
-    return points; 
+  vector<Polygon> getPolygons() const override { 
+    return polygons; 
   }
 
   Model(vector<Polygon> polygons, Point ref = Point(), const string& name = "Model") : 
