@@ -43,7 +43,7 @@ private:
     double scaleY = (double) frameSize.height / (double) height;
 
     return Matrix::TranslationMatrix(viewportCenter.x, viewportCenter.y) * 
-           Matrix::ScaleMatrix(scaleX, scaleY);
+    Matrix::ScaleMatrix(scaleX, scaleY);
   }
 
 public:
@@ -79,7 +79,6 @@ public:
 
     duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
     cout << "Clipping: " << duration.count() << endl;
-
 
 
 
