@@ -2,6 +2,10 @@
 
 #include <vector>
 #include <cmath>
+#include <thread>
+#include <vector>
+#include <mutex>
+#include <algorithm>
 
 #include "Drawable.h"
 #include "Transformable.h"
@@ -15,16 +19,12 @@ private:
 public:
   string getName() const override { return name; }
 
-  vector<Line> getLines() const override { 
-    vector<Line> lines;
+  Matrix getMatrix() const override {
+    return transformationMatrix();
+  }
 
-    for(Polygon polygon : polygons) {
-      vector<Line> polygonLines = polygon.getLines(transformationMatrix());
-
-      for(Line line : polygonLines) lines.push_back(line);
-    }
-
-    return lines; 
+  vector<Polygon> getPolygons() const override { 
+    return polygons; 
   }
 
   Model(vector<Polygon> polygons, Point ref = Point(), const string& name = "Model") : 

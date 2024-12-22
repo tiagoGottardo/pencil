@@ -13,7 +13,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
   // displayFile.push_back(make_unique<Model>(Model::createDonut(40)));
   QTimer *timer = new QTimer(this);
   connect(timer, &QTimer::timeout, this, &MainWindow::triggerRotate);
-  timer->start(10); 
+  timer->start(5); 
 }
 
 void MainWindow::triggerRotate() {

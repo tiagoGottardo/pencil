@@ -1,5 +1,8 @@
 #pragma once
 
+#include <chrono>
+#include <iostream>
+
 #include "./Point.h"
 #include "./Polygon.h"
 #include "./Clipping.h"
@@ -22,10 +25,15 @@ private:
     vector<Line> result = vector<Line>();
 
     for(unique_ptr<Drawable>& drawable : *displayFile) {
-      vector<Line> lines = drawable->getLines();
+      Matrix transformationMatrix = normalizationMatrix() * drawable->getMatrix();
 
-      for(Line& line : lines) 
-        result.push_back(line.applyMatrix(normalizationMatrix()));
+      for(Polygon polygon : drawable->getPolygons()) {
+        vector<Point> points = polygon.getPoints();
+        for(Point& point : points) point.applyMatrix(transformationMatrix);
+
+        for(size_t i = 0; i < points.size(); i++) 
+          result.push_back(Line(points[i], points[(i + 1 < points.size()) ? i + 1 : 0]));
+      }
     }
 
     return result;
@@ -36,7 +44,7 @@ private:
     double scaleY = (double) frameSize.height / (double) height;
 
     return Matrix::TranslationMatrix(viewportCenter.x, viewportCenter.y) * 
-           Matrix::ScaleMatrix(scaleX, scaleY);
+    Matrix::ScaleMatrix(scaleX, scaleY);
   }
 
 public:
@@ -51,12 +59,11 @@ public:
   vector<Line> transformViewport(RectangleSize frameSize, Point viewportCenter) {
     vector<Line> lines = normalizeDisplayFile();
 
-    Clipping clipping({width, height});
+    Clipping Clipping({ width, height });
+    Clipping.executeParallel(&lines, 8);
 
-    clipping.execute(&lines);
-
-    for(Line& line : lines)
-      line.applyMatrix(transformationMatrix(frameSize, viewportCenter));
+    Matrix transformationMatrix = this->transformationMatrix(frameSize, viewportCenter);
+    for(Line& line : lines) line.applyMatrix(transformationMatrix);
     
     return lines;
   }

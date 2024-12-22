@@ -1,7 +1,7 @@
 #!/bin/bash
 
 START=$(date +%s.%N)
-g++ -DTEST_MODE ./tests/*.cpp ./tests/Tester.h -o test 
+g++ -DTEST_MODE ./tests/*.cpp ./tests/Tester.h -pthread -o test 
 ./test
 END=$(date +%s.%N)
 

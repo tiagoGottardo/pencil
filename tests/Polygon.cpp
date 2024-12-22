@@ -66,22 +66,22 @@ void polygon() {
     p.rotate(20);
     p.scale(1);
 
-    vector<Line> lines = p.getLines();
+    vector<Point> points = p.getPoints();
 
-    Line correctLines[] = { 
-      Line(Point(169, -58, -86), Point(79, 178, 34)),
-      Line(Point(79, 178, 34), Point(-169, 58, 86)),
-      Line(Point(-169, 58, 86), Point(-79, -178, -34)),
-      Line(Point(-79, -178, -34), Point(169, -58, -86))
+    Point correctPoints[] = { 
+      Point(70, -70),
+      Point(70, 70),
+      Point(-70, 70),
+      Point(-70, -70)
     };
 
-    if(lines.size() != 4);
+    if(points.size() != 4);
 
-    for(size_t i = 0; i < lines.size(); i++) 
-      if(correctLines[i] != lines[i]) return false;
+    for(size_t i = 0; i < points.size(); i++) 
+      if(correctPoints[i] != points[i]) return false;
 
     return true;
-  }(), "it tests polygon getLines method");
+  }(), "it tests polygon getPoints method");
 
   suite.run();
 }

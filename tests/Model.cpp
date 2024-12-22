@@ -7,7 +7,7 @@ void model() {
   suite.add([]() -> bool { 
     Model model = Factory::import("./tests/assets/object.obj");
 
-    vector<Line> lines = model.getLines();
+    vector<Point> points = model.getPoints();
 
     vector<Point> correctPoints = {
       Point(2374, 2374, 2374),
@@ -25,7 +25,7 @@ void model() {
     };
 
     for(size_t i = 0; i < correctPoints.size(); i++) 
-      if(lines[i].a != correctPoints[i]) return false;
+      if(points[i] != correctPoints[i]) return false;
 
     if(model.getName() != "Object") return false;
 
