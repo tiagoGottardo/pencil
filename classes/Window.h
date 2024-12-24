@@ -21,20 +21,22 @@ private:
     Matrix::TranslationMatrix(-centroid.x, -centroid.y, -centroid.z);
   }
 
+  void normalizeDrawable(unique_ptr<Drawable>& drawable, vector<Line>* result) {
+    Matrix transformationMatrix = normalizationMatrix() * drawable->getMatrix();
+
+    for(Polygon polygon : drawable->getPolygons()) {
+      vector<Point> points = polygon.normalize(transformationMatrix);
+
+      for(size_t i = 0; i < points.size(); i++) 
+        result->push_back(Line(points[i], points[(i + 1 < points.size()) ? i + 1 : 0]));
+    }
+  }
+
   vector<Line> normalizeDisplayFile() {
     vector<Line> result = vector<Line>();
 
-    for(unique_ptr<Drawable>& drawable : *displayFile) {
-      Matrix transformationMatrix = normalizationMatrix() * drawable->getMatrix();
-
-      for(Polygon polygon : drawable->getPolygons()) {
-        vector<Point> points = polygon.getPoints();
-        for(Point& point : points) point.applyMatrix(transformationMatrix);
-
-        for(size_t i = 0; i < points.size(); i++) 
-          result.push_back(Line(points[i], points[(i + 1 < points.size()) ? i + 1 : 0]));
-      }
-    }
+    for(unique_ptr<Drawable>& drawable : *displayFile)
+      normalizeDrawable(drawable, &result);
 
     return result;
   }

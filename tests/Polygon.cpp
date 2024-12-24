@@ -11,10 +11,6 @@ public:
   static vector<Point> getPoints(Polygon polygon) {
     return polygon.points;
   }
-
-  static vector<Point> getTransformedPoints(Polygon polygon) {
-    return polygon.getTransformedPoints(polygon.transformationMatrix());
-  }
 };
 
 void polygon() {
@@ -40,26 +36,6 @@ void polygon() {
 
     return true;
   }(), "it tests create regular polygon method");
-
-  suite.add([]() -> bool { 
-    Polygon p = Factory::createRegularPolygon(200, 4);
-
-    vector<Point> transformedPoints = PolygonFriend::getTransformedPoints(p);
-
-    Point correctPoints[] = { 
-      Point(70, -70),
-      Point(70, 70),
-      Point(-70, 70),
-      Point(-70, -70)
-    };
-
-    if(transformedPoints.size() != 4);
-
-    for(size_t i = 0; i < transformedPoints.size(); i++) 
-      if(correctPoints[i] != transformedPoints[i]) return false;
-
-    return true;
-  }(), "it tests polygon points transformation");
 
   suite.add([]() -> bool { 
     Polygon p = Factory::createRegularPolygon(200, 4);

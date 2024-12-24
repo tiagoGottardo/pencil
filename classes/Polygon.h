@@ -15,28 +15,20 @@ private:
   string name;
   vector<Point> points;
 
-  vector<Point> getTransformedPoints(Matrix transformationMatrix) const {  
-    vector<Point> result;
-
-    for(Point point : points) 
-      result.push_back(point.applyMatrix(transformationMatrix));
-
-    return result;
-  }
-
 public:
   string getName() const override { return name; }
 
-  Matrix getMatrix() const override {
-    return transformationMatrix();
-  }
+  Matrix getMatrix() const override { return transformationMatrix(); }
 
-  vector<Polygon> getPolygons() const override {
-    return vector<Polygon>{*this};
-  }
+  vector<Polygon> getPolygons() const override { return vector<Polygon>{*this}; }
 
-  vector<Point> getPoints() const { 
-    return points; 
+  vector<Point> getPoints() const { return points; }
+
+  vector<Point> normalize(Matrix transformationMatrix) {
+    vector<Point> points = getPoints();
+    for(Point& point : points) point.applyMatrix(transformationMatrix);
+
+    return points;
   }
 
   Polygon(vector<Point> points, Point ref = Point(), const string& name = "Polygon") : 
