@@ -5,6 +5,7 @@
 #include <thread>
 #include <future>
 #include <vector>
+#include <algorithm>
 
 #include "./Point.h"
 #include "./Polygon.h"
@@ -127,7 +128,7 @@ public:
   void executeParallel(vector<Line>* lines, int numThreads) {
     size_t n = lines->size();
     size_t chunkSize = n / numThreads;
-    std::vector<std::future<void>> futures;
+    vector<future<void>> futures;
 
     auto worker = [&](size_t start, size_t end) {
       for (size_t i = start; i < end; ++i) {
@@ -147,9 +148,7 @@ public:
       futures.push_back(std::async(std::launch::async, worker, start, end));
     }
 
-    for (auto& fut : futures) 
-      fut.get();
-    
+    for (auto& fut : futures) fut.get();
 
     lines->erase(std::remove_if(lines->begin(), lines->end(), [](const Line& line) {
       return line.a == line.b;
