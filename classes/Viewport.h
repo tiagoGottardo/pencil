@@ -7,8 +7,8 @@
 #include "./Factory.h"
 #include "./Window.h"
 
-#define WINDOW_INIT_WIDTH 100000
-#define WINDOW_INIT_HEIGHT 100000
+#define WINDOW_INIT_WIDTH 1311
+#define WINDOW_INIT_HEIGHT 761 
 
 #define FRAME_WIDTH 1311
 #define FRAME_HEIGHT 761 

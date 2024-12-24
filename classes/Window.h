@@ -25,7 +25,7 @@ private:
     Matrix transformationMatrix = normalizationMatrix() * drawable->getMatrix();
 
     for(Polygon polygon : drawable->getPolygons()) {
-      vector<Point> points = polygon.normalize(transformationMatrix);
+      vector<Point> points = polygon.applyMatrix(transformationMatrix);
 
       for(size_t i = 0; i < points.size(); i++) 
         result->push_back(Line(points[i], points[(i + 1 < points.size()) ? i + 1 : 0]));

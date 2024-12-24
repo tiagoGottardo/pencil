@@ -24,8 +24,9 @@ public:
 
   vector<Point> getPoints() const { return points; }
 
-  vector<Point> normalize(Matrix transformationMatrix) {
+  vector<Point> applyMatrix(Matrix transformationMatrix) {
     vector<Point> points = getPoints();
+
     for(Point& point : points) point.applyMatrix(transformationMatrix);
 
     return points;

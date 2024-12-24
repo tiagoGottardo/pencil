@@ -13,27 +13,27 @@ private:
   string name;
 
 public:
-  int x;
-  int y;
-  int z;
+  double x;
+  double y;
+  double z;
 
-  Point(int x = 0, int y = 0, int z = 0, const string& name = "Point") : name(name), x(x), y(y), z(z) {}
+  Point(double x = 0, double y = 0, double z = 0, const string& name = "Point") : name(name), x(x), y(y), z(z) {}
 
   string getName() const { return name; }
 
-  void checkItself() const { printf("  %s: (%d, %d, %d)\n", name.c_str(), x, y, z); }
+  void checkItself() const { printf("  %s: (%.2f, %.2f, %.2f)\n", name.c_str(), x, y, z); }
 
   Point& applyMatrix(Matrix matrix) {
-    double vector[4] = { (double) x, (double) y, (double) z, 1. };
-    double result[4] = {.0};
+    double vector[4] = { x, y, z, 1 };
+    double result[4] = { 0, 0, 0, 0 };
 
     for(size_t i = 0; i < MATRIX_SIZE; i++)
       for(size_t j = 0; j < MATRIX_SIZE; j++) 
         result[i] += matrix[i][j] * vector[j];   
 
-    x = round(result[0]); 
-    y = round(result[1]); 
-    z = round(result[2]);
+    x = result[0]; 
+    y = result[1]; 
+    z = result[2];
 
     return *this;
   }
@@ -45,5 +45,5 @@ public:
   Point& operator+=(const Point& other) { *this = *this + other; return *this; }
   Point operator-(const Point& other) const { return Point(x - other.x, y - other.y, z - other.z); }
   Point& operator-=(const Point& other) { *this = *this - other; return *this; }
-  Point operator/(const int& num) const { return Point(x / num, y / num, z / num, name); }
+  Point operator/(const double& num) const { return Point(x / num, y / num, z / num, name); }
 };

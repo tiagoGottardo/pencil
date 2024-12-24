@@ -98,7 +98,7 @@ private:
     xn2 = x1 + p2 * rn2;
     yn2 = y1 + p4 * rn2;
 
-    return { LineStatus::CLIPPLED, Line(Point(round(xn1), round(yn1)), Point(round(xn2), round(yn2))) };
+    return { LineStatus::CLIPPLED, Line(Point(xn1, yn1), Point(xn2, yn2)) };
   }
 
   static Point maxPoint(RectangleSize windowSize) { return Point((int) windowSize.width / 2, (int) windowSize.height / 2); }
@@ -141,7 +141,7 @@ public:
       }
     };
 
-    for (int i = 0; i < numThreads; ++i) {
+    for (size_t i = 0; i < numThreads; ++i) {
       size_t start = i * chunkSize;
       size_t end = (i == numThreads - 1) ? n : start + chunkSize;
 

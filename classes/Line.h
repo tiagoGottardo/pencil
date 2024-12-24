@@ -25,8 +25,8 @@ public:
 
   void checkItself() const {
     printf("%s: ", name.c_str());
-    printf("(%d, %d, %d) -> ", a.x, a.y, a.z);
-    printf("(%d, %d, %d)\n", b.x, b.y, b.z);
+    printf("(%.2f, %.2f, %.2f) -> ", a.x, a.y, a.z);
+    printf("(%.2f, %.2f, %.2f)\n", b.x, b.y, b.z);
   }
 
   Line& applyMatrix(Matrix matrix) {

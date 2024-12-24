@@ -45,7 +45,7 @@ public:
     return Polygon(points, centroid, name);
   }
 
-  static Model createDonut(int sides, int size = 10000) {
+  static Model createDonut(int sides, int size = 500) {
     std::vector<Polygon> polygons;
 
     int R = size / 2; 
@@ -109,7 +109,7 @@ public:
       if (prefix == "v") {
         double x, y, z;
         lineStream >> x >> y >> z;
-        points.emplace_back(round(x * 1000), round(y * 1000), round(z * 1000));
+        points.emplace_back(x, y, z);
       } else if (prefix == "f") {
         vector<Point> polygonPoints;
         string slice;
