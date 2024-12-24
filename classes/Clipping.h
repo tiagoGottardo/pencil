@@ -26,12 +26,8 @@ typedef struct {
 } ClipResult;
 
 class Clipping {
-
 private:
-  Point minPoint;
-  Point maxPoint;
-
-  float maxi(float arr[],int n) {
+  static float maxi(float arr[],int n) {
     float m = 0;
     for (int i = 0; i < n; ++i)
       if (m < arr[i])
@@ -39,7 +35,7 @@ private:
     return m;
   }
 
-  float mini(float arr[], int n) {
+  static float mini(float arr[], int n) {
     float m = 1;
     for (int i = 0; i < n; ++i)
       if (m > arr[i])
@@ -47,7 +43,7 @@ private:
     return m;
   }
 
-  ClipResult liangClipper(float xmin, float ymin, float xmax, float ymax, float x1, float y1, float x2, float y2) {
+  static ClipResult liangClipper(float xmin, float ymin, float xmax, float ymax, float x1, float y1, float x2, float y2) {
     float p1 = -(x2 - x1);
     float p2 = -p1;
     float p3 = -(y2 - y1);
@@ -91,8 +87,8 @@ private:
 
     float xn1, yn1, xn2, yn2;
     float rn1, rn2;
-    rn1 = maxi(negarr, negind); 
-    rn2 = mini(posarr, posind); 
+    rn1 = Clipping::maxi(negarr, negind); 
+    rn2 = Clipping::mini(posarr, posind); 
     
     if (rn1 > rn2) return { LineStatus::OUTSIDE, Line() };
 
@@ -105,14 +101,14 @@ private:
     return { LineStatus::CLIPPLED, Line(Point(round(xn1), round(yn1)), Point(round(xn2), round(yn2))) };
   }
 
+  static Point maxPoint(RectangleSize windowSize) { return Point((int) windowSize.width / 2, (int) windowSize.height / 2); }
+  static Point minPoint(RectangleSize windowSize) { return -Clipping::maxPoint(windowSize); }
+
 public:
+  static void execute(RectangleSize windowSize, vector<Line>* lines) {
+    Point maxPoint = Clipping::maxPoint(windowSize);
+    Point minPoint = Clipping::minPoint(windowSize);
 
-  Clipping(RectangleSize windowSize) { 
-    maxPoint = Point((int) windowSize.width / 2, (int) windowSize.height / 2);
-    minPoint = -maxPoint;
-  }
-
-  void execute(vector<Line>* lines) {
     for (auto it = lines->begin(); it != lines->end(); ) {
       ClipResult result = liangClipper(minPoint.x, minPoint.y, maxPoint.x, maxPoint.y, it->a.x, it->a.y, it->b.x, it->b.y);
 
@@ -125,7 +121,11 @@ public:
     }
   }
 
-  void executeParallel(vector<Line>* lines, int numThreads) {
+  static void executeParallel(RectangleSize windowSize, vector<Line>* lines) {
+    Point maxPoint = Clipping::maxPoint(windowSize);
+    Point minPoint = Clipping::minPoint(windowSize);
+
+    size_t numThreads = thread::hardware_concurrency() / 2;
     size_t n = lines->size();
     size_t chunkSize = n / numThreads;
     vector<future<void>> futures;

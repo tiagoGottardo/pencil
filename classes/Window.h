@@ -61,8 +61,7 @@ public:
   vector<Line> transformViewport(RectangleSize frameSize, Point viewportCenter) {
     vector<Line> lines = normalizeDisplayFile();
 
-    Clipping Clipping({ width, height });
-    Clipping.executeParallel(&lines, 8);
+    Clipping::executeParallel({ width, height }, &lines);
 
     Matrix transformationMatrix = this->transformationMatrix(frameSize, viewportCenter);
     for(Line& line : lines) line.applyMatrix(transformationMatrix);

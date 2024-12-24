@@ -11,9 +11,7 @@ void clipping() {
     lines.push_back(Line(Point(0, 0), Point(200, 0)));
     lines.push_back(Line(Point(200, 200), Point(400, 400)));
 
-    Clipping clipping({100, 100});
-
-    clipping.execute(&lines);
+    Clipping::execute({100, 100}, &lines);
 
     return lines.size() == 2 && lines[1].b == Point(50, 0);
   }(), "it tests clip");
@@ -25,9 +23,7 @@ void clipping() {
     lines.push_back(Line(Point(0, 0), Point(200, 0)));
     lines.push_back(Line(Point(200, 200), Point(400, 400)));
 
-    Clipping clipping({100, 100});
-
-    clipping.executeParallel(&lines, 4);
+    Clipping::executeParallel({ 100, 100 }, &lines);
 
     return lines.size() == 2 && lines[1].b == Point(50, 0);
   }(), "it tests clip parallel execution");
