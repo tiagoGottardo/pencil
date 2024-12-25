@@ -24,10 +24,12 @@ public:
 
   vector<Point> getPoints() const { return points; }
 
-  vector<Point> applyMatrix(Matrix transformationMatrix) {
-    vector<Point> points = getPoints();
+  vector<Point> applyTransformations(Matrix transformationMatrix) {
 
-    for(Point& point : points) point.applyMatrix(transformationMatrix);
+    for(Point& point : points) {
+      point.applyMatrix(transformationMatrix);
+      point.applyPerspective();
+    }
 
     return points;
   }

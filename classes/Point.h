@@ -38,6 +38,23 @@ public:
     return *this;
   }
 
+  Point& applyPerspective() {
+    double vector[4] = { x, y, z, 1 };
+    double result[4] = { 0, 0, 0, 0 };
+
+    Matrix matrix = Matrix::PerspectiveMatrix();
+
+    for(size_t i = 0; i < MATRIX_SIZE; i++)
+      for(size_t j = 0; j < MATRIX_SIZE; j++) 
+        result[i] += matrix[i][j] * vector[j];   
+
+    x = result[0] / result[3]; 
+    y = result[1] / result[3]; 
+    z = result[2] / result[3];
+
+    return *this;
+  }
+
   bool operator==(const Point& other) const { return (x == other.x && y == other.y && z == other.z); }
   bool operator!=(const Point& other) const { return !(*this == other); }
   Point operator-() const { return Point(-x, -y, -z); }

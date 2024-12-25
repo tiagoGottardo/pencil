@@ -23,7 +23,7 @@ private:
   RectangleSize getFrameSize() { return { FRAME_WIDTH, FRAME_HEIGHT }; }
 
   Point center() { 
-    return Point(this->width() / 2, this->height() / 2); 
+    return Point(this->width() / 2., this->height() / 2.); 
   }
 
   vector<Line> frameLines() { 

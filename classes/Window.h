@@ -7,6 +7,9 @@
 #include "./Polygon.h"
 #include "./Clipping.h"
 
+#define NEAR 0.1 
+#define FAR 1300 
+
 class Window {
 private:
   uint width, height;
@@ -17,7 +20,8 @@ private:
   friend class WindowFriend;
 
   Matrix normalizationMatrix() {
-    return Matrix::ZRotationMatrix(rotation) * 
+    return Matrix::ScaleMatrix(1./width, 1./height, 1./1300.) *
+    Matrix::ZRotationMatrix(rotation) * 
     Matrix::TranslationMatrix(-centroid.x, -centroid.y, -centroid.z);
   }
 
@@ -25,7 +29,7 @@ private:
     Matrix transformationMatrix = normalizationMatrix() * drawable->getMatrix();
 
     for(Polygon polygon : drawable->getPolygons()) {
-      vector<Point> points = polygon.applyMatrix(transformationMatrix);
+      vector<Point> points = polygon.applyTransformations(transformationMatrix);
 
       for(size_t i = 0; i < points.size(); i++) 
         result->push_back(Line(points[i], points[(i + 1 < points.size()) ? i + 1 : 0]));
@@ -42,11 +46,8 @@ private:
   }
 
   Matrix transformationMatrix(RectangleSize frameSize, Point viewportCenter) {
-    double scaleX = (double) frameSize.width / (double) width;
-    double scaleY = (double) frameSize.height / (double) height;
-
     return Matrix::TranslationMatrix(viewportCenter.x, viewportCenter.y) * 
-    Matrix::ScaleMatrix(scaleX, scaleY);
+    Matrix::ScaleMatrix(frameSize.width / 2, frameSize.height / 2);
   }
 
 public:
@@ -61,7 +62,7 @@ public:
   vector<Line> transformViewport(RectangleSize frameSize, Point viewportCenter) {
     vector<Line> lines = normalizeDisplayFile();
 
-    Clipping::executeParallel({ width, height }, &lines);
+    Clipping::executeParallel(&lines);
 
     Matrix transformationMatrix = this->transformationMatrix(frameSize, viewportCenter);
     for(Line& line : lines) line.applyMatrix(transformationMatrix);
