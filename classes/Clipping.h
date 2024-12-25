@@ -105,12 +105,10 @@ private:
   static Point minPoint(RectangleSize windowSize) { return -Clipping::maxPoint(windowSize); }
 
 public:
-  static void execute(RectangleSize windowSize, vector<Line>* lines) {
-    Point maxPoint = Clipping::maxPoint(windowSize);
-    Point minPoint = Clipping::minPoint(windowSize);
+  static void execute(vector<Line>* lines) {
 
     for (auto it = lines->begin(); it != lines->end(); ) {
-      ClipResult result = liangClipper(minPoint.x, minPoint.y, maxPoint.x, maxPoint.y, it->a.x, it->a.y, it->b.x, it->b.y);
+      ClipResult result = liangClipper(-1, -1, 1, 1, it->a.x, it->a.y, it->b.x, it->b.y);
 
       if (result.lineStatus == LineStatus::OUTSIDE) {
         it = lines->erase(it); 
@@ -121,10 +119,7 @@ public:
     }
   }
 
-  static void executeParallel(RectangleSize windowSize, vector<Line>* lines) {
-    Point maxPoint = Clipping::maxPoint(windowSize);
-    Point minPoint = Clipping::minPoint(windowSize);
-
+  static void executeParallel(vector<Line>* lines) {
     size_t numThreads = thread::hardware_concurrency() / 2;
     size_t n = lines->size();
     size_t chunkSize = n / numThreads;
@@ -132,9 +127,9 @@ public:
 
     auto worker = [&](size_t start, size_t end) {
       for (size_t i = start; i < end; ++i) {
-        ClipResult result = liangClipper(minPoint.x, minPoint.y, maxPoint.x, maxPoint.y, (*lines)[i].a.x, (*lines)[i].a.y, (*lines)[i].b.x, (*lines)[i].b.y);
+        ClipResult result = liangClipper(-1., -1., 1., 1., (*lines)[i].a.x, (*lines)[i].a.y, (*lines)[i].b.x, (*lines)[i].b.y);
 
-        if (result.lineStatus == LineStatus::OUTSIDE)
+        if (result.lineStatus == LineStatus::OUTSIDE || (*lines)[i].a.z > 1. || (*lines)[i].b.z > 1.)
           (*lines)[i] = Line();
          else 
           (*lines)[i] = result.line;
