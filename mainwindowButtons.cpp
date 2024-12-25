@@ -26,32 +26,32 @@ void MainWindow::on_right_clicked() {
 
 void MainWindow::on_increaseX_clicked() {
     Transformable* transformable = dynamic_cast<Transformable*>(displayFile[displayFileIndex].get());
-    transformable->move(Point(500));
+    transformable->move(Point(5));
   }
 
   void MainWindow::on_increaseY_clicked() { 
     Transformable* transformable = dynamic_cast<Transformable*>(displayFile[displayFileIndex].get());
-    transformable->move(Point(0, 500));
+    transformable->move(Point(0, 5));
   }
 
   void MainWindow::on_increaseZ_clicked() { 
     Transformable* transformable = dynamic_cast<Transformable*>(displayFile[displayFileIndex].get());
-    transformable->move(Point(0, 0, 500));
+    transformable->move(Point(0, 0, 5));
   }
 
   void MainWindow::on_decreaseX_clicked() {
     Transformable* transformable = dynamic_cast<Transformable*>(displayFile[displayFileIndex].get());
-    transformable->move(Point(-500, 0, 0));
+    transformable->move(Point(-5, 0, 0));
   }
 
   void MainWindow::on_decreaseY_clicked() {
     Transformable* transformable = dynamic_cast<Transformable*>(displayFile[displayFileIndex].get());
-    transformable->move(Point(0, -500, 0));
+    transformable->move(Point(0, -5, 0));
   }
 
   void MainWindow::on_decreaseZ_clicked() {
     Transformable* transformable = dynamic_cast<Transformable*>(displayFile[displayFileIndex].get());
-    transformable->move(Point(0, 0, -500));
+    transformable->move(Point(0, 0, -5));
   }
 
   void MainWindow::on_increaseXRotation_clicked() {

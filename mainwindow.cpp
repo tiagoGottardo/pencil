@@ -11,6 +11,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
   ui->setupUi(this);
   ui->frame->connectWindow(&displayFile);
   // displayFile.push_back(make_unique<Model>(Model::createDonut(40)));
+  on_addCharizard_clicked(); 
+
   QTimer *timer = new QTimer(this);
   connect(timer, &QTimer::timeout, this, &MainWindow::triggerRotate);
   timer->start(5); 
@@ -42,10 +44,10 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
   if(event->key() == Qt::Key_R) { ui->frame->getWindow()->setSize(); }
 
   // Move window
-  if(event->key() == Qt::Key_D) { ui->frame->getWindow()->move(Point(500, 0)); }
-  if(event->key() == Qt::Key_A) { ui->frame->getWindow()->move(Point(-500, 0)); }
-  if(event->key() == Qt::Key_W) { ui->frame->getWindow()->move(Point(0, -500)); }
-  if(event->key() == Qt::Key_S) { ui->frame->getWindow()->move(Point(0, 500)); }
+  if(event->key() == Qt::Key_D) { ui->frame->getWindow()->move(Point(5, 0)); }
+  if(event->key() == Qt::Key_A) { ui->frame->getWindow()->move(Point(-5, 0)); }
+  if(event->key() == Qt::Key_W) { ui->frame->getWindow()->move(Point(0, -5)); }
+  if(event->key() == Qt::Key_S) { ui->frame->getWindow()->move(Point(0, 5)); }
 
   // Rotate window
   if(event->key() == Qt::Key_Q) { ui->frame->getWindow()->rotate(-1); }
