@@ -4,13 +4,8 @@
 
 class PolygonFriend {
 public:
-  static Point getRef(Polygon polygon) {
-    return polygon.ref;
-  }
-
-  static vector<Point> getPoints(Polygon polygon) {
-    return polygon.points;
-  }
+  static Point getRef(Polygon polygon) { return polygon.ref; }
+  static vector<Point> getPoints(Polygon polygon) { return polygon.points; }
 };
 
 void polygon() {
@@ -21,8 +16,8 @@ void polygon() {
 
     Point correctPoints[] = { 
       Point(0, -50),
-      Point(43, 24),
-      Point(-43, 25)
+      Point(43.3, 25),
+      Point(-43.3, 25)
     };
 
     if(PolygonFriend::getRef(p) != Point(50, 50, 0)) return false;
@@ -45,10 +40,10 @@ void polygon() {
     vector<Point> points = p.getPoints();
 
     Point correctPoints[] = { 
-      Point(70, -70),
-      Point(70, 70),
-      Point(-70, 70),
-      Point(-70, -70)
+      Point(70.71, -70.71),
+      Point(70.71, 70.71),
+      Point(-70.71, 70.71),
+      Point(-70.71, -70.71)
     };
 
     if(points.size() != 4);
