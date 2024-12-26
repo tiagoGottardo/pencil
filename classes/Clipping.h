@@ -110,7 +110,7 @@ public:
     for (auto it = lines->begin(); it != lines->end(); ) {
       ClipResult result = liangClipper(-1, -1, 1, 1, it->a.x, it->a.y, it->b.x, it->b.y);
 
-      if (result.lineStatus == LineStatus::OUTSIDE) {
+      if (result.lineStatus == LineStatus::OUTSIDE || it->a.z > 1. || it->b.z > 1.) {
         it = lines->erase(it); 
       } else {
         *it = result.line; 
@@ -146,7 +146,7 @@ public:
     for (auto& fut : futures) fut.get();
 
     lines->erase(std::remove_if(lines->begin(), lines->end(), [](const Line& line) {
-      return line.a == line.b;
+      return line.a == line.b && line.a == Point();
     }), lines->end());
   }
 };
