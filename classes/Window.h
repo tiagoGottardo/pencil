@@ -10,6 +10,10 @@
 #define NEAR 0.1 
 #define FAR 1300 
 
+typedef struct {
+  uint width, height;
+} RectangleSize;
+
 class Window {
 private:
   uint width, height;
@@ -65,6 +69,7 @@ public:
     Clipping::executeParallel(&lines);
 
     Matrix transformationMatrix = this->transformationMatrix(frameSize, viewportCenter);
+
     for(Line& line : lines) line.applyMatrix(transformationMatrix);
     
     return lines;

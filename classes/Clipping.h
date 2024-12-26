@@ -17,10 +17,6 @@ enum LineStatus {
 };
 
 typedef struct {
-  uint width, height;
-} RectangleSize;
-
-typedef struct {
   LineStatus lineStatus;
   Line line;
 } ClipResult;
@@ -43,7 +39,12 @@ private:
     return m;
   }
 
-  static ClipResult liangClipper(float xmin, float ymin, float xmax, float ymax, float x1, float y1, float x2, float y2) {
+  static ClipResult liangClipper(float x1, float y1, float x2, float y2) {
+    float xmin = -1;
+    float xmax =  1;
+    float ymin = -1;
+    float ymax =  1;
+
     float p1 = -(x2 - x1);
     float p2 = -p1;
     float p3 = -(y2 - y1);
@@ -101,21 +102,16 @@ private:
     return { LineStatus::CLIPPLED, Line(Point(xn1, yn1), Point(xn2, yn2)) };
   }
 
-  static Point maxPoint(RectangleSize windowSize) { return Point((int) windowSize.width / 2, (int) windowSize.height / 2); }
-  static Point minPoint(RectangleSize windowSize) { return -Clipping::maxPoint(windowSize); }
-
 public:
   static void execute(vector<Line>* lines) {
 
     for (auto it = lines->begin(); it != lines->end(); ) {
-      ClipResult result = liangClipper(-1, -1, 1, 1, it->a.x, it->a.y, it->b.x, it->b.y);
+      ClipResult result = liangClipper(it->a.x, it->a.y, it->b.x, it->b.y);
 
-      if (result.lineStatus == LineStatus::OUTSIDE || it->a.z > 1. || it->b.z > 1.) {
+      if (result.lineStatus == LineStatus::OUTSIDE || it->a.z > 1. || it->b.z > 1.)
         it = lines->erase(it); 
-      } else {
-        *it = result.line; 
-        ++it;
-      }
+      else 
+        { *it = result.line; ++it; }
     }
   }
 
@@ -127,7 +123,7 @@ public:
 
     auto worker = [&](size_t start, size_t end) {
       for (size_t i = start; i < end; ++i) {
-        ClipResult result = liangClipper(-1., -1., 1., 1., (*lines)[i].a.x, (*lines)[i].a.y, (*lines)[i].b.x, (*lines)[i].b.y);
+        ClipResult result = liangClipper((*lines)[i].a.x, (*lines)[i].a.y, (*lines)[i].b.x, (*lines)[i].b.y);
 
         if (result.lineStatus == LineStatus::OUTSIDE || (*lines)[i].a.z > 1. || (*lines)[i].b.z > 1.)
           (*lines)[i] = Line();
