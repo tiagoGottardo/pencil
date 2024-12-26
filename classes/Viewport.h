@@ -25,24 +25,11 @@ private:
 
   Point center() { return Point(this->width() / 2., this->height() / 2.); }
 
-  vector<Line> frameLines() { 
-    Polygon frame = Factory::createRectangle(FRAME_WIDTH, FRAME_HEIGHT, center(), "Frame"); 
-
-    vector<Point> points = frame.getPoints();
-
-    for(Point& point : points) point.applyMatrix(frame.getMatrix());
-
-    vector<Line> lines;
-
-    for(size_t i = 0; i < points.size(); i++)
-      lines.push_back(Line(points[i], points[(i + 1 != points.size()) ? i + 1 : 0]));
-    
-    return lines;
-  }
-
   void draw(QPainter* painter, vector<Line>* lines) {
     for(Line line : *lines) line.draw(painter, (int) this->height());
-    for(Line line : frameLines()) line.draw(painter, (int) this->height());
+
+    for(Line line : Factory::createFrame(FRAME_WIDTH, FRAME_HEIGHT, center(), "Frame")) 
+      line.draw(painter, (int) this->height());
   }
 
 public:

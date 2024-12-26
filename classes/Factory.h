@@ -10,7 +10,6 @@
 
 class Factory {
 public:
-
   static Polygon createRegularPolygon(int size = 100, int sides = 3, Point centroid = Point(), string name = "Polygon") {
     if(sides < 3) throw invalid_argument("It must has at least 3 sides.");
 
@@ -32,7 +31,7 @@ public:
     return Polygon(points, centroid, name);
   }
 
-  static Polygon createRectangle(uint width, uint height, Point centroid, string name = "Rectangle") {
+  static vector<Line> createFrame(uint width, uint height, Point centroid, string name = "Rectangle") {
     vector<Point> points;
 
     points.push_back(Point());
@@ -42,7 +41,17 @@ public:
 
     for(Point& point : points) point -= Point(width / 2, height / 2);
 
-    return Polygon(points, centroid, name);
+    Polygon frame = Polygon(points, centroid, name);
+
+    points = frame.getPoints();
+
+    for(Point& point : points) point.applyMatrix(frame.getMatrix());
+
+    vector<Line> lines;
+
+    for(size_t i = 0; i < points.size(); i++) lines.push_back(Line(points[i], points[(i + 1 != points.size()) ? i + 1 : 0]));
+    
+    return lines;
   }
 
   static Model createDonut(int sides, int size = 500) {
