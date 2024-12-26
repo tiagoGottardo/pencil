@@ -48,6 +48,8 @@ public:
       for(size_t j = 0; j < MATRIX_SIZE; j++) 
         result[i] += matrix[i][j] * vector[j];   
 
+    if(result[3] == 0) result[3] = 0.0000001; 
+    
     x = result[0] / result[3]; 
     y = result[1] / result[3]; 
     z = result[2] / result[3];
@@ -55,7 +57,16 @@ public:
     return *this;
   }
 
-  bool operator==(const Point& other) const { return (x == other.x && y == other.y && z == other.z); }
+  bool operator==(const Point& other) const { 
+    double epsilon = 1e-2;
+
+    Point c = *this - other;
+    if((c.x >= 0 && c.x >= epsilon) || (c.x < 0 && -c.x >= epsilon)) return false;
+    if((c.y >= 0 && c.y >= epsilon) || (c.y < 0 && -c.y >= epsilon)) return false;
+    if((c.z >= 0 && c.z >= epsilon) || (c.z < 0 && -c.z >= epsilon)) return false;
+
+    return true;
+  }
   bool operator!=(const Point& other) const { return !(*this == other); }
   Point operator-() const { return Point(-x, -y, -z); }
   Point operator+(const Point& other) const { return Point(x + other.x, y + other.y, z + other.z); }
