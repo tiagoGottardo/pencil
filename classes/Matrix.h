@@ -87,15 +87,15 @@ public:
     });
   }
 
-  Matrix static PerspectiveMatrix(double fov = 45.0, double aspect = 1331./761., double near = 0.1, double far = 1300) {
-    double r = 1.0 / tan(fov * 0.5 * M_PI / 180.0);  // Convert FOV to radians
-    double t = r / aspect;  // Top bound derived from aspect ratio
+  Matrix static PerspectiveMatrix(double aspect = 1331./761., double fov = 45.0, double near = 0.1, double far = 1300) {
+    double r = 1.0 / tan(fov * 0.5 * M_PI / 180.0);
+    double t = r / aspect;
     
     return Matrix({
-      {r,   0,                             0,                                0},
-      {0,   t,                             0,                                0},
-      {0,   0,  -(far + near) / (far - near), -(2 * far * near) / (far - near)},
-      {0,   0,                            -1,                                0},
+      {r, 0,                             0,                                0},
+      {0, t,                             0,                                0},
+      {0, 0,  -(far + near) / (far - near), -(2 * far * near) / (far - near)},
+      {0, 0,                            -1,                                0},
     });
   }
 
