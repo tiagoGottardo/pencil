@@ -24,14 +24,13 @@ public:
 
   vector<Point> getPoints() const { return points; }
 
-  vector<Point> applyTransformations(Matrix transformationMatrix) {
+  vector<Line> normalize(Matrix matrix) { 
+    vector<Line> result;
 
-    for(Point& point : points) {
-      point.applyMatrix(transformationMatrix);
-      point.applyPerspective();
-    }
+    for(Point& point : points) point.applyMatrix(matrix, true); 
+    for(size_t i = 0; i < points.size(); i++) result.push_back(Line(points[i], points[(i + 1 < points.size()) ? i + 1 : 0]));
 
-    return points;
+    return result;
   }
 
   Polygon(vector<Point> points, Point ref = Point(), const string& name = "Polygon") : 

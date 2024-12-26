@@ -7,55 +7,42 @@
 #include "./Polygon.h"
 #include "./Clipping.h"
 
-#define NEAR 0.1 
-#define FAR 1300 
-
-typedef struct {
-  uint width, height;
-} RectangleSize;
-
 class Window {
 private:
-  uint width, height;
+  uint width, height, far;
   DisplayFile *displayFile;
   double rotation;
   Point centroid;
 
   friend class WindowFriend;
 
-  Matrix normalizationMatrix() {
-    return Matrix::ScaleMatrix(1./width, 1./height, 1./1300.) *
-    Matrix::ZRotationMatrix(rotation) * 
-    Matrix::TranslationMatrix(-centroid.x, -centroid.y, -centroid.z);
+  Matrix windowMatrix() {
+    return Matrix::ScaleMatrix(1./width, 1./height, 1./far) *
+      Matrix::ZRotationMatrix(rotation) * 
+      Matrix::TranslationMatrix(-centroid.x, -centroid.y, -centroid.z);
   }
 
-  void normalizeDrawable(unique_ptr<Drawable>& drawable, vector<Line>* result) {
-    Matrix transformationMatrix = normalizationMatrix() * drawable->getMatrix();
-
-    for(Polygon polygon : drawable->getPolygons()) {
-      vector<Point> points = polygon.applyTransformations(transformationMatrix);
-
-      for(size_t i = 0; i < points.size(); i++) 
-        result->push_back(Line(points[i], points[(i + 1 < points.size()) ? i + 1 : 0]));
-    }
-  }
-
-  vector<Line> normalizeDisplayFile() {
-    vector<Line> result = vector<Line>();
-
-    for(unique_ptr<Drawable>& drawable : *displayFile)
-      normalizeDrawable(drawable, &result);
-
-    return result;
-  }
-
-  Matrix transformationMatrix(RectangleSize frameSize, Point viewportCenter) {
+  Matrix viewportMatrix(RectangleSize frameSize, Point viewportCenter) {
     return Matrix::TranslationMatrix(viewportCenter.x, viewportCenter.y) * 
     Matrix::ScaleMatrix(frameSize.width / 2, frameSize.height / 2);
   }
 
+  vector<Line> normalizeDisplayFile(RectangleSize frameSize) {
+    vector<Line> result = vector<Line>();
+
+    for(unique_ptr<Drawable>& drawable : *displayFile) {
+      Matrix normalizationMatrix = Matrix::PerspectiveMatrix(frameSize, far) * windowMatrix() * drawable->getMatrix();
+
+      for(Polygon polygon : drawable->getPolygons()) 
+        for(Line line : polygon.normalize(normalizationMatrix)) 
+          result.push_back(line);
+    }
+
+    return result;
+  }
+
 public:
-  Window(uint width, uint height, DisplayFile* displayFile) : width(width), height(height), displayFile(displayFile), rotation(0), centroid(Point(0, 0)) { }
+  Window(uint width, uint height, uint far, DisplayFile* displayFile) : width(width), height(height), far(far), displayFile(displayFile), rotation(0), centroid(Point(0, 0)) { }
 
   void setSize() { width = (width == 500) ? 100 : 500; height = (height == 250) ? 100 : 250; }
 
@@ -64,13 +51,12 @@ public:
   void move(Point to) { centroid += Point(to.x, -to.y, to.z); }
 
   vector<Line> transformViewport(RectangleSize frameSize, Point viewportCenter) {
-    vector<Line> lines = normalizeDisplayFile();
+    vector<Line> lines = normalizeDisplayFile(frameSize);
 
     Clipping::executeParallel(&lines);
 
-    Matrix transformationMatrix = this->transformationMatrix(frameSize, viewportCenter);
-
-    for(Line& line : lines) line.applyMatrix(transformationMatrix);
+    Matrix viewportMatrix = this->viewportMatrix(frameSize, viewportCenter);
+    for(Line& line : lines) line.applyMatrix(viewportMatrix);
     
     return lines;
   }

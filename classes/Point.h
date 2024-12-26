@@ -23,36 +23,25 @@ public:
 
   void checkItself() const { printf("  %s: (%.2f, %.2f, %.2f)\n", name.c_str(), x, y, z); }
 
-  Point& applyMatrix(Matrix matrix) {
+  Point& applyMatrix(Matrix matrix, bool divideByW = false) {
     double vector[4] = { x, y, z, 1 };
     double result[4] = { 0, 0, 0, 0 };
 
     for(size_t i = 0; i < MATRIX_SIZE; i++)
       for(size_t j = 0; j < MATRIX_SIZE; j++) 
         result[i] += matrix[i][j] * vector[j];   
+
+    if(divideByW) {
+      if(result[3] == 0) result[3] = 1e-7; 
+
+      result[0] /= result[3]; 
+      result[1] /= result[3]; 
+      result[2] /= result[3];
+    }
 
     x = result[0]; 
     y = result[1]; 
     z = result[2];
-
-    return *this;
-  }
-
-  Point& applyPerspective() {
-    double vector[4] = { x, y, z, 1 };
-    double result[4] = { 0, 0, 0, 0 };
-
-    Matrix matrix = Matrix::PerspectiveMatrix();
-
-    for(size_t i = 0; i < MATRIX_SIZE; i++)
-      for(size_t j = 0; j < MATRIX_SIZE; j++) 
-        result[i] += matrix[i][j] * vector[j];   
-
-    if(result[3] == 0) result[3] = 0.0000001; 
-    
-    x = result[0] / result[3]; 
-    y = result[1] / result[3]; 
-    z = result[2] / result[3];
 
     return *this;
   }

@@ -9,6 +9,7 @@
 
 #define WINDOW_INIT_WIDTH 1311
 #define WINDOW_INIT_HEIGHT 761 
+#define WINDOW_INIT_FAR 1300 
 
 #define FRAME_WIDTH 1311
 #define FRAME_HEIGHT 761 
@@ -22,9 +23,7 @@ private:
 
   RectangleSize getFrameSize() { return { FRAME_WIDTH, FRAME_HEIGHT }; }
 
-  Point center() { 
-    return Point(this->width() / 2., this->height() / 2.); 
-  }
+  Point center() { return Point(this->width() / 2., this->height() / 2.); }
 
   vector<Line> frameLines() { 
     Polygon frame = Factory::createRectangle(FRAME_WIDTH, FRAME_HEIGHT, center(), "Frame"); 
@@ -43,7 +42,6 @@ private:
 
   void draw(QPainter* painter, vector<Line>* lines) {
     for(Line line : *lines) line.draw(painter, (int) this->height());
-
     for(Line line : frameLines()) line.draw(painter, (int) this->height());
   }
 
@@ -54,9 +52,7 @@ public:
     timer->start(5); // milliseconds to trigger
   }
 
-  void connectWindow(DisplayFile* displayFile) {
-    if(!window) window = new Window(WINDOW_INIT_WIDTH, WINDOW_INIT_HEIGHT, displayFile);
-  }
+  void connectWindow(DisplayFile* displayFile) { if(!window) window = new Window(WINDOW_INIT_WIDTH, WINDOW_INIT_HEIGHT, WINDOW_INIT_FAR, displayFile); }
 
   void connectWindow(Window* window) { if(!window) window = window; }
 
