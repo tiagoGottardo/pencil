@@ -4,13 +4,8 @@
 
 class WindowFriend {
 public:
-  static std::vector<Line> testNormalizeDisplayFile(Window window) {
-    return window.normalizeDisplayFile();
-  }
-
-  static Matrix testCalculateTransformationMatrix(Window window, RectangleSize viewportSize, Point frameCenter) {
-    return window.transformationMatrix(viewportSize, frameCenter);
-  }
+  static std::vector<Line> testNormalizeDisplayFile(RectangleSize frameSize, Window window) { return window.normalizeDisplayFile(frameSize); }
+  static Matrix testCalculateViewportMatrix(Window window, RectangleSize frameSize, Point viewportCenter) { return window.viewportMatrix(frameSize, viewportCenter); }
 };
 
 void window() {
@@ -20,16 +15,16 @@ void window() {
     DisplayFile* displayFile = new DisplayFile();
     displayFile->push_back(make_unique<Polygon>(Factory::createRegularPolygon(100, 4, Point(10, 10, -50))));
 
-    Window window = Window(100, 100, displayFile);
+    Window window = Window(100, 100, 1300, displayFile);
     window.move(Point(40, 40));
 
-    vector<Line> lines = WindowFriend::testNormalizeDisplayFile(window);
+    vector<Line> lines = WindowFriend::testNormalizeDisplayFile({ 1311, 761 }, window);
 
     Line correctLines[] = {
-      Line(Point(3.36, 5.26, -4.20), Point(3.36, 30.63, -4.20)),
-      Line(Point(3.36, 30.63, -4.20), Point(-41.02, 30.63, -4.20)),
-      Line(Point(-41.02, 30.63, -4.20), Point(-41.02, 5.26, -4.20)),
-      Line(Point(-41.02, 5.26, -4.20), Point(3.36, 5.26, -4.20))
+      Line(Point(3.36, 9.19, -4.20), Point(3.36, 53.58, -4.20)),
+      Line(Point(3.36, 53.58, -4.20), Point(-41.02, 53.58, -4.20)),
+      Line(Point(-41.02, 53.58, -4.20), Point(-41.02, 9.19, -4.20)),
+      Line(Point(-41.02, 9.19, -4.20), Point(3.36, 9.19, -4.20)),
     };
 
     for(int i = 0; i < (int) lines.size(); i++)  
@@ -39,10 +34,10 @@ void window() {
   }(), "it tests window normalization on displayFile items");
 
   suite.add([]() -> bool { 
-    Window window = Window(100, 100, new DisplayFile());
+    Window window = Window(100, 100, 1300, new DisplayFile());
 
     RectangleSize viewportSize = {500, 250};
-    Matrix matrix = WindowFriend::testCalculateTransformationMatrix(window, viewportSize, Point(viewportSize.width / 2, viewportSize.height / 2));
+    Matrix matrix = WindowFriend::testCalculateViewportMatrix(window, viewportSize, Point(viewportSize.width / 2, viewportSize.height / 2));
 
     Matrix correctMatrix = Matrix({
       {250,   0, 0, 250},
