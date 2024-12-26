@@ -108,7 +108,9 @@ public:
     for (auto it = lines->begin(); it != lines->end(); ) {
       ClipResult result = liangClipper(it->a.x, it->a.y, it->b.x, it->b.y);
 
-      if (result.lineStatus == LineStatus::OUTSIDE || it->a.z > 1. || it->b.z > 1.)
+      bool behindWindow = it->a.z > 1. || it->b.z > 1.;
+
+      if (result.lineStatus == LineStatus::OUTSIDE || behindWindow)
         it = lines->erase(it); 
       else 
         { *it = result.line; ++it; }
@@ -125,7 +127,9 @@ public:
       for (size_t i = start; i < end; ++i) {
         ClipResult result = liangClipper((*lines)[i].a.x, (*lines)[i].a.y, (*lines)[i].b.x, (*lines)[i].b.y);
 
-        if (result.lineStatus == LineStatus::OUTSIDE || (*lines)[i].a.z > 1. || (*lines)[i].b.z > 1.)
+        bool behindWindow = (*lines)[i].a.z > 1. || (*lines)[i].b.z > 1.;
+
+        if (result.lineStatus == LineStatus::OUTSIDE || behindWindow)
           (*lines)[i] = Line();
          else 
           (*lines)[i] = result.line;
