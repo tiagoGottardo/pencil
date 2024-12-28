@@ -20,9 +20,9 @@ protected:
     return  
       Matrix::TranslationMatrix(ref.x, ref.y, ref.z) *
       Matrix::ScaleMatrix(scaleFactor, scaleFactor, scaleFactor) *
-      Matrix::XRotationMatrix(xRotation) *
+      Matrix::ZRotationMatrix(zRotation) *
       Matrix::YRotationMatrix(yRotation) *
-      Matrix::ZRotationMatrix(zRotation);
+      Matrix::XRotationMatrix(xRotation);
   }
 
 public:
