@@ -14,7 +14,8 @@
    <string>MainWindow</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-color: grey;</string>
+   <string notr="true">background-color:   #36454F;
+color: rgb(255, 255, 255);</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="Viewport" name="frame">
@@ -23,7 +24,7 @@
       <x>10</x>
       <y>10</y>
       <width>1511</width>
-      <height>1061</height>
+      <height>1011</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -162,6 +163,9 @@
       <width>41</width>
       <height>41</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(255, 255, 255);</string>
     </property>
     <property name="text">
      <string>↻</string>
@@ -508,6 +512,22 @@ color: #FFFFFF;</string>
     </property>
     <property name="text">
      <string>Delete</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="windowInfo">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>1030</y>
+      <width>1511</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font-size: 20px;</string>
+    </property>
+    <property name="text">
+     <string> Window X: Y: Z: Width: Height: Far: Angle X: Angle Y: Angle Z: </string>
     </property>
    </widget>
   </widget>

@@ -28,6 +28,7 @@ private:
 
 protected:
   void keyPressEvent(QKeyEvent *event) override;
+  void mousePressEvent(QMouseEvent *event) override;
 
 private slots:
   void triggerRotate();

@@ -5,13 +5,12 @@
 #include "./classes/Model.h"
 
 #include <QPainter>
+#include <QCursor>
 #include <vector>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow), displayFileIndex(0) {
   ui->setupUi(this);
   ui->frame->connectWindow(&displayFile);
-  // displayFile.push_back(make_unique<Model>(Model::createDonut(40)));
-  on_addCharizard_clicked(); 
 
   QTimer *timer = new QTimer(this);
   connect(timer, &QTimer::timeout, this, &MainWindow::triggerRotate);
@@ -19,7 +18,26 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 }
 
 void MainWindow::triggerRotate() {
+  Window* w = ui->frame->getWindow();
+
+  ui->windowInfo->setText(QString::fromStdString(w->interface()));
+  
   ui->label->setText((displayFile.size() == 0) ? QString::fromStdString("") : QString::fromStdString(displayFile[displayFileIndex].get()->getName()));
+
+  QPoint mouseLoc = QCursor::pos();
+
+  if(this->cursor().shape() == Qt::BlankCursor) {
+    QPoint center = ui->frame->rect().center();
+    QPoint globalCenter = ui->frame->mapToGlobal(center);
+
+    int x = mouseLoc.x() - globalCenter.x();
+    int y = mouseLoc.y() - globalCenter.y();
+
+    ui->frame->getWindow()->rotateX(y * 0.01);
+    ui->frame->getWindow()->rotateY(x * 0.01);
+
+    QCursor::setPos(globalCenter);
+  }
 
   for(unique_ptr<Drawable>& drawable : this->displayFile) {
     Model* model = dynamic_cast<Model*>(drawable.get());
@@ -31,7 +49,17 @@ void MainWindow::triggerRotate() {
   }
 }
 
+void MainWindow::mousePressEvent(QMouseEvent *event) {
+  if (event->button() == Qt::LeftButton) {
+    setCursor(Qt::BlankCursor);
+  } else if (event->button() == Qt::RightButton) {
+    setCursor(Qt::ArrowCursor);
+  }
+}
+
 void MainWindow::keyPressEvent(QKeyEvent *event) {
+  Window* w = ui->frame->getWindow();
+
   if(event->key() == Qt::Key_Return) QCoreApplication::quit();
 
   if(event->key() == Qt::Key_F) {
@@ -40,18 +68,12 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
       drawable->checkItself();
   }
 
-  // Resize window
-  if(event->key() == Qt::Key_R) { ui->frame->getWindow()->setSize(); }
-
   // Move window
-  if(event->key() == Qt::Key_D) { ui->frame->getWindow()->move(Point(5, 0)); }
-  if(event->key() == Qt::Key_A) { ui->frame->getWindow()->move(Point(-5, 0)); }
-  if(event->key() == Qt::Key_W) { ui->frame->getWindow()->move(Point(0, -5)); }
-  if(event->key() == Qt::Key_S) { ui->frame->getWindow()->move(Point(0, 5)); }
+  if(event->key() == Qt::Key_W) { w->move(FRONT, 5); }
+  if(event->key() == Qt::Key_A) { w->move(LEFT, 5); }
+  if(event->key() == Qt::Key_D) { w->move(RIGHT, 5); }
+  if(event->key() == Qt::Key_S) { w->move(BACK, 5); }
 
-  // Rotate window
-  if(event->key() == Qt::Key_Q) { ui->frame->getWindow()->rotate(-1); }
-  if(event->key() == Qt::Key_E) { ui->frame->getWindow()->rotate(1); }
 };
 
 MainWindow::~MainWindow() { delete ui; }
