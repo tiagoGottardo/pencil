@@ -23,6 +23,15 @@ public:
 
   void checkItself() const { printf("  %s: (%.2f, %.2f, %.2f)\n", name.c_str(), x, y, z); }
 
+  Point& normalize() {
+    double length = sqrt(pow(x, 2) + pow(y, 2) + pow(z, 2));
+    x /= length;
+    y /= length;
+    z /= length;
+
+    return *this;
+  };
+
   Point& applyMatrix(Matrix matrix, bool divideByW = false) {
     double vector[4] = { x, y, z, 1 };
     double result[4] = { 0, 0, 0, 0 };
@@ -62,5 +71,5 @@ public:
   Point& operator+=(const Point& other) { *this = *this + other; return *this; }
   Point operator-(const Point& other) const { return Point(x - other.x, y - other.y, z - other.z); }
   Point& operator-=(const Point& other) { *this = *this - other; return *this; }
-  Point operator/(const double& num) const { return Point(x / num, y / num, z / num, name); }
+  Point operator*(const double& num) const { return Point(x * num, y * num, z * num, name); }
 };
