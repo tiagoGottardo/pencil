@@ -20,7 +20,13 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 void MainWindow::triggerRotate() {
   Window* w = ui->frame->getWindow();
 
-  ui->windowInfo->setText(QString::fromStdString(w->interface()));
+  if(this->cursor().shape() == Qt::BlankCursor) 
+    ui->windowInfo->setText(QString::fromStdString(w->interface()));
+   else if (displayFile.size() > 0)
+    ui->windowInfo->setText(QString::fromStdString(displayFile[displayFileIndex].get()->interface()));
+   else
+    ui->windowInfo->setText(QString::fromStdString(""));
+
   
   ui->label->setText((displayFile.size() == 0) ? QString::fromStdString("") : QString::fromStdString(displayFile[displayFileIndex].get()->getName()));
 
@@ -49,16 +55,9 @@ void MainWindow::triggerRotate() {
   }
 }
 
-void MainWindow::mousePressEvent(QMouseEvent *event) {
-  if (event->button() == Qt::LeftButton) {
-    setCursor(Qt::BlankCursor);
-  } else if (event->button() == Qt::RightButton) {
-    setCursor(Qt::ArrowCursor);
-  }
-}
-
 void MainWindow::keyPressEvent(QKeyEvent *event) {
   Window* w = ui->frame->getWindow();
+  Transformable* transformable = dynamic_cast<Transformable*>(displayFile[displayFileIndex].get());
 
   if(event->key() == Qt::Key_Return) QCoreApplication::quit();
 
@@ -68,11 +67,28 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
       drawable->checkItself();
   }
 
-  // Move window
-  if(event->key() == Qt::Key_W) { w->move(FRONT, 5); }
-  if(event->key() == Qt::Key_A) { w->move(LEFT, 5); }
-  if(event->key() == Qt::Key_D) { w->move(RIGHT, 5); }
-  if(event->key() == Qt::Key_S) { w->move(BACK, 5); }
+  if(event->key() == Qt::Key_E) {
+    if(this->cursor().shape() != Qt::BlankCursor) {
+      setCursor(Qt::BlankCursor);
+      ui->frame->setFocus();
+    } else setCursor(Qt::ArrowCursor);
+  }
+
+  if(this->cursor().shape() == Qt::BlankCursor) {
+    if(event->key() == Qt::Key_W) { w->move(FORWARD); }
+    if(event->key() == Qt::Key_A) { w->move(LEFT); }
+    if(event->key() == Qt::Key_D) { w->move(RIGHT); }
+    if(event->key() == Qt::Key_S) { w->move(BACK); }
+    if(event->key() == Qt::Key_Space) { w->move(UP); }
+    if(event->key() == Qt::Key_Shift) { w->move(DOWN); }
+  } else {
+    if(event->key() == Qt::Key_W) { transformable->move(Point(0, 0, 10)); }
+    if(event->key() == Qt::Key_A) { transformable->move(Point(10)); }
+    if(event->key() == Qt::Key_D) { transformable->move(Point(-10)); }
+    if(event->key() == Qt::Key_S) { transformable->move(Point(0, 0, -10)); }
+    if(event->key() == Qt::Key_Space) { transformable->move(Point(0, 10, 0)); }
+    if(event->key() == Qt::Key_Shift) { transformable->move(Point(0, -10, 0)); }
+  }
 
 };
 
