@@ -10,34 +10,30 @@
 #include "./Polygon.h"
 #include "./Clipping.h"
 
+
 enum Direction {
   RIGHT,
   LEFT,
-  FRONT,
+  FORWARD,
   BACK,
+  UP,
+  DOWN
 };
 
 class Window {
 private:
   uint width, height, far;
   DisplayFile *displayFile;
-  double xRotation;
-  double yRotation;
-  double zRotation;
+  Vector rotation;
   Point centroid;
-  friend class WindowFriend;
 
-  double climp(double value) {
-    if(value > 360.) return climp(value - 360.);
-    if(value < 0.) return climp(value + 360.);
-    return value;
-  }
+  friend class WindowFriend;
 
   Matrix windowMatrix() {
     return Matrix::ScaleMatrix(1./width, 1./height, 1./far) *
-    Matrix::ZRotationMatrix(zRotation) *
-    Matrix::XRotationMatrix(xRotation) *
-    Matrix::YRotationMatrix(yRotation) *
+    Matrix::XRotationMatrix(rotation.x) *
+    Matrix::YRotationMatrix(rotation.y) *
+    Matrix::ZRotationMatrix(rotation.z) *
     Matrix::TranslationMatrix(-centroid.x, -centroid.y, -centroid.z);
   }
 
@@ -60,55 +56,54 @@ private:
     return result;
   }
 
+  Vector forwardVector() {
+    Vector result(0, 0, -1);
+    Matrix rotationMatrix = Matrix::XRotationMatrix(rotation.x) * Matrix::YRotationMatrix(rotation.y);
+    result.applyMatrix(rotationMatrix);
+
+    result.x *= -1;
+    result.y *= -1;
+
+    return result;
+  }
+
+  Vector rightVector() { return (Point(-forwardVector().z, 0, forwardVector().x)).normalize(); }
+
+  Vector getMoveVector(Direction direction) {
+    switch(direction) {
+      case FORWARD: return forwardVector(); 
+      case RIGHT: return rightVector();
+      case BACK: return -forwardVector();
+      case LEFT: return -rightVector();
+      case UP: return Point(0, 1, 0);
+      default: return Point(0, -1, 0);
+    }
+  }
+
 public:
   Window(uint width, uint height, uint far, DisplayFile* displayFile) : 
     width(width), 
     height(height), 
     far(far), 
     displayFile(displayFile), 
-    xRotation(0), 
-    yRotation(0), 
-    zRotation(0), 
-    centroid(Point(0, 0)) {}
+    rotation(Vector("Rotation")), 
+    centroid(Point("Ref")) {}
 
-  void setSize() { width = (width == 500) ? 100 : 500; height = (height == 250) ? 100 : 250; }
-
-  void rotateX(double theta) { xRotation = climp(xRotation + theta); }
-  void rotateY(double theta) { yRotation = climp(yRotation + theta); }
-  void rotateZ(double theta) { zRotation = climp(zRotation + theta); }
-
-  Point forwardPoint() {
-    Point forward(0, 0, -1);
-    Matrix rotationMatrix = Matrix::XRotationMatrix(xRotation) * Matrix::YRotationMatrix(yRotation);
-    forward.applyMatrix(rotationMatrix);
-    return Point(-forward.x, -forward.y, forward.z);
-  }
-
-  Point rightPoint() {
-    Point forward = forwardPoint();
-    Point result = Point(-forward.z, 0, forward.x);
-    
-    return result.normalize(); 
-  }
+  void rotateX(double theta) { rotation.x += theta; }
+  void rotateY(double theta) { rotation.y += theta; }
+  void rotateZ(double theta) { rotation.z += theta; }
 
   string interface() {
-    ostringstream stream;
-    stream << "Window | Position: (" << std::fixed << std::setprecision(2) << centroid.x << "; " << centroid.y << "; " << centroid.z <<
-    ") | Width: " << width << " | Height: " << height << " | Far: " << far << " | Angle: (" << xRotation << "; " << yRotation << "; " << zRotation << ")";
-    return stream.str();    
+    return (ostringstream()
+      << " Window" 
+      << " | Position: " << centroid.interface()  
+      << " | Width: " << width  
+      << " | Height: " << height  
+      << " | Far: " << far  
+      << " | Angle: " << rotation.interface()).str();
   }
 
-  void move(Direction direction, double speed = 5.) { 
-    Point move;
-    switch(direction) {
-      case FRONT: move = (forwardPoint() * speed); break;
-      case RIGHT: move = (rightPoint() * speed); break;
-      case BACK: move = (-forwardPoint() * speed); break;
-      case LEFT: move = (-rightPoint() * speed); break;
-    }
-
-    centroid += move;
-  } 
+  void move(Direction direction, double speed = 5) { centroid += getMoveVector(direction) * speed; } 
 
   vector<Line> transformViewport(RectangleSize frameSize, Point viewportCenter) {
     vector<Line> lines = normalizeDisplayFile(frameSize);
