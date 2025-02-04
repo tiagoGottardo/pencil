@@ -10,7 +10,7 @@
 
 class Factory {
 public:
-  static Polygon createRegularPolygon(int size = 100, int sides = 3, Point centroid = Point(), string name = "Polygon") {
+  static Polygon createRegularPolygon(int size = 100, int sides = 3, string name = "Polygon") {
     if(sides < 3) throw invalid_argument("It must has at least 3 sides.");
 
     double R = size / 2;
@@ -28,7 +28,7 @@ public:
       points.push_back(Point(R * cos(ang), R * sin(ang)));
     }
 
-    return Polygon(points, centroid, name);
+    return Polygon(points, name);
   }
 
   static vector<Line> createFrame(uint width, uint height, Point centroid, string name = "Rectangle") {
@@ -41,7 +41,9 @@ public:
 
     for(Point& point : points) point -= Point(width / 2, height / 2);
 
-    Polygon frame = Polygon(points, centroid, name);
+    Polygon frame = Polygon(points, name);
+
+    frame.move(centroid);
 
     points = frame.getPoints();
 
@@ -93,7 +95,7 @@ public:
       }
     }
 
-    return Model(polygons, Point(), "Donut");
+    return Model(polygons, "Donut");
   };
 
   static Model import(const std::string& filename) {
@@ -141,6 +143,6 @@ public:
     std::string name(nameView);
     if (!name.empty()) name[0] = toupper(name[0]);
 
-    return Model(std::move(polygons), Point(), name);
+    return Model(std::move(polygons), name);
   }
 };
