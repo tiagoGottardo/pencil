@@ -12,7 +12,8 @@ void polygon() {
   Tester suite = Tester("Polygon Suite");
 
   suite.add([]() -> bool { 
-    Polygon p = Factory::createRegularPolygon(100, 3, Point(50, 50));
+    Polygon p = Factory::createRegularPolygon(100, 3);
+    p.move(Point(50, 50));
 
     Point correctPoints[] = { 
       Point(0, -50),
