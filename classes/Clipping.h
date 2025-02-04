@@ -23,39 +23,39 @@ typedef struct {
 
 class Clipping {
 private:
-  static float maxi(float arr[],int n) {
-    float m = 0;
+  static double maxi(double arr[],int n) {
+    double m = 0;
     for (int i = 0; i < n; ++i)
       if (m < arr[i])
         m = arr[i];
     return m;
   }
 
-  static float mini(float arr[], int n) {
-    float m = 1;
+  static double mini(double arr[], int n) {
+    double m = 1;
     for (int i = 0; i < n; ++i)
       if (m > arr[i])
         m = arr[i];
     return m;
   }
 
-  static ClipResult liangClipper(float x1, float y1, float x2, float y2) {
-    float xmin = -1;
-    float xmax =  1;
-    float ymin = -1;
-    float ymax =  1;
+  static ClipResult liangClipper(double x1, double y1, double x2, double y2) {
+    double xmin = -1;
+    double xmax =  1;
+    double ymin = -1;
+    double ymax =  1;
 
-    float p1 = -(x2 - x1);
-    float p2 = -p1;
-    float p3 = -(y2 - y1);
-    float p4 = -p3;
+    double p1 = -(x2 - x1);
+    double p2 = -p1;
+    double p3 = -(y2 - y1);
+    double p4 = -p3;
 
-    float q1 = x1 - xmin;
-    float q2 = xmax - x1;
-    float q3 = y1 - ymin;
-    float q4 = ymax - y1;
+    double q1 = x1 - xmin;
+    double q2 = xmax - x1;
+    double q3 = y1 - ymin;
+    double q4 = ymax - y1;
 
-    float posarr[5], negarr[5];
+    double posarr[5], negarr[5];
     int posind = 1, negind = 1;
     posarr[0] = 1;
     negarr[0] = 0;
@@ -64,8 +64,8 @@ private:
       return { LineStatus::OUTSIDE, Line() };
 
     if (p1 != 0) {
-      float r1 = q1 / p1;
-      float r2 = q2 / p2;
+      double r1 = q1 / p1;
+      double r2 = q2 / p2;
       if (p1 < 0) {
         negarr[negind++] = r1; 
         posarr[posind++] = r2;
@@ -75,8 +75,8 @@ private:
       }
     }
     if (p3 != 0) {
-      float r3 = q3 / p3;
-      float r4 = q4 / p4;
+      double r3 = q3 / p3;
+      double r4 = q4 / p4;
       if (p3 < 0) {
         negarr[negind++] = r3;
         posarr[posind++] = r4;
@@ -86,8 +86,8 @@ private:
       }
     }
 
-    float xn1, yn1, xn2, yn2;
-    float rn1, rn2;
+    double xn1, yn1, xn2, yn2;
+    double rn1, rn2;
     rn1 = Clipping::maxi(negarr, negind); 
     rn2 = Clipping::mini(posarr, posind); 
     
