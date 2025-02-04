@@ -19,6 +19,7 @@ public:
   virtual string getName() const = 0;
   virtual vector<Polygon> getPolygons() const = 0;
   virtual Matrix getMatrix() const = 0;
+  virtual string interface() const = 0;
   virtual void checkItself() const = 0;
   virtual ~Drawable() = default;
 };

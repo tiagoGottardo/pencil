@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <cmath>
+#include <sstream>
 
 #include "Drawable.h"
 #include "Transformable.h"
@@ -10,10 +11,10 @@
 
 class Polygon : public Drawable, public Transformable {
 private:
-  friend class PolygonFriend;
-
   string name;
   vector<Point> points;
+
+  friend class PolygonFriend;
 
 public:
   string getName() const override { return name; }
@@ -33,18 +34,23 @@ public:
     return result;
   }
 
-  Polygon(vector<Point> points, Point ref = Point(), const string& name = "Polygon") : 
-    Transformable(ref),
+  Polygon(vector<Point> points, const string& name = "Polygon") : 
+    Transformable(),
     name(name), 
     points(points) {}
   
   void checkItself() const override {
     printf("%s: {\n", name.c_str());
     ref.checkItself(); 
-    printf("  X rotation: %.2f\n", xRotation);
-    printf("  Y rotation: %.2f\n", yRotation);
-    printf("  Z rotation: %.2f\n\n", zRotation);
+    rotation.checkItself();
     for(Point point : points) point.checkItself();
     printf("}\n");
+  }
+
+  string interface() const override {
+    return (ostringstream()
+      << " " << name 
+      << " | Position: " << ref.interface()  
+      << " | Angle: " << rotation.interface()).str();
   }
 };

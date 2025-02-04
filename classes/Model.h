@@ -1,5 +1,7 @@
 #pragma once
 
+#include <sstream>
+
 #include "Drawable.h"
 #include "Transformable.h"
 #include "Polygon.h"
@@ -16,18 +18,22 @@ public:
 
   vector<Polygon> getPolygons() const override { return polygons; }
 
-  Model(vector<Polygon> polygons, Point ref = Point(), const string& name = "Model") : 
-    Transformable(ref),
+  Model(vector<Polygon> polygons, const string& name = "Model") : 
+    Transformable(),
     name(name), 
     polygons(polygons) {}
   
   void checkItself() const override {
     printf("Model %s\n", name.c_str());
     ref.checkItself(); 
-    printf("  X rotation: %.2f\n", xRotation);
-    printf("  Y rotation: %.2f\n", yRotation);
-    printf("  Z rotation: %.2f\n\n", zRotation);
-    for(Polygon polygon : polygons) polygon.checkItself();
+    rotation.checkItself(); 
     printf("}\n");
+  }
+
+  string interface() const override {
+    return (ostringstream()
+      << " " << name 
+      << " | Position: " << ref.interface()  
+      << " | Angle: " << rotation.interface()).str();
   }
 };
