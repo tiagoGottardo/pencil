@@ -24,7 +24,7 @@ private:
   Ui::MainWindow *ui;
   Viewport viewport;
   int displayFileIndex;
-  DisplayFile displayFile = DisplayFile();
+  DisplayFile displayFile;
 
 protected:
   void keyPressEvent(QKeyEvent *event) override;

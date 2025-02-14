@@ -9,6 +9,7 @@
 #include <vector>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow), displayFileIndex(0) {
+  displayFile = DisplayFile();
   ui->setupUi(this);
   ui->frame->connectWindow(&displayFile);
 
@@ -57,7 +58,6 @@ void MainWindow::triggerRotate() {
 
 void MainWindow::keyPressEvent(QKeyEvent *event) {
   Window* w = ui->frame->getWindow();
-  Transformable* transformable = dynamic_cast<Transformable*>(displayFile[displayFileIndex].get());
 
   if(event->key() == Qt::Key_Return) QCoreApplication::quit();
 
@@ -81,7 +81,9 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
     if(event->key() == Qt::Key_S) { w->move(BACK); }
     if(event->key() == Qt::Key_Space) { w->move(UP); }
     if(event->key() == Qt::Key_Shift) { w->move(DOWN); }
-  } else {
+  } else if (displayFile.size() > 0) {
+    Transformable* transformable = dynamic_cast<Transformable*>(displayFile[displayFileIndex].get());
+
     if(event->key() == Qt::Key_W) { transformable->move(Point(0, 0, 10)); }
     if(event->key() == Qt::Key_A) { transformable->move(Point(10)); }
     if(event->key() == Qt::Key_D) { transformable->move(Point(-10)); }
@@ -89,7 +91,6 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
     if(event->key() == Qt::Key_Space) { transformable->move(Point(0, 10, 0)); }
     if(event->key() == Qt::Key_Shift) { transformable->move(Point(0, -10, 0)); }
   }
-
 };
 
 MainWindow::~MainWindow() { delete ui; }
