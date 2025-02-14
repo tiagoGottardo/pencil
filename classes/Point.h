@@ -1,9 +1,9 @@
 #pragma once
 
 #ifndef TEST_MODE
-#include <QPainter>
-#else 
-#include "../tests/mocks/QPainterMock.h"
+#   include <QPainter>
+# else 
+#   include "../tests/mocks/QPainterMock.h"
 #endif
 
 #include <iomanip>
