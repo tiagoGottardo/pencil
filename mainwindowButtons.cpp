@@ -131,8 +131,11 @@ void MainWindow::on_increaseX_clicked() {
       QDir::homePath(),                  // Initial directory
       "OBJ Files (*.obj)" // File filters
     );
+
+    if (fileName.isEmpty()) return;
+
     displayFile.push_back(make_unique<Model>(Factory::import(fileName.toStdString())));
-  displayFileIndex = (int) displayFile.size() - 1;
+    displayFileIndex = (int) displayFile.size() - 1;
 }
 
 void MainWindow::on_deleteObject_clicked() {
